@@ -1,6 +1,6 @@
 ## Pupa Scrapers for Canada in Ruby
 
-The bulk of Pupa scrapers for Canada are written in Python and available at [http://github.com/opencivicdata/scrapers-ca](http://github.com/opencivicdata/scrapers-ca). This repository was created to integrate more specifically with [MyCityHall.ca](http://mycityhall.ca/).
+The [bulk of Pupa scrapers](http://github.com/opencivicdata/scrapers-ca) for Canada are written in Python. This repository was created to integrate more specifically with [MyCityHall.ca](http://mycityhall.ca/).
 
 ## Getting Started
 
