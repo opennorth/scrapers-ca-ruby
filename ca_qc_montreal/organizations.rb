@@ -5,8 +5,6 @@ class Montreal
   # @see http://www.mamrot.gouv.qc.ca/organisation-municipale/organisation-territoriale/instances-municipales/paliers-municipaux/
   # @see http://www.mamrot.gouv.qc.ca/pub/organisation_municipale/organisation_territoriale/organisation_municipale.pdf
   def scrape_organizations
-    organization_ids = {}
-
     # The CMM has other suborganizations.
     # @see http://cmm.qc.ca/qui-sommes-nous/
     organization_ids['cmm'] = create_organization({
@@ -75,8 +73,6 @@ class Montreal
         parent_id: organization_ids[key],
       })
     end
-
-    organization_ids
   end
 
   def create_organization(properties)

@@ -1,4 +1,3 @@
 source 'https://rubygems.org'
-gem 'htmlentities'
-gem 'pupa', '~> 0.0.9'
+gem 'pupa', '~> 0.0.11'
 gem 'rubyzip', '~> 0.9.9'

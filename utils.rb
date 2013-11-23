@@ -2,7 +2,6 @@ require 'bundler/setup'
 
 require 'csv'
 
-require 'htmlentities'
 require 'pupa'
 require 'zip/zip'
 

@@ -1,31 +1,7 @@
 class Montreal
-  # @todo Replace once ocd-identifier-ids has a source for borough numbers.
-  ARRONDISSEMENT_TYPE_IDS = %w(
-    ahuntsic-cartierville
-    anjou
-    côte-des-neiges-notre-dame-de-grâce
-    lachine
-    lasalle
-    le_plateau-mont-royal
-    le_sud-ouest
-    l~île-bizard-sainte-geneviève
-    mercier-hochelaga-maisonneuve
-    montréal-nord
-    outremont
-    pierrefonds-roxboro
-    rivière-des-prairies-pointe-aux-trembles
-    rosemont-la_petite-patrie
-    saint-laurent
-    saint-léonard
-    verdun
-    ville-marie
-    villeray-saint-michel-parc-extension
-  )
-
   def scrape_posts # should have 170
-    organization_ids = scrape_organizations
-
-    unzip('http://depot.ville.montreal.qc.ca/elections-2009-postes-electifs/data.zip') do |zipfile|
+    # @see http://donnees.ville.montreal.qc.ca/dataset/elections-2009-postes-electifs
+    unzip('http://donnees.ville.montreal.qc.ca/storage/f/2013-10-06T17%3A19%3A14.469Z/elections-2009-postes-electifs.zip') do |zipfile|
       entry = zipfile.entries.find{|entry| File.extname(entry.name) == '.csv'}
       if entry
         data = zipfile.read(entry).force_encoding('windows-1252').encode('utf-8')
@@ -65,8 +41,7 @@ class Montreal
           end
 
           if ["Maire d'arrondissement", "Conseiller de ville", "Conseiller d'arrondissement"].include?(role)
-            # @todo Replace once ocd-identifier-ids has a source for borough numbers.
-            key = ARRONDISSEMENT_TYPE_IDS[borough_number - 1]
+            key = boroughs_by_number[borough_number]
             create_post(properties.merge(organization_id: organization_ids.fetch("#{key}/conseil")))
           end
         end
@@ -95,7 +70,7 @@ class Montreal
     end
   end
 
-  def create_post(properties, organization_id)
+  def create_post(properties)
     post = Pupa::Post.new(properties)
     post.add_source('http://donnees.ville.montreal.qc.ca/fiche/elections-2009-postes-electifs/', note: 'Portail des données ouvertes de la Ville de Montréal')
     dispatch(post)

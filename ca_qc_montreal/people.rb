@@ -1,11 +1,16 @@
 class Montreal
   def scrape_people # should have 103
-    organization_ids = scrape_organizations
-
     party_ids = {}
-    { 'ind' => 'Vision Montréal',
+    { 'cm' => 'Coalition Montréal - Marcel Côté',
+      'ea' => 'Équipe Anjou',
+      'ebt' => 'Équipe Barbe Team - Pro action LaSalle',
+      'eco' => 'Équipe conservons Outremont',
+      'edc' => 'Équipe Denis Coderre pour Montréal',
+      'edl' => 'Équipe Dauphin Lachine',
+      'erb' => 'Équipe Richard Bélanger',
+      'ind' => 'Indépendant',
       'pm' => 'Projet Montréal',
-      'vm' => 'Indépendant',
+      'vcm' => 'Vrai changement pour Montréal',
     }.each do |key,name|
       party_ids[key] = create_organization({
         name: name,
@@ -14,21 +19,19 @@ class Montreal
     end
 
     gender_map = {
+      '' => nil,
       'Madame' => 'female',
       'Monsieur' => 'male',
     }
 
-    response = client.get('http://depot.ville.montreal.qc.ca/bd-elus/data.json', preserve_raw: true)
-    data = MultiJson.load(response.env[:raw_body].force_encoding('windows-1252').encode('utf-8'))
+    response = client.get('http://ville.montreal.qc.ca/pls/portal/PORTALCON.ELUS_MUNICIPAUX_DATA.LISTE_ELUS')
+    # @todo Remove `gsub` once file is corrected. (&#151; is an em-dash in Windows-1252.)
+    data = Oj.load(response.env[:raw_body].force_encoding('windows-1252').encode('utf-8').gsub(/&#0?151;/, '—'))
 
-    # @todo Remove once file is corrected.
-    coder = HTMLEntities.new
-
-    # @todo Are seats vacant? 1 Conseiller d'arrondissement, 3 Conseiller de la Ville
+    # @todo Are seats vacant? 1 Conseiller d'arrondissement, 3 Conseiller de la Ville [remove comment?]
     data.each do |row|
       row.each do |key,value|
-        # @todo Remove decoder once file is corrected.
-        value = coder.decode(value).strip
+        row[key] = value.strip
       end
 
       person = nil
@@ -36,23 +39,23 @@ class Montreal
       # @note Certaines personnes occupent deux postes de conseillers soit :
       #   1) le poste pour lequel ils ont été élus
       #   2) le poste de conseiller désigné à l’arrondissement Ville-Marie
-      # @see http://donnees.ville.montreal.qc.ca/fiche/bd-elus/
+      # @see http://donnees.ville.montreal.qc.ca/dataset/bd-elus
       unless ['Maire de la Ville', 'Conseiller de la Ville désigné', 'Conseillère de la Ville désignée'].include?(row['TITRE_CONSEIL'])
         person = Pupa::Person.new({
           honorific_prefix: row['APPELLATION_POLITESSE'],
           name: "#{row['PRENOM']} #{row['NOM']}",
           family_name: row['NOM'],
           given_name: row['PRENOM'],
-          # @todo Remove once file is corrected.
+          # @todo Remove `gsub` once file is corrected. (Email addresses should not have a space after "@".)
           email: row['COURRIEL'].gsub(' ', ''),
           image: row['FICHIER_IMAGE'],
           gender: gender_map.fetch(row['APPELLATION_POLITESSE']),
         })
         person.add_contact_detail('email', row['COURRIEL'])
-        # @todo standardize format of addresses (remove HTML, strip each line, remove parens)
+        # @todo standardize format of addresses (remove HTML, strip each line, remove parens) (see handwritten notes)
         person.add_contact_detail('address', row['ADRESSE_ARRONDISSEMENT'], note: 'Arrondissement')
         person.add_contact_detail('address', row['ADRESSE_HOTEL_DE_VILLE'], note: 'Hôtel de ville')
-        # @todo format phone numbers
+        # @todo format phone numbers (see handwritten notes)
         person.add_contact_detail('voice', row['TELEPHONE_ARRONDISSEMENT'], note: 'Arrondissement')
         person.add_contact_detail('voice', row['TELEPHONE_HOTEL_DE_VILLE'], note: 'Hôtel de ville')
         person.add_contact_detail('fax', row['TELECOPIE_ARRONDISSEMENT'], note: 'Arrondissement')
@@ -69,8 +72,15 @@ class Montreal
         }
       end
 
-      if person
+      if person # If this is the first time processing this person.
         create_membership(properties.merge(organization_id: party_ids.fetch(row['PARTI_POLITIQUE'])))
+      end
+
+      # The mayor of Montreal has an `ARRONDISSEMENT` of "Ville de Montréal",
+      # which will raise a `KeyError` if we perform the lookup eagerly.
+      borough_council_ids = Hash.new do |hash,key|
+        # @todo Remove `sub` once file is corrected. ("La Petite-Patrie" should have a hyphen, not an en dash.)
+        hash[key] = organization_ids.fetch("#{boroughs_by_name.fetch(key.sub('–', '-'))}/conseil")
       end
 
       # Inherit the post's role and label.
@@ -82,18 +92,18 @@ class Montreal
         }))
 
         create_membership(properties.merge({
-          organization_id: '', # @todo borough council ARRONDISSEMENT
+          organization_id: borough_council_ids[row['ARRONDISSEMENT']],
           post_id: '', # @todo
         }))
       # The two people who are designated councillors appear twice.
       when 'Conseiller de la Ville désigné', 'Conseillère de la Ville désignée' # should have 2
         create_membership(properties.merge({
-          organization_id: '', # @todo ville-marie
+          organization_id: organization_ids.fetch('ville-marie/conseil'),
           post_id: '', # @todo
         }))
       when "Conseiller d'arrondissement", "Conseillère d'arrondissement" # should have 38
         create_membership(properties.merge({
-          organization_id: '', # @todo borough council ARRONDISSEMENT
+          organization_id: borough_council_ids[row['ARRONDISSEMENT']],
           post_id: '', # @todo
         }))
       when ''
@@ -107,20 +117,11 @@ class Montreal
         when "Maire d'arrondissement" # should have 1
           if row['ARRONDISSEMENT'] == 'Ville-Marie'
             create_membership(properties.merge({
-              organization_id: '', # @todo ville-marie council
+              organization_id: organization_ids.fetch('ville-marie/conseil'),
               post_id: '', # @todo
             }))
-          # @todo Remove once file is corrected.
           else
-            create_membership(properties.merge({
-              organization_id: organization_ids['ville/conseil'],
-              post_id: '', # @todo
-            }))
-
-            create_membership(properties.merge({
-              organization_id: '', # @todo borough council ARRONDISSEMENT
-              post_id: '', # @todo
-            }))
+            error("Unexpected ARRONDISSEMENT #{row['ARRONDISSEMENT']}")
           end
         end
       else
@@ -129,15 +130,15 @@ class Montreal
 
       if row['TITRE_COMITE_EXECUTIF']['exécutif'] && row['TITRE_MAIRIE'] != 'Maire de la Ville'
         create_membership(properties.merge({
-          role: row['TITRE_COMITE_EXECUTIF'], # @todo remove, create posts for executive committee
+          role: row['TITRE_COMITE_EXECUTIF'], # @todo remove role attribute, create posts for executive committee
           organization_id: organization_ids['ville/comite_executif'],
           post_id: '', # @todo
         }))
       end
 
-      # @todo Remove once file is corrected.
-      if person
-        if person.gender == 'male'
+      # @todo Remove once file is corrected. (TITRE_MAIRIE and TITRE_CONSEIL should correspond to APPELLATION_POLITESSE.)
+      if person && person.gender # If this is the first time processing this person.
+        hash = if person.gender == 'male'
           {
             'TITRE_MAIRIE' => /Maire\b/,
             'TITRE_CONSEIL' => 'Conseiller',
@@ -147,9 +148,11 @@ class Montreal
             'TITRE_MAIRIE' => 'Mairesse',
             'TITRE_CONSEIL' => 'Conseillère',
           }
-        end.each do |key,pattern|
+        end
+
+        hash.each do |key,pattern|
           unless row[key].empty? || row[key][pattern]
-            error("#{key} doesn't agree with gender: #{person.to_h}")
+            error("#{key} (#{row[key]}) doesn't agree with gender: #{person.to_h}")
           end
         end
       end
