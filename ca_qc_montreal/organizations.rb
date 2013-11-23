@@ -51,7 +51,7 @@ class Montreal
       parent_id: organization_ids['agglomeration'],
     })
     # @see http://ville.montreal.qc.ca/portal/page?_pageid=5798,85933591&_dad=portal&_schema=PORTAL
-    organization_ids['ville/conseil'] = create_organization({ # 65 posts
+    organization_ids['ville/conseil'] = create_organization({
       name: 'Conseil municipal',
       parent_id: organization_ids['ville'],
     })
@@ -68,7 +68,7 @@ class Montreal
         parent_id: organization_ids['ville'],
       })
       subkey = "#{key}/conseil"
-      organization_ids[subkey] = create_organization({ # 105 posts total
+      organization_ids[subkey] = create_organization({
         name: "Conseil d'arrondissement",
         parent_id: organization_ids[key],
       })

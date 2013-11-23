@@ -5,7 +5,7 @@ class Montreal < GovernmentProcessor
 
   def initialize(*args)
     super
-
+    # Populated by `scrape_organizations`.
     @organization_ids ||= {}
   end
 

@@ -49,14 +49,13 @@ class Montreal
           end
         end
 
+        # @see http://election-montreal.qc.ca/cadre-electoral-districts/cadre-electoral/arrondissements/villemarie.en.html
         properties = {
           organization_id: organization_ids.fetch('ville-marie/conseil'),
           area: {
             name: 'Ville-Marie',
           }
         }
-
-        # @see http://election-montreal.qc.ca/cadre-electoral-districts/cadre-electoral/arrondissements/villemarie.en.html
         create_post(properties.merge({
           label: "Maire de l'arrondissement de Ville-Marie",
           role: "Maire d'arrondissement",

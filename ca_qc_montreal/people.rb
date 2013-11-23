@@ -1,15 +1,21 @@
 class Montreal
   def scrape_people # should have 103
+    gender_map = {
+      '' => nil,
+      'Madame' => 'female',
+      'Monsieur' => 'male',
+    }
+
     party_ids = {}
-    { 'cm' => 'Coalition Montréal - Marcel Côté',
-      'ea' => 'Équipe Anjou',
+    { 'cm'  => 'Coalition Montréal - Marcel Côté',
+      'ea'  => 'Équipe Anjou',
       'ebt' => 'Équipe Barbe Team - Pro action LaSalle',
       'eco' => 'Équipe conservons Outremont',
       'edc' => 'Équipe Denis Coderre pour Montréal',
       'edl' => 'Équipe Dauphin Lachine',
       'erb' => 'Équipe Richard Bélanger',
       'ind' => 'Indépendant',
-      'pm' => 'Projet Montréal',
+      'pm'  => 'Projet Montréal',
       'vcm' => 'Vrai changement pour Montréal',
     }.each do |key,name|
       party_ids[key] = create_organization({
@@ -18,19 +24,13 @@ class Montreal
       })
     end
 
-    gender_map = {
-      '' => nil,
-      'Madame' => 'female',
-      'Monsieur' => 'male',
-    }
-
     response = client.get('http://ville.montreal.qc.ca/pls/portal/PORTALCON.ELUS_MUNICIPAUX_DATA.LISTE_ELUS')
     # @todo Remove `gsub` once file is corrected. (&#151; is an em-dash in Windows-1252.)
     data = Oj.load(response.env[:raw_body].force_encoding('windows-1252').encode('utf-8').gsub(/&#0?151;/, '—'))
 
     designated_councillor_number = 1
 
-    # @todo Five seats are vacant (2013-11-22)
+    # @todo Are five seats really vacant or is the data incorrect? (2013-11-22)
     data.each do |row|
       row.each do |key,value|
         row[key] = value.strip
@@ -111,7 +111,7 @@ class Montreal
           area_name = '' # @todo Once the district is added to the file.
         end
 
-        organization_id = organization_ids['ville/conseil']
+        organization_id = organization_ids.fetch('ville/conseil')
         create_membership(properties.merge({
           organization_id: organization_id,
           post: {
@@ -130,15 +130,6 @@ class Montreal
             'area.name' => area_name,
           },
         }))
-      # The two people who are designated councillors appear twice.
-      when 'Conseiller de la Ville désigné', 'Conseillère de la Ville désignée' # should have 2
-        create_membership(properties.merge({
-          organization_id: organization_ids.fetch('ville-marie/conseil'),
-          post: {
-            label: "Conseiller de ville désigné (siège #{designated_councillor_number})",
-          },
-        }))
-        designated_councillor_number += 1
       when "Conseiller d'arrondissement", "Conseillère d'arrondissement" # should have 38
         organization_id = borough_council_ids[row['ARRONDISSEMENT']]
         create_membership(properties.merge({
@@ -149,11 +140,20 @@ class Montreal
             'area.name' => '', # @todo Once the district is added to the file.
           },
         }))
+      # The two people who are designated councillors appear twice.
+      when 'Conseiller de la Ville désigné', 'Conseillère de la Ville désignée' # should have 2
+        create_membership(properties.merge({
+          organization_id: organization_ids.fetch('ville-marie/conseil'),
+          post: {
+            label: "Conseiller de ville désigné (siège #{designated_councillor_number})",
+          },
+        }))
+        designated_councillor_number += 1
       when ''
         # The person who is city mayor and Ville-Marie mayor appears twice.
         if row['TITRE_MAIRIE'] == "Maire" # should have 1
           create_membership(properties.merge({
-            organization_id: organization_ids['ville/conseil'],
+            organization_id: organization_ids.fetch('ville/conseil'),
             post: {
               label: "Maire de la Ville de Montréal",
             },
@@ -172,37 +172,43 @@ class Montreal
         error("Unrecognized TITRE_CONSEIL #{row['TITRE_CONSEIL']}")
       end
 
-      if row['TITRE_COMITE_EXECUTIF']['exécutif'] && row['TITRE_MAIRIE'] != 'Maire de la Ville'
+      case row['TITRE_COMITE_EXECUTIF']
+      when 'Membre du comité exécutif', 'Vice-président du comité exécutif', 'Vice-présidente du comité exécutif', 'Président du comité exécutif'
+        organization_id = organization_ids.fetch('ville/comite_executif')
+        # @todo create posts for executive committee
         create_membership(properties.merge({
-          role: row['TITRE_COMITE_EXECUTIF'], # @todo create posts for executive committee, remove role attribute
-          organization_id: organization_ids['ville/comite_executif'],
-          post_id: '', # @todo after creating posts
+          organization_id: organization_id,
+          post: {
+            organization_id: organization_id,
+            # @todo add more attributes to uniquely identify post (see popolo-billy?)
+          },
         }))
+      when 'Conseiller associé', 'Conseillère associée'
+        # Do nothing.
+      else
+        error("Unrecognized TITRE_COMITE_EXECUTIF #{row['TITRE_COMITE_EXECUTIF']}")
       end
 
-      # @todo test images
+      row['AUTRE_TITRE'].split("\r\n").each do |title|
+        if title == "Membre du conseil d'agglomération." # Ignore others.
+          organization_id = organization_ids.fetch('agglomeration/conseil')
+          # @todo create posts for agglomeration council
+          create_membership(properties.merge({
+            organization_id: organization_id,
+            post: {
+              organization_id: organization_id,
+              # @todo add more attributes to uniquely identify post (see popolo-billy?)
+            },
+          }))
+        end
+      end
 
-      # AUTRE_TITRE (80)
-      #   CMM council
-      #   Agglomeration council
-      #   Agencies
-      #   Committees
-      #   Commissions
-      #   Societies
-      # AUTRE_TITRE_OFFICIEL (6)
-      #   Chef de l'opposition
-      #   Leader de l'opposition
-      #   Président de commission
-      #   Présidente de commission
-      #   Vice-président de commission
-      #   Vice-présidente de commission
-      # RESPONSABILITES (20)
+      # AUTRE_TITRE_OFFICIEL has been previously unpredictable.
+      #   "Leader de la majorité"
+      #   "Leader de l'opposition"
+      #   "Chef de l'opposition"
 
-      # @note We don't have a post for "Président du conseil de la Ville", which
-      # appears under TITRE_COMITE_EXECUTIF. We don't have posts for "Conseiller
-      # associé" or "Conseillère associée" either.
-
-      # COMMISSION_CONSEIL is always blank.
+      # COMMISSION_CONSEIL is always blank. RESPONSABILITES is unpredicatable.
     end
   end
 
