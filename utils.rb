@@ -19,6 +19,20 @@ class GovernmentProcessor < Pupa::Processor
   end
 end
 
+class Pupa::Membership
+  attr_reader :person, :post
+  foreign_object :person, :post
+  dump :person, :post
+
+  def person=(person)
+    @person = {_type: 'pupa/person'}.merge(person)
+  end
+
+  def post=(post)
+    @post = {_type: 'pupa/post'}.merge(post)
+  end
+end
+
 class Pupa::Post
   attr_accessor :area
   dump :area

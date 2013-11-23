@@ -13,6 +13,7 @@ class Montreal
           # @todo Remove once file is corrected.
           role.sub!('Conseillier', 'Conseiller')
           label.sub!('du dentre', 'du Centre')
+          label.gsub!(/\?|–/, '—') # en dash to em dash
           if borough_number == 21
             borough_number = 12
           end
@@ -21,11 +22,13 @@ class Montreal
           end
 
           if label[/\AMair/]
+            label = label.sub(/\AMairie\b/, 'Maire')
+            # @todo Remove the "?" after "Mairi" once file is corrected.
             area_name = label.sub(/\bdu\b/, 'de Le').match(/\AMairi?e de l(?:'arrondissement|a Ville) d(?:'|e )(.+?)\z/).captures.fetch(0).strip
           else
             label_suffix = label.match(/\A(?:Conseiller de ville arrondissement|District électoral)(.+?)(?:\(Pierrefonds-Roxboro\))?\z/).captures.fetch(0).strip
-            area_name = label_suffix.match(/\Ad(?:'|u |e (?:l(?:'|a ))?)(.+?)(?: \(.+\))?\z/).captures.fetch(0).strip
             label = "#{role} #{label_suffix}"
+            area_name = label_suffix.match(/\Ad(?:'|e |e l'|e la |u )(.+?)(?: \(.+\))?\z/).captures.fetch(0).strip
           end
 
           properties = {
@@ -47,7 +50,6 @@ class Montreal
         end
 
         properties = {
-          role: 'Conseiller de ville désigné',
           organization_id: organization_ids.fetch('ville-marie/conseil'),
           area: {
             name: 'Ville-Marie',
@@ -57,12 +59,15 @@ class Montreal
         # @see http://election-montreal.qc.ca/cadre-electoral-districts/cadre-electoral/arrondissements/villemarie.en.html
         create_post(properties.merge({
           label: "Maire de l'arrondissement de Ville-Marie",
+          role: "Maire d'arrondissement",
         }))
         create_post(properties.merge({
           label: "Conseiller de ville désigné (siège 1)",
+          role: "Conseiller de ville désigné",
         }))
         create_post(properties.merge({
           label: "Conseiller de ville désigné (siège 2)",
+          role: "Conseiller de ville désigné",
         }))
       else
         error('CSV file not found')
