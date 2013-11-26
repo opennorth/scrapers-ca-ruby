@@ -69,7 +69,7 @@ class Pupa::Person
           errors.add(:contact_details, "contain an invalid email address: #{contact_detail[:value]}")
         end
       when 'address'
-        unless contact_detail[:value][/\A[\dAB-]+, (?:avenue|boul\.|boulevard|ch\.|montée|rue) [^\n]+(?:\n\d+e étage|\n(?:Bureau|Suite) [\dAB.-]+)?\n(?:Anjou|L'Île-Bizard|Lachine|LaSalle|Montréal|Montréal-Nord|Outremont|Pierrefonds|Saint-Laurent|Saint-Léonard) \(Québec\)\nH[0-9][ABCEGHJKLMNPRSTVWXYZ] [0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]\z\z/]
+        unless contact_detail[:value][/\A[\dAB-]+, (?:avenue|boul\.|boulevard|ch\.|montée|rue) [^\n]+(?:\n\d+e étage|\n(?:Bureau|Suite) [\dAB.-]+)?\n(?:Anjou|L'Île-Bizard|Lachine|LaSalle|Montréal|Montréal-Nord|Outremont|Pierrefonds|Saint-Laurent|Saint-Léonard) \(Québec\)\nH[0-9][ABCEGHJKLMNPRSTVWXYZ] [0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]\z/]
           errors.add(:contact_details, "contain an invalid address: #{contact_detail[:value]}")
         end
       end
