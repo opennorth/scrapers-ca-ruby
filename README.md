@@ -23,6 +23,16 @@ Run a scraper with:
 
     ruby ca_qc_montreal/scraper.rb
 
+## Data Quality
+
+To check property usage:
+
+    curl -O https://raw.github.com/variety/variety/master/variety.js
+    mongo mycityhall --eval 'var collection = "organizations"' variety.js
+    mongo mycityhall --eval 'var collection = "posts"' variety.js
+    mongo mycityhall --eval 'var collection = "people"' variety.js
+    mongo mycityhall --eval 'var collection = "memberships"' variety.js
+
 ## Bugs? Questions?
 
 This repository is on GitHub: [http://github.com/opennorth/scrapers-ca-ruby](http://github.com/opennorth/scrapers-ca-ruby), where your contributions, forks, bug reports, feature requests, and feedback are greatly welcomed.
