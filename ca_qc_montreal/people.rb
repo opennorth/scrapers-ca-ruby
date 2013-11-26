@@ -40,7 +40,10 @@ class Montreal
 
       # @todo Remove once file is corrected. ("La Petite-Patrie" should have a hyphen, not an en dash.)
       row['ARRONDISSEMENT'].sub!('–', '-')
-      row['APPELLATION_POLITESSE'] ||= 'male' if row['PRENOM'] == 'Jean-Dominic' && row['NOM'] == 'Lévesque-René'
+      # (Email addresses should not have a space after "@".)
+      row['COURRIEL'].gsub!(' ', '')
+      # (All records should set APPELLATION_POLITESSE.)
+      row['APPELLATION_POLITESSE'] = 'Monsieur' if row['PRENOM'] == 'Jean-Dominic' && row['NOM'] == 'Lévesque-René'
 
       # @note Certaines personnes occupent deux postes de conseillers soit :
       #   1) le poste pour lequel ils ont été élus
@@ -51,16 +54,13 @@ class Montreal
         name: "#{row['PRENOM']} #{row['NOM']}",
         family_name: row['NOM'],
         given_name: row['PRENOM'],
-        # @todo Remove `gsub` once file is corrected. (Email addresses should not have a space after "@".)
-        email: row['COURRIEL'].gsub(' ', ''),
+        email: row['COURRIEL'],
         image: row['FICHIER_IMAGE'],
         gender: gender_map.fetch(row['APPELLATION_POLITESSE']),
       })
       person.add_contact_detail('email', row['COURRIEL'])
-      # @todo standardize format of addresses (remove HTML, strip each line, remove parens) (see handwritten notes)
       person.add_contact_detail('address', row['ADRESSE_ARRONDISSEMENT'], note: 'Arrondissement')
       person.add_contact_detail('address', row['ADRESSE_HOTEL_DE_VILLE'], note: 'Hôtel de ville')
-      # @todo format phone numbers (see handwritten notes)
       person.add_contact_detail('voice', row['TELEPHONE_ARRONDISSEMENT'], note: 'Arrondissement')
       person.add_contact_detail('voice', row['TELEPHONE_HOTEL_DE_VILLE'], note: 'Hôtel de ville')
       person.add_contact_detail('fax', row['TELECOPIE_ARRONDISSEMENT'], note: 'Arrondissement')
@@ -73,6 +73,7 @@ class Montreal
       else
         properties = {person_id: person._id}
         dispatch(person)
+        warn(person.errors.full_messages) if person.invalid?
         create_membership(properties.merge(organization_id: party_ids.fetch(row['PARTI_POLITIQUE'])))
 
         # @todo Remove once file is corrected. (TITRE_MAIRIE and TITRE_CONSEIL should correspond to APPELLATION_POLITESSE.)

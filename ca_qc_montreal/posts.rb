@@ -68,11 +68,11 @@ class Montreal
     dispatch(Pupa::Post.new(properties.merge({
       label: "Conseiller de ville désigné (siège 1)",
       role: "Conseiller de ville désigné",
-    }))
+    })))
     dispatch(Pupa::Post.new(properties.merge({
       label: "Conseiller de ville désigné (siège 2)",
       role: "Conseiller de ville désigné",
-    }))
+    })))
 
     1.upto(11) do |n|
       dispatch(Pupa::Post.new({
