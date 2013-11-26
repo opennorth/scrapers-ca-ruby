@@ -14,6 +14,7 @@ class Montreal
           role.sub!('Conseillier', 'Conseiller')
           label.sub!('du dentre', 'du Centre')
           label.gsub!(/\?|–/, '—') # en dash to em dash
+          label.strip!
           if borough_number == 21
             borough_number = 12
           end
@@ -48,29 +49,53 @@ class Montreal
             create_post(properties.merge(organization_id: organization_ids.fetch("#{key}/conseil")))
           end
         end
-
-        # @see http://election-montreal.qc.ca/cadre-electoral-districts/cadre-electoral/arrondissements/villemarie.en.html
-        properties = {
-          organization_id: organization_ids.fetch('ville-marie/conseil'),
-          area: {
-            name: 'Ville-Marie',
-          }
-        }
-        create_post(properties.merge({
-          label: "Maire de l'arrondissement de Ville-Marie",
-          role: "Maire d'arrondissement",
-        }))
-        create_post(properties.merge({
-          label: "Conseiller de ville désigné (siège 1)",
-          role: "Conseiller de ville désigné",
-        }))
-        create_post(properties.merge({
-          label: "Conseiller de ville désigné (siège 2)",
-          role: "Conseiller de ville désigné",
-        }))
       else
         error('CSV file not found')
       end
+    end
+
+    # @see http://election-montreal.qc.ca/cadre-electoral-districts/cadre-electoral/arrondissements/villemarie.en.html
+    properties = {
+      organization_id: organization_ids.fetch('ville-marie/conseil'),
+      area: {
+        name: 'Ville-Marie',
+      }
+    }
+    dispatch(Pupa::Post.new(properties.merge({
+      label: "Maire de l'arrondissement de Ville-Marie",
+      role: "Maire d'arrondissement",
+    })))
+    dispatch(Pupa::Post.new(properties.merge({
+      label: "Conseiller de ville désigné (siège 1)",
+      role: "Conseiller de ville désigné",
+    }))
+    dispatch(Pupa::Post.new(properties.merge({
+      label: "Conseiller de ville désigné (siège 2)",
+      role: "Conseiller de ville désigné",
+    }))
+
+    1.upto(11) do |n|
+      dispatch(Pupa::Post.new({
+        label: "Membre du comité exécutif (siège #{n})",
+        role: 'Membre',
+        organization_id: organization_ids.fetch('ville/comite_executif'),
+      }))
+    end
+
+    dispatch(Pupa::Post.new({
+      label: 'Président du comité exécutif',
+      role: 'Président',
+      organization_id: organization_ids.fetch('ville/comite_executif'),
+    }))
+
+    # The Mayor of Montreal and 15 members of municipal council.
+    # @see http://ville.montreal.qc.ca/portal/page?_pageid=5977,88851616&_dad=portal&_schema=PORTAL
+    1.upto(16) do |n|
+      dispatch(Pupa::Post.new({
+        label: "Membre du conseil d'agglomération (siège #{n})",
+        role: 'Membre',
+        organization_id: organization_ids.fetch('agglomeration/conseil'),
+      }))
     end
   end
 

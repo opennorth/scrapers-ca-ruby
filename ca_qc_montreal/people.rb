@@ -1,7 +1,6 @@
 class Montreal
   def scrape_people # should have 103
     gender_map = {
-      '' => nil,
       'Madame' => 'female',
       'Monsieur' => 'male',
     }
@@ -28,9 +27,12 @@ class Montreal
     # @todo Remove `gsub` once file is corrected. (&#151; is an em-dash in Windows-1252.)
     data = Oj.load(response.env[:raw_body].force_encoding('windows-1252').encode('utf-8').gsub(/&#0?151;/, '—'))
 
-    designated_councillor_number = 1
+    designated_councillor_number        = 1
+    executive_committee_member_number   = 1
+    agglomeration_council_member_number = 1
 
-    # @todo Are five seats really vacant or is the data incorrect? (2013-11-22)
+    # If any memberships seem to be missing, check the latest news.
+    # @see http://election-montreal.qc.ca/actualites/index.en.html
     data.each do |row|
       row.each do |key,value|
         row[key] = value.strip
@@ -38,6 +40,7 @@ class Montreal
 
       # @todo Remove once file is corrected. ("La Petite-Patrie" should have a hyphen, not an en dash.)
       row['ARRONDISSEMENT'].sub!('–', '-')
+      row['APPELLATION_POLITESSE'] ||= 'male' if row['PRENOM'] == 'Jean-Dominic' && row['NOM'] == 'Lévesque-René'
 
       # @note Certaines personnes occupent deux postes de conseillers soit :
       #   1) le poste pour lequel ils ont été élus
@@ -73,23 +76,20 @@ class Montreal
         create_membership(properties.merge(organization_id: party_ids.fetch(row['PARTI_POLITIQUE'])))
 
         # @todo Remove once file is corrected. (TITRE_MAIRIE and TITRE_CONSEIL should correspond to APPELLATION_POLITESSE.)
-        if person.gender
-          hash = if person.gender == 'male'
-            {
-              'TITRE_MAIRIE' => /Maire\b/,
-              'TITRE_CONSEIL' => 'Conseiller',
-            }
-          else
-            {
-              'TITRE_MAIRIE' => 'Mairesse',
-              'TITRE_CONSEIL' => 'Conseillère',
-            }
-          end
-
-          hash.each do |key,pattern|
-            unless row[key].empty? || row[key][pattern]
-              error("#{key} (#{row[key]}) doesn't agree with gender: #{person.to_h}")
-            end
+        hash = if person.gender == 'male'
+          {
+            'TITRE_MAIRIE' => /Maire\b/,
+            'TITRE_CONSEIL' => 'Conseiller',
+          }
+        else
+          {
+            'TITRE_MAIRIE' => 'Mairesse',
+            'TITRE_CONSEIL' => 'Conseillère',
+          }
+        end
+        hash.each do |key,pattern|
+          unless row[key].empty? || row[key][pattern]
+            error("#{key} (#{row[key]}) doesn't agree with gender: #{person.to_h}")
           end
         end
       end
@@ -104,45 +104,63 @@ class Montreal
       case row['TITRE_CONSEIL']
       when 'Conseiller de la Ville', 'Conseillère de la Ville' # should have 64 (borough mayors included)
         if row['TITRE_MAIRIE'][/\AMaire/]
-          role = "Maire d'arrondissement"
+          role = person.gender == 'male' ? "Maire d'arrondissement" : "Mairesse d'arrondissement"
+          post_role = "Maire d'arrondissement"
           area_name = row['ARRONDISSEMENT']
         else
-          role = "Conseiller de ville"
+          role = person.gender == 'male' ? "Conseiller de ville" : "Conseillère de ville"
+          post_role = "Conseiller de ville"
           area_name = '' # @todo Once the district is added to the file.
         end
 
         organization_id = organization_ids.fetch('ville/conseil')
         create_membership(properties.merge({
+          role: role,
           organization_id: organization_id,
           post: {
-            'organization_id' => organization_id,
-            'role' => role,
-            'area.name' => area_name,
+            foreign_keys: {
+              organization_id: organization_id,
+            },
+            role: post_role,
+            area: {
+              name: area_name,
+            },
           },
         }))
 
         organization_id = borough_council_ids[row['ARRONDISSEMENT']]
         create_membership(properties.merge({
+          role: role,
           organization_id: organization_id,
           post: {
-            'organization_id' => organization_id,
-            'role' => role,
-            'area.name' => area_name,
+            foreign_keys: {
+              organization_id: organization_id,
+            },
+            role: post_role,
+            area: {
+              name: area_name,
+            },
           },
         }))
       when "Conseiller d'arrondissement", "Conseillère d'arrondissement" # should have 38
         organization_id = borough_council_ids[row['ARRONDISSEMENT']]
         create_membership(properties.merge({
+          role: row['TITRE_CONSEIL'],
           organization_id: organization_id,
           post: {
-            'organization_id' => organization_id,
-            'role' => "Conseillier d'arrondissement",
-            'area.name' => '', # @todo Once the district is added to the file.
+            foreign_keys: {
+              organization_id: organization_id,
+            },
+            role: "Conseiller d'arrondissement",
+            area: {
+              name: '', # @todo Once the district is added to the file.
+            },
           },
         }))
       # The two people who are designated councillors appear twice.
       when 'Conseiller de la Ville désigné', 'Conseillère de la Ville désignée' # should have 2
         create_membership(properties.merge({
+          role: person.gender == 'male' ? 'Conseiller de ville désigné' : 'Conseillère de ville désignée',
           organization_id: organization_ids.fetch('ville-marie/conseil'),
           post: {
             label: "Conseiller de ville désigné (siège #{designated_councillor_number})",
@@ -153,6 +171,7 @@ class Montreal
         # The person who is city mayor and Ville-Marie mayor appears twice.
         if row['TITRE_MAIRIE'] == "Maire" # should have 1
           create_membership(properties.merge({
+            role: person.gender == 'male' ? "Maire de la Ville de Montréal" : "Mairesse de la Ville de Montréal",
             organization_id: organization_ids.fetch('ville/conseil'),
             post: {
               label: "Maire de la Ville de Montréal",
@@ -160,6 +179,7 @@ class Montreal
           }))
         elsif row['TITRE_MAIRIE'] == "Maire d'arrondissement" && row['ARRONDISSEMENT'] == 'Ville-Marie' # should have 1
           create_membership(properties.merge({
+            role: person.gender == 'male' ? "Maire d'arrondissement" : "Mairesse d'arrondissement",
             organization_id: organization_ids.fetch('ville-marie/conseil'),
             post: {
               label: "Maire de l'arrondissement de Ville-Marie",
@@ -173,17 +193,24 @@ class Montreal
       end
 
       case row['TITRE_COMITE_EXECUTIF']
-      when 'Membre du comité exécutif', 'Vice-président du comité exécutif', 'Vice-présidente du comité exécutif', 'Président du comité exécutif'
-        organization_id = organization_ids.fetch('ville/comite_executif')
-        # @todo create posts for executive committee
+      when 'Président du comité exécutif'
         create_membership(properties.merge({
-          organization_id: organization_id,
+          label: row['TITRE_COMITE_EXECUTIF'],
+          organization_id: organization_ids.fetch('ville/comite_executif'),
           post: {
-            organization_id: organization_id,
-            # @todo add more attributes to uniquely identify post (see popolo-billy?)
+            label: row['TITRE_COMITE_EXECUTIF'],
           },
         }))
-      when 'Conseiller associé', 'Conseillère associée'
+      when 'Membre du comité exécutif', 'Vice-président du comité exécutif', 'Vice-présidente du comité exécutif'
+        create_membership(properties.merge({
+          label: row['TITRE_COMITE_EXECUTIF'],
+          organization_id: organization_ids.fetch('ville/comite_executif'),
+          post: {
+            label: "Membre du comité exécutif (siège #{executive_committee_member_number})",
+          },
+        }))
+        executive_committee_member_number += 1
+      when 'Conseiller associé', 'Conseillère associée', ''
         # Do nothing.
       else
         error("Unrecognized TITRE_COMITE_EXECUTIF #{row['TITRE_COMITE_EXECUTIF']}")
@@ -191,13 +218,11 @@ class Montreal
 
       row['AUTRE_TITRE'].split("\r\n").each do |title|
         if title == "Membre du conseil d'agglomération." # Ignore others.
-          organization_id = organization_ids.fetch('agglomeration/conseil')
-          # @todo create posts for agglomeration council
           create_membership(properties.merge({
-            organization_id: organization_id,
+            label: "Membre du conseil d'agglomération",
+            organization_id: organization_ids.fetch('agglomeration/conseil'),
             post: {
-              organization_id: organization_id,
-              # @todo add more attributes to uniquely identify post (see popolo-billy?)
+              label: "Membre du conseil d'agglomération (siège #{agglomeration_council_member_number})",
             },
           }))
         end
