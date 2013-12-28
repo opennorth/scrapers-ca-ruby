@@ -12,11 +12,11 @@ class Montreal
     })
     organization_ids['cmm/conseil'] = create_organization({ # 28 posts
       name: 'Conseil de la Communauté',
-      parent_id: organization_ids['cmm'],
+      parent_id: organization_ids.fetch('cmm'),
     })
     organization_ids['cmm/comite_executif'] = create_organization({
       name: 'Comité exécutif de la Communauté',
-      parent_id: organization_ids['cmm/conseil'],
+      parent_id: organization_ids.fetch('cmm/conseil'),
     })
 
     # Whereas the administrative region of Montreal is a provincial organization
@@ -35,11 +35,11 @@ class Montreal
     organization_ids['agglomeration'] = create_organization({
       _id: 'ocd-organization/country:ca/cd:2466',
       name: 'Agglomération de Montréal',
-      parent_id: organization_ids['cmm'],
+      parent_id: organization_ids.fetch('cmm'),
     })
     organization_ids['agglomeration/conseil'] = create_organization({ # 31 posts
       name: "Conseil d'agglomération",
-      parent_id: organization_ids['agglomeration'],
+      parent_id: organization_ids.fetch('agglomeration'),
     })
 
     # The city has other suborganizations.
@@ -48,16 +48,16 @@ class Montreal
     organization_ids['ville'] = create_organization({
       _id: 'ocd-organization/country:ca/csd:2466023',
       name: 'Ville de Montréal',
-      parent_id: organization_ids['agglomeration'],
+      parent_id: organization_ids.fetch('agglomeration'),
     })
     # @see http://ville.montreal.qc.ca/portal/page?_pageid=5798,85933591&_dad=portal&_schema=PORTAL
     organization_ids['ville/conseil'] = create_organization({
       name: 'Conseil municipal',
-      parent_id: organization_ids['ville'],
+      parent_id: organization_ids.fetch('ville'),
     })
     organization_ids['ville/comite_executif'] = create_organization({ # 12 posts
       name: 'Comité exécutif',
-      parent_id: organization_ids['ville/conseil'],
+      parent_id: organization_ids.fetch('ville/conseil'),
     })
 
     CSV.parse(get('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-arrondissements.csv').force_encoding('UTF-8')) do |row|
@@ -65,12 +65,12 @@ class Montreal
       organization_ids[key] = create_organization({
         _id: row[0].sub(/\Aocd-division/, 'ocd-organization'),
         name: row[1],
-        parent_id: organization_ids['ville'],
+        parent_id: organization_ids.fetch('ville'),
       })
       subkey = "#{key}/conseil"
       organization_ids[subkey] = create_organization({
         name: "Conseil d'arrondissement",
-        parent_id: organization_ids[key],
+        parent_id: organization_ids.fetch(key),
       })
     end
   end
