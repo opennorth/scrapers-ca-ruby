@@ -24,7 +24,7 @@ class Montreal
     end
 
     response = client.get('http://ville.montreal.qc.ca/pls/portal/PORTALCON.ELUS_MUNICIPAUX_DATA.LISTE_ELUS')
-    # @todo Remove `gsub` once file is corrected. (&#151; is an em-dash in Windows-1252.)
+    # @todo Remove `gsub` and encoding once file is corrected. (&#151; is an em-dash in Windows-1252.)
     data = Oj.load(response.env[:raw_body].force_encoding('windows-1252').encode('utf-8').gsub(/&#0?151;/, '—'))
 
     designated_councillor_number        = 1
@@ -48,6 +48,9 @@ class Montreal
       # @note Certaines personnes occupent deux postes de conseillers soit :
       #   1) le poste pour lequel ils ont été élus
       #   2) le poste de conseiller désigné à l’arrondissement Ville-Marie
+      # @note TITRE_MAIRIE and TITRE_CONSEIL may not correspond to the person's
+      #   gender, as the choice is at the discretion of the person (Marc Lebel,
+      #   2 Dec 2013).
       # @see http://donnees.ville.montreal.qc.ca/dataset/bd-elus
       person = Pupa::Person.new({
         honorific_prefix: row['APPELLATION_POLITESSE'],
@@ -75,24 +78,6 @@ class Montreal
         dispatch(person)
         warn(person.errors.full_messages) if person.invalid?
         create_membership(properties.merge(organization_id: party_ids.fetch(row['PARTI_POLITIQUE'])))
-
-        # @todo Remove once file is corrected. (TITRE_MAIRIE and TITRE_CONSEIL should correspond to APPELLATION_POLITESSE.)
-        hash = if person.gender == 'male'
-          {
-            'TITRE_MAIRIE' => /Maire\b/,
-            'TITRE_CONSEIL' => 'Conseiller',
-          }
-        else
-          {
-            'TITRE_MAIRIE' => 'Mairesse',
-            'TITRE_CONSEIL' => 'Conseillère',
-          }
-        end
-        hash.each do |key,pattern|
-          unless row[key].empty? || row[key][pattern]
-            error("#{key} (#{row[key]}) doesn't agree with gender: #{person.to_h}")
-          end
-        end
       end
 
       # The mayor of Montreal has an `ARRONDISSEMENT` of "Ville de Montréal",
