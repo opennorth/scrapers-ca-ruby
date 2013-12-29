@@ -36,12 +36,16 @@ end
 require_relative 'organizations'
 require_relative 'posts'
 require_relative 'people'
+require_relative 'documents'
 
 GovernmentProcessor.add_scraping_task(:organizations)
 GovernmentProcessor.add_scraping_task(:posts)
 GovernmentProcessor.add_scraping_task(:people)
+GovernmentProcessor.add_scraping_task(:documents)
 
-Pupa::Runner.new(Montreal, {
+runner = Pupa::Runner.new(Montreal, {
   database: 'mycityhall',
   expires_in: 604800, # 1 week
-}).run(ARGV)
+})
+runner.add_action(name: 'pdf_to_text', description: 'Transform PDF to text')
+runner.run(ARGV)
