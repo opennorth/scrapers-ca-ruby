@@ -4,7 +4,7 @@ The [bulk of Pupa scrapers](http://github.com/opencivicdata/scrapers-ca) for Can
 
 ## Getting Started
 
-Install Git, Ruby 2.0 and MongoDB, if you haven't already. We recommend [RVM](http://rvm.io/) or [rbenv](https://github.com/sstephenson/rbenv) to manage your Rubies.
+Install Git, Ruby 2.x and MongoDB. We recommend [RVM](http://rvm.io/) or [rbenv](https://github.com/sstephenson/rbenv) to manage your Rubies.
 
 Install the Bundler gem:
 
