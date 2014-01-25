@@ -6,26 +6,25 @@ class Montreal
     }
 
     party_ids = {}
-    { 'cm'  => 'Coalition Montréal - Marcel Côté',
-      'ea'  => 'Équipe Anjou',
-      'ebt' => 'Équipe Barbe Team - Pro action LaSalle',
-      'eco' => 'Équipe conservons Outremont',
-      'edc' => 'Équipe Denis Coderre pour Montréal',
-      'edl' => 'Équipe Dauphin Lachine',
-      'erb' => 'Équipe Richard Bélanger',
-      'ind' => 'Indépendant',
-      'pm'  => 'Projet Montréal',
-      'vcm' => 'Vrai changement pour Montréal',
-    }.each do |key,name|
-      party_ids[key] = create_organization({
+    [ 'Coalition Montréal - Marcel Côté',
+      'Équipe Anjou',
+      'Équipe Barbe Team – Pro action LaSalle',
+      'Équipe conservons Outremont',
+      'Équipe Denis Coderre pour Montréal',
+      'Équipe Dauphin Lachine',
+      'Équipe Richard Bélanger',
+      'Indépendant',
+      'Projet Montréal - Équipe Bergeron',
+      'Vrai changement pour Montréal - Groupe Mélanie Joly',
+    ].each do |name|
+      party_ids[name] = create_organization({
         name: name,
         classification: 'political party',
       })
     end
 
     response = client.get('http://ville.montreal.qc.ca/pls/portal/PORTALCON.ELUS_MUNICIPAUX_DATA.LISTE_ELUS')
-    # @todo Remove `gsub` and encoding once file is corrected. (&#151; is an em-dash in Windows-1252.)
-    data = Oj.load(response.env[:raw_body].force_encoding('windows-1252').encode('utf-8').gsub(/&#0?151;/, '—'))
+    data = Oj.load(response.env[:raw_body])
 
     designated_councillor_number        = 1
     executive_committee_member_number   = 1
@@ -38,12 +37,18 @@ class Montreal
         row[key] = value.strip
       end
 
-      # @todo Remove once file is corrected. ("La Petite-Patrie" should have a hyphen, not an en dash.)
-      row['ARRONDISSEMENT'].sub!('–', '-')
+      # @todo Remove once file is corrected.
+      { "L'Île-Bizard-Sainte-Geneviève" => "L'Île-Bizard—Sainte-Geneviève", #m-dash
+        'Côte-des-Neiges-Notre-Dame-de-Grâce' => 'Côte-des-Neiges—Notre-Dame-de-Grâce', # m-dash
+        'Mercier-Hochelaga-Maisonneuve' => 'Mercier—Hochelaga-Maisonneuve', # m-dash
+        'Rivière-des-Prairies-Pointe-aux-Trembles' => 'Rivière-des-Prairies—Pointe-aux-Trembles', # m-dash
+        'Rosemont–La Petite–Patrie' => 'Rosemont—La Petite-Patrie', # m-dash, hyphen
+        'Villeray-Saint-Michel-Parc-Extension' => 'Villeray—Saint-Michel—Parc-Extension', # m-dashes
+      }.each do |pattern,replacement|
+        row['ARRONDISSEMENT'].sub!(pattern, replacement)
+      end
       # (Email addresses should not have a space after "@".)
       row['COURRIEL'].gsub!(' ', '')
-      # (All records should set APPELLATION_POLITESSE.)
-      row['APPELLATION_POLITESSE'] = 'Monsieur' if row['PRENOM'] == 'Jean-Dominic' && row['NOM'] == 'Lévesque-René'
 
       # @note Certaines personnes occupent deux postes de conseillers soit :
       #   1) le poste pour lequel ils ont été élus
@@ -155,7 +160,7 @@ class Montreal
         designated_councillor_number += 1
       when ''
         # The person who is city mayor and Ville-Marie mayor appears twice.
-        if row['TITRE_MAIRIE'] == "Maire" # should have 1
+        if row['TITRE_MAIRIE'] == "Maire de la Ville" # should have 1
           create_membership(properties.merge({
             role: person.gender == 'male' ? "Maire de la Ville de Montréal" : "Mairesse de la Ville de Montréal",
             organization_id: organization_ids.fetch('ville/conseil'),

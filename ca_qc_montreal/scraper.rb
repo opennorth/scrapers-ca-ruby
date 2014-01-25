@@ -1,8 +1,10 @@
 require File.expand_path(File.join('..', 'utils.rb'), __dir__)
 
 class Pupa::Person
+  EMAIL_REGEX = /\A[A-Za-z.-]+@ville.montreal.qc.ca\z/
+
   validates_inclusion_of :honorific_prefix, in: %w(Monsieur Madame)
-  validates_format_of :email, with: /\A[a-z.-]+@ville.montreal.qc.ca\z/, allow_blank: true
+  validates_format_of :email, with: EMAIL_REGEX, allow_blank: true
   validates_format_of :image, with: %r{\Ahttp://ville.montreal.qc.ca/pls/portal/docs/PAGE/COLLECTIONS_GENERALES/MEDIA/Images/Public/[\w-]+\.(?:JPG|jpg)\z}
   validate :validate_email_and_address
 
@@ -10,7 +12,7 @@ class Pupa::Person
     contact_details.each do |contact_detail|
       case contact_detail[:type]
       when 'email'
-        unless contact_detail[:value][/\A[a-z.-]+@ville.montreal.qc.ca\z/]
+        unless contact_detail[:value][EMAIL_REGEX]
           errors.add(:contact_details, "contain an invalid email address: #{contact_detail[:value]}")
         end
       when 'address'
