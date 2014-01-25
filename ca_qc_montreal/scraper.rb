@@ -1,5 +1,55 @@
 require File.expand_path(File.join('..', 'utils.rb'), __dir__)
 
+class Pupa::Person
+  validates_inclusion_of :honorific_prefix, in: %w(Monsieur Madame)
+  validates_format_of :email, with: /\A[a-z.-]+@ville.montreal.qc.ca\z/, allow_blank: true
+  validates_format_of :image, with: %r{\Ahttp://ville.montreal.qc.ca/pls/portal/docs/PAGE/COLLECTIONS_GENERALES/MEDIA/Images/Public/[\w-]+\.(?:JPG|jpg)\z}
+  validate :validate_email_and_address
+
+  def validate_email_and_address
+    contact_details.each do |contact_detail|
+      case contact_detail[:type]
+      when 'email'
+        unless contact_detail[:value][/\A[a-z.-]+@ville.montreal.qc.ca\z/]
+          errors.add(:contact_details, "contain an invalid email address: #{contact_detail[:value]}")
+        end
+      when 'address'
+        # Normalize newlines, and remove commas and spaces at line endings.
+        contact_detail[:value] = contact_detail[:value].split(/[, ]*\r\n/).join("\n")
+        # Normalize whitespace, apostrophes and province.
+        contact_detail[:value].squeeze!(' ')
+        contact_detail[:value].gsub!('’', "'")
+        contact_detail[:value].sub!(/, Québec\b/, ' (Québec)')
+        # Remove unnecessary address parts.
+        contact_detail[:value].sub!(/Bureau des élus de (?:Pointe-aux-Trembles|Rivière-des-Prairies)\n/, '')
+        # Add a comma after the street number.
+        contact_detail[:value].sub!(/\A(\d+) /, '\1, ')
+        # Correct typographical errors.
+        contact_detail[:value].sub!(/\bLasalle\b/, 'LaSalle')
+        contact_detail[:value].sub!(/\nbureau\b/, 'Bureau')
+        contact_detail[:value].sub!(/\bQu\.bec\b/, 'Québec')
+        # Add a new line before the city and province line.
+        contact_detail[:value].sub!(/ (?=(?:Anjou|L'Île-Bizard|Lachine|LaSalle|Montréal|Montréal-Nord|Outremont|Pierrefonds|Saint-Laurent|Saint-Léonard) \(Québec\))/, "\n")
+
+        unless contact_detail[:value][/\A[\dAB-]+, (?:avenue|boul\.|boulevard|ch\.|montée|rue) [^\n]+(?:\n\d+e étage|\n(?:Bureau|Suite) [\dAB.-]+)?\n(?:Anjou|L'Île-Bizard|Lachine|LaSalle|Montréal|Montréal-Nord|Outremont|Pierrefonds|Saint-Laurent|Saint-Léonard) \(Québec\)\nH[0-9][ABCEGHJKLMNPRSTVWXYZ] [0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]\z/]
+          errors.add(:contact_details, "contain an invalid address: #{contact_detail[:value]}")
+        end
+      end
+    end
+  end
+end
+
+class Document
+  validates_inclusion_of :description, in: [
+    'Assemblée extraordinaire',
+    'Assemblée ordinaire',
+    'Assemblée spéciale',
+    'Séance extraordinaire',
+    'Séance ordinaire',
+    'Séance spéciale',
+  ]
+end
+
 class Montreal < GovernmentProcessor
   attr_reader :organization_ids
 
@@ -38,10 +88,10 @@ require_relative 'posts'
 require_relative 'people'
 require_relative 'documents'
 
-GovernmentProcessor.add_scraping_task(:organizations)
-GovernmentProcessor.add_scraping_task(:posts)
-GovernmentProcessor.add_scraping_task(:people)
-GovernmentProcessor.add_scraping_task(:documents)
+Montreal.add_scraping_task(:organizations)
+Montreal.add_scraping_task(:posts)
+Montreal.add_scraping_task(:people)
+Montreal.add_scraping_task(:documents)
 
 runner = Pupa::Runner.new(Montreal, {
   database: 'mycityhall',
