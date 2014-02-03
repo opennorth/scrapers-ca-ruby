@@ -8,7 +8,7 @@ class Montreal
     party_ids = {}
     [ 'Coalition Montréal - Marcel Côté',
       'Équipe Anjou',
-      'Équipe Barbe Team – Pro action LaSalle',
+      'Équipe Barbe Team – Pro action LaSalle', # n-dash
       'Équipe conservons Outremont',
       'Équipe Denis Coderre pour Montréal',
       'Équipe Dauphin Lachine',
@@ -42,12 +42,12 @@ class Montreal
         'Côte-des-Neiges-Notre-Dame-de-Grâce' => 'Côte-des-Neiges—Notre-Dame-de-Grâce', # m-dash
         'Mercier-Hochelaga-Maisonneuve' => 'Mercier—Hochelaga-Maisonneuve', # m-dash
         'Rivière-des-Prairies-Pointe-aux-Trembles' => 'Rivière-des-Prairies—Pointe-aux-Trembles', # m-dash
-        'Rosemont–La Petite–Patrie' => 'Rosemont—La Petite-Patrie', # m-dash, hyphen
+        'Rosemont–La Petite–Patrie' => 'Rosemont—La Petite-Patrie', # n-dashes to m-dash and hyphen
         'Villeray-Saint-Michel-Parc-Extension' => 'Villeray—Saint-Michel—Parc-Extension', # m-dashes
       }.each do |pattern,replacement|
         row['ARRONDISSEMENT'].sub!(pattern, replacement)
       end
-      # (Email addresses should not have a space after "@".)
+      # @todo Remove once file is corrected. (Email addresses should not have a space after "@".)
       row['COURRIEL'].gsub!(' ', '')
 
       # @note Certaines personnes occupent deux postes de conseillers soit :
