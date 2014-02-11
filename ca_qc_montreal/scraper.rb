@@ -99,7 +99,7 @@ require_relative 'documents'
 Montreal.add_scraping_task(:organizations)
 Montreal.add_scraping_task(:posts)
 Montreal.add_scraping_task(:people)
-# Montreal.add_scraping_task(:documents)
+# Montreal.add_scraping_task(:documents) # @todo uncomment
 
 runner = Pupa::Runner.new(Montreal, {
   database: 'mycityhall',
