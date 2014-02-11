@@ -3,6 +3,7 @@ require 'bundler/setup'
 require 'csv'
 
 require 'active_model'
+require 'multi_xml'
 require 'nokogiri'
 require 'pupa'
 require 'zip/zip'

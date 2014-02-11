@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 gem 'activemodel'
+gem 'multi_xml'
 gem 'nokogiri'
-gem 'pupa', '~> 0.0.12'
+gem 'pupa', '~> 0.0.13'
 gem 'rubyzip', '~> 0.9.9'
