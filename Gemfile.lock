@@ -48,6 +48,7 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.38)
+    unicode_utils (1.4.0)
 
 PLATFORMS
   ruby
@@ -58,3 +59,4 @@ DEPENDENCIES
   nokogiri
   pupa (~> 0.0.13)
   rubyzip (~> 0.9.9)
+  unicode_utils

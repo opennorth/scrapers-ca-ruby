@@ -7,6 +7,7 @@ require 'multi_xml'
 require 'nokogiri'
 require 'pupa'
 require 'zip/zip'
+require 'unicode_utils'
 
 class Pupa::Membership
   attr_reader :person, :post
