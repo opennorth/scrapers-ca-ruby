@@ -2,9 +2,9 @@ class Montreal
   def scrape_posts # should have 198
     # @see http://donnees.ville.montreal.qc.ca/dataset/elections-2013-postes-electifs
     CSV.parse(get('http://donnees.ville.montreal.qc.ca/storage/f/2014-01-06T16%3A29%3A28.760Z/electiongene-2013-posteselectifs.csv').force_encoding('utf-8'), headers: true) do |row|
-      borough_number = row['no'].split('.').first.to_i
-      role = row['type']
-      label = row['poste']
+      borough_number = row.fetch('no').split('.').first.to_i
+      role = row.fetch('type')
+      label = row.fetch('poste')
 
       # @todo Remove once file is corrected.
       label.sub!('du dentre', 'du Centre')
