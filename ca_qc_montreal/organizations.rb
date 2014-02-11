@@ -4,19 +4,22 @@ class Montreal
   # @return [Hash] the JSON IDs of scraped organizations
   # @see http://www.mamrot.gouv.qc.ca/organisation-municipale/organisation-territoriale/instances-municipales/paliers-municipaux/
   # @see http://www.mamrot.gouv.qc.ca/pub/organisation_municipale/organisation_territoriale/organisation_municipale.pdf
-  def scrape_organizations
+  def scrape_organizations # should have 22 jurisdictions, 22 councils, 2 committees
     # The CMM has other suborganizations.
     # @see http://cmm.qc.ca/qui-sommes-nous/
     organization_ids['cmm'] = create_organization({
       name: 'Communauté métropolitaine de Montréal',
+      classification: 'jurisdiction',
     })
     organization_ids['cmm/conseil'] = create_organization({ # 28 posts
       name: 'Conseil de la Communauté',
       parent_id: organization_ids.fetch('cmm'),
+      classification: 'council',
     })
     organization_ids['cmm/comite_executif'] = create_organization({
       name: 'Comité exécutif de la Communauté',
       parent_id: organization_ids.fetch('cmm/conseil'),
+      classification: 'committee',
     })
 
     # Whereas the administrative region of Montreal is a provincial organization
@@ -36,10 +39,12 @@ class Montreal
       _id: 'ocd-organization/country:ca/cd:2466',
       name: 'Agglomération de Montréal',
       parent_id: organization_ids.fetch('cmm'),
+      classification: 'jurisdiction',
     })
     organization_ids['agglomeration/conseil'] = create_organization({ # 31 posts
       name: "Conseil d'agglomération",
       parent_id: organization_ids.fetch('agglomeration'),
+      classification: 'council',
     })
 
     # The city has other suborganizations.
@@ -49,15 +54,18 @@ class Montreal
       _id: 'ocd-organization/country:ca/csd:2466023',
       name: 'Ville de Montréal',
       parent_id: organization_ids.fetch('agglomeration'),
+      classification: 'jurisdiction',
     })
     # @see http://ville.montreal.qc.ca/portal/page?_pageid=5798,85933591&_dad=portal&_schema=PORTAL
     organization_ids['ville/conseil'] = create_organization({
       name: 'Conseil municipal',
       parent_id: organization_ids.fetch('ville'),
+      classification: 'council',
     })
     organization_ids['ville/comite_executif'] = create_organization({ # 12 posts
       name: 'Comité exécutif',
       parent_id: organization_ids.fetch('ville/conseil'),
+      classification: 'committee',
     })
 
     CSV.parse(get('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-arrondissements.csv').force_encoding('UTF-8')) do |row|
@@ -66,11 +74,13 @@ class Montreal
         _id: row[0].sub(/\Aocd-division/, 'ocd-organization'),
         name: row[1],
         parent_id: organization_ids.fetch('ville'),
+        classification: 'jurisdiction',
       })
       subkey = "#{key}/conseil"
       organization_ids[subkey] = create_organization({
         name: "Conseil d'arrondissement",
         parent_id: organization_ids.fetch(key),
+        classification: 'council',
       })
     end
   end
