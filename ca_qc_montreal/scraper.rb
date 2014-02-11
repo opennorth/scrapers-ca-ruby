@@ -66,7 +66,7 @@ class Montreal < GovernmentProcessor
   def boroughs_by_number
     @boroughs_by_number ||= begin
       {}.tap do |hash|
-        CSV.parse(get('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-numeric/ca_qc_montreal_arrondissements.csv').force_encoding('UTF-8')) do |row|
+        CSV.parse(get('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-numeric/census_subdivision-montreal-arrondissements.csv').force_encoding('UTF-8')) do |row|
           hash[row[1].to_i] = row[0].split(':').last
         end
       end
