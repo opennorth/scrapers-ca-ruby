@@ -1,10 +1,12 @@
 require File.expand_path(File.join('..', 'utils.rb'), __dir__)
 
 class Pupa::Person
-  EMAIL_REGEX = /\A[A-Za-z.-]+@ville.montreal.qc.ca\z/
+  EMAIL_RE = /\A[A-Za-z.-]+@ville.montreal.qc.ca\z/
+  BOROUGH_RE = /Anjou|L'Île-Bizard|Lachine|LaSalle|Montréal|Montréal-Nord|Outremont|Pierrefonds|Saint-Laurent|Saint-Léonard/
+  POSTAL_CODE_RE = /H[0-9][ABCEGHJKLMNPRSTVWXYZ] [0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]/
 
   validates_inclusion_of :honorific_prefix, in: %w(Monsieur Madame)
-  validates_format_of :email, with: EMAIL_REGEX, allow_blank: true
+  validates_format_of :email, with: EMAIL_RE, allow_blank: true
   validates_format_of :image, with: %r{\Ahttp://ville.montreal.qc.ca/pls/portal/docs/PAGE/COLLECTIONS_GENERALES/MEDIA/Images/Public/[\w-]+\.(?:JPG|jpg)\z}
   validate :validate_email_and_address
 
@@ -12,7 +14,7 @@ class Pupa::Person
     contact_details.each do |contact_detail|
       case contact_detail[:type]
       when 'email'
-        unless contact_detail[:value][EMAIL_REGEX]
+        unless contact_detail[:value][EMAIL_RE]
           errors.add(:contact_details, "contain an invalid email address: #{contact_detail[:value]}")
         end
       when 'address'
@@ -30,10 +32,14 @@ class Pupa::Person
         contact_detail[:value].sub!(/\bLasalle\b/, 'LaSalle')
         contact_detail[:value].sub!(/\nbureau\b/, 'Bureau')
         contact_detail[:value].sub!(/\bQu\.bec\b/, 'Québec')
+        # Add the province if not present.
+        contact_detail[:value].sub!(/(#{BOROUGH_RE})(?=\n#{POSTAL_CODE_RE}\z)/, '\1 (Québec)')
         # Add a new line before the city and province line.
-        contact_detail[:value].sub!(/ (?=(?:Anjou|L'Île-Bizard|Lachine|LaSalle|Montréal|Montréal-Nord|Outremont|Pierrefonds|Saint-Laurent|Saint-Léonard) \(Québec\))/, "\n")
+        contact_detail[:value].sub!(/ (?=(?:#{BOROUGH_RE}) \(Québec\))/, "\n")
+        # Add a new line before the postal code line.
+        contact_detail[:value].sub!(/ (?=#{POSTAL_CODE_RE}\z)/, "\n")
 
-        unless contact_detail[:value][/\A[\dAB-]+, (?:avenue|boul\.|boulevard|ch\.|montée|rue) [^\n]+(?:\n\d+e étage|\n(?:Bureau|Suite) [\dAB.-]+)?\n(?:Anjou|L'Île-Bizard|Lachine|LaSalle|Montréal|Montréal-Nord|Outremont|Pierrefonds|Saint-Laurent|Saint-Léonard) \(Québec\)\nH[0-9][ABCEGHJKLMNPRSTVWXYZ] [0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]\z/]
+        unless contact_detail[:value][/\A[\dAB-]+, (?:avenue|boul\.|boulevard|ch\.|montée|rue) [^\n]+(?:\n\d+e étage(?:, bureau \d+)?|\n(?:Bureau|Suite) [\dAB.-]+)?\n(?:#{BOROUGH_RE}) \(Québec\)\n#{POSTAL_CODE_RE}\z/]
           errors.add(:contact_details, "contain an invalid address: #{contact_detail[:value]}")
         end
       end

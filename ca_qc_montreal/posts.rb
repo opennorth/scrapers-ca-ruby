@@ -1,5 +1,5 @@
 class Montreal
-  def scrape_posts # should have 170
+  def scrape_posts # should have 198
     # @see http://donnees.ville.montreal.qc.ca/dataset/elections-2013-postes-electifs
     CSV.parse(get('http://donnees.ville.montreal.qc.ca/storage/f/2014-01-06T16%3A29%3A28.760Z/electiongene-2013-posteselectifs.csv').force_encoding('utf-8'), headers: true) do |row|
       borough_number = row['no'].split('.').first.to_i
