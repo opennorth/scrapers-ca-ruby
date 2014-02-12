@@ -1,24 +1,37 @@
 class Montreal
   def scrape_posts # should have 198
-    # @see http://donnees.ville.montreal.qc.ca/dataset/elections-2013-postes-electifs
-    CSV.parse(get('http://donnees.ville.montreal.qc.ca/storage/f/2014-01-06T16%3A29%3A28.760Z/electiongene-2013-posteselectifs.csv').force_encoding('utf-8'), headers: true) do |row|
-      borough_number = row.fetch('no').split('.').first.to_i
-      role = row.fetch('type')
-      label = row.fetch('poste')
+    boroughs = {}
+    CSV.parse(get('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-numeric/census_subdivision-montreal-arrondissements.csv').force_encoding('utf-8')) do |row|
+      boroughs[row[1]] = row[0].sub(/\Aocd-division\b/, 'ocd-organization')
+    end
 
-      # @todo Remove once file is corrected.
-      label.sub!('du dentre', 'du Centre')
-      label.gsub!(/\?|–/, '—') # en dash to em dash
+    # @see http://donnees.ville.montreal.qc.ca/dataset/resultats-elections-2013
+    get('http://donnees.ville.montreal.qc.ca/storage/f/2013-12-11T15%3A59%3A02.221Z/resultats-election-2013-finaux-sommaires.xml')['resultats']['resultats_postes']['poste'].each do |post|
+      role = case post['nom']
+      when /\AMaire de l'arrondissement\b/
+        "Maire d'arrondissement"
+      when /\AConseiller de la ville\b/
+        "Conseiller de ville"
+      when /\AConseiller d'arrondissement\b/
+        "Conseiller d'arrondissement"
+      else
+        error("Unrecognized label #{post['nom']}" )
+      end
+
+      label = post.fetch('nom')
+      label.sub!(/\AConseiller d'arrondissement - District électoral\b/, "Conseiller d'arrondissement")
+      label.sub!(/\AConseiller de la ville - District électoral\b/, "Conseiller de ville")
+      label.sub!(/\AConseiller de la ville arrondissement\b/, "Conseiller de ville")
+      label.gsub!('–', '—') # en dash to em dash
+      label.gsub!('−', '—') # minus sign to em dash
       label.strip!
 
-      if label[/\AMair/]
-        label = label.sub(/\AMairie\b/, 'Maire')
-        # @todo Remove the "?" after "Mairi" once file is corrected.
-        area_name = label.sub(/\bdu\b/, 'de Le').match(/\AMairi?e de l(?:'arrondissement|a Ville) d(?:'|e )(.+?)\z/).captures.fetch(0).strip
-      else
-        label_suffix = label.match(/\A(?:Conseiller de ville arrondissement|District électoral)(.+?)(?:\(Pierrefonds-Roxboro\))?\z/).captures.fetch(0).strip
-        label = "#{role} #{label_suffix}"
-        area_name = label_suffix.match(/\Ad(?:'|e |e l'|e la |u )(.+?)(?: \(.+\))?\z/).captures.fetch(0).strip
+      area_name = post['district']['__content__'] || post['arrondissement']['__content__']
+      area_name.gsub!('–', '—') # en dash to em dash
+      identifier = post.fetch('id')
+
+      unless label[area_name]
+        warn("expected #{label} to match #{area_name}")
       end
 
       properties = {
@@ -27,21 +40,34 @@ class Montreal
         area: {
           name: area_name,
         },
+        identifiers: [{
+          identifier: identifier,
+        }],
       }
 
-      if ["Maire de la Ville de Montréal", "Maire d'arrondissement", "Conseiller de ville"].include?(role)
-        create_post(properties.merge(organization_id: organization_ids.fetch('ville/conseil')))
+      if ["Maire d'arrondissement", "Conseiller de ville"].include?(role)
+        create_post(properties.merge(organization_id: 'ocd-organization/country:ca/csd:2466023/council'))
       end
 
-      if ["Maire d'arrondissement", "Conseiller de ville", "Conseiller d'arrondissement"].include?(role)
-        key = boroughs_by_number[borough_number]
-        create_post(properties.merge(organization_id: organization_ids.fetch("#{key}/conseil")))
-      end
+      create_post(properties.merge(organization_id: "#{boroughs.fetch(identifier.split(',').first)}/council"))
     end
+
+    # @see http://donnees.ville.montreal.qc.ca/dataset/elections-2013-postes-electifs
+    dispatch(Pupa::Post.new({
+      label: "Maire de la Ville de Montréal",
+      role: "Maire de la Ville de Montréal",
+      organization_id: 'ocd-organization/country:ca/csd:2466023/council',
+      area: {
+        name: 'Montréal',
+      },
+      identifiers: [{
+        identifier: '0,00',
+      }],
+    }))
 
     # @see http://election-montreal.qc.ca/cadre-electoral-districts/cadre-electoral/arrondissements/villemarie.en.html
     properties = {
-      organization_id: organization_ids.fetch('ville-marie/conseil'),
+      organization_id: 'ocd-organization/country:ca/csd:2466023/arrondissement:ville-marie/council',
       area: {
         name: 'Ville-Marie',
       }
@@ -63,14 +89,14 @@ class Montreal
       dispatch(Pupa::Post.new({
         label: "Membre du comité exécutif (siège #{n})",
         role: 'Membre',
-        organization_id: organization_ids.fetch('ville/comite_executif'),
+        organization_id: 'ocd-organization/country:ca/csd:2466023/executive_committee',
       }))
     end
 
     dispatch(Pupa::Post.new({
       label: 'Président du comité exécutif',
       role: 'Président',
-      organization_id: organization_ids.fetch('ville/comite_executif'),
+      organization_id: 'ocd-organization/country:ca/csd:2466023/executive_committee',
     }))
 
     # The Mayor of Montreal and 15 members of municipal council.
@@ -79,14 +105,14 @@ class Montreal
       dispatch(Pupa::Post.new({
         label: "Membre du conseil d'agglomération (siège #{n})",
         role: 'Membre',
-        organization_id: organization_ids.fetch('agglomeration/conseil'),
+        organization_id: 'ocd-organization/country:ca/cd:2466/council',
       }))
     end
   end
 
   def create_post(properties)
     post = Pupa::Post.new(properties)
-    post.add_source('http://donnees.ville.montreal.qc.ca/dataset/elections-2013-postes-electifs', note: 'Portail des données ouvertes de la Ville de Montréal')
+    post.add_source('http://donnees.ville.montreal.qc.ca/dataset/resultats-elections-2013', note: 'Portail des données ouvertes de la Ville de Montréal')
     dispatch(post)
   end
 end

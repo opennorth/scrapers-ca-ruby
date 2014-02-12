@@ -59,31 +59,15 @@ class Document
 end
 
 class Montreal < GovernmentProcessor
-  attr_reader :organization_ids
-
   def initialize(*args)
     super
-    # Populated by `scrape_organizations`.
-    @organization_ids ||= {}
-  end
-
-  # @return [Hash] a hash in which keys are Élection Montréal numeric
-  #   identifiers and values are OCD type IDs
-  def boroughs_by_number
-    @boroughs_by_number ||= begin
-      {}.tap do |hash|
-        CSV.parse(get('https://raw.github.com/opencivicdata/ocd-division-ids/master/mappings/country-ca-numeric/census_subdivision-montreal-arrondissements.csv').force_encoding('UTF-8')) do |row|
-          hash[row[1].to_i] = row[0].split(':').last
-        end
-      end
-    end
   end
 
   # @return [Hash] a hash in which keys are names and values are OCD type IDs
   def boroughs_by_name
     @boroughs_by_name ||= begin
       {}.tap do |hash|
-        CSV.parse(get('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-arrondissements.csv').force_encoding('UTF-8')) do |row|
+        CSV.parse(get('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-arrondissements.csv').force_encoding('utf-8')) do |row|
           hash[row[1]] = row[0].split(':').last
         end
       end

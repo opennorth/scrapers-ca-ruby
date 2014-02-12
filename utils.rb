@@ -47,6 +47,8 @@ class Pupa::Person
 end
 
 class Pupa::Post
+  include Pupa::Concerns::Identifiable
+
   attr_accessor :area, :position
   dump :area, :position
 
