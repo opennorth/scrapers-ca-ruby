@@ -59,20 +59,6 @@ class Document
 end
 
 class Montreal < GovernmentProcessor
-  def initialize(*args)
-    super
-  end
-
-  # @return [Hash] a hash in which keys are names and values are OCD type IDs
-  def boroughs_by_name
-    @boroughs_by_name ||= begin
-      {}.tap do |hash|
-        CSV.parse(get('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-arrondissements.csv').force_encoding('utf-8')) do |row|
-          hash[row[1]] = row[0].split(':').last
-        end
-      end
-    end
-  end
 end
 
 require_relative 'organizations'

@@ -96,6 +96,8 @@ class Montreal
   end
 
   def create_organization(properties)
-    dispatch(Pupa::Organization.new(properties))
+    organization = Pupa::Organization.new(properties)
+    dispatch(organization)
+    organization._id
   end
 end

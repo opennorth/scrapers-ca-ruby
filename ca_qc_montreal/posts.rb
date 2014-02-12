@@ -70,11 +70,14 @@ class Montreal
       organization_id: 'ocd-organization/country:ca/csd:2466023/arrondissement:ville-marie/council',
       area: {
         name: 'Ville-Marie',
-      }
+      },
     }
     dispatch(Pupa::Post.new(properties.merge({
       label: "Maire de l'arrondissement de Ville-Marie",
       role: "Maire d'arrondissement",
+      identifiers: [{
+        identifier: '18,00',
+      }],
     })))
     dispatch(Pupa::Post.new(properties.merge({
       label: "Conseiller de ville désigné (siège 1)",
