@@ -1,5 +1,10 @@
 class Montreal
   def scrape_people # should have 103
+    boroughs = {}
+    CSV.parse(get('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-arrondissements.csv').force_encoding('utf-8')) do |row|
+      boroughs[row[1]] = row[0].sub(/\Aocd-division\b/, 'ocd-organization')
+    end
+
     gender_map = {
       'Madame' => 'female',
       'Monsieur' => 'male',
@@ -23,8 +28,32 @@ class Montreal
       })
     end
 
-    response = client.get('http://ville.montreal.qc.ca/pls/portal/PORTALCON.ELUS_MUNICIPAUX_DATA.LISTE_ELUS')
-    data = Oj.load(response.env[:raw_body])
+    # @see http://donnees.ville.montreal.qc.ca/dataset/resultats-elections-2013
+    identifiers = {}
+    get('http://donnees.ville.montreal.qc.ca/storage/f/2013-12-11T15%3A59%3A02.221Z/resultats-election-2013-finaux-sommaires.xml')['resultats']['resultats_postes']['poste'].each do |post|
+      candidate = post['candidat'].find do |candidate|
+        candidate['nb_voix_majorite']
+      end
+
+      family_name = UnicodeUtils.downcase(candidate['nom'], :fr).gsub(/(?<=\A|\bmc|[ '-])(.)/) do
+        $1.capitalize
+      end
+
+      # Fix names that won't match otherwise.
+      if family_name == 'Desousa'
+        family_name = 'DeSousa'
+      end
+      given_name = candidate['prenom']
+      if given_name == 'Dimitrios (Jim)'
+        given_name = 'Dimitrios Jim'
+      end
+      name = "#{given_name} #{family_name}"
+      if name == 'Laura Palestini'
+        name = 'Laura-Ann Palestini'
+      end
+
+      identifiers[name] = post.fetch('id')
+    end
 
     designated_councillor_number        = 1
     executive_committee_member_number   = 1
@@ -32,7 +61,8 @@ class Montreal
 
     # If any memberships seem to be missing, check the latest news.
     # @see http://election-montreal.qc.ca/actualites/index.en.html
-    data.each do |row|
+    # @see http://donnees.ville.montreal.qc.ca/dataset/bd-elus
+    get('http://ville.montreal.qc.ca/pls/portal/PORTALCON.ELUS_MUNICIPAUX_DATA.LISTE_ELUS').each do |row|
       row.each do |key,value|
         row[key] = value.strip
       end
@@ -47,8 +77,6 @@ class Montreal
       }.each do |pattern,replacement|
         row['ARRONDISSEMENT'].sub!(pattern, replacement)
       end
-      # @todo Remove once file is corrected. (Email addresses should not have a space after "@".)
-      row['COURRIEL'].gsub!(' ', '')
 
       # @note Certaines personnes occupent deux postes de conseillers soit :
       #   1) le poste pour lequel ils ont été élus
@@ -56,10 +84,10 @@ class Montreal
       # @note TITRE_MAIRIE and TITRE_CONSEIL may not correspond to the person's
       #   gender, as the choice is at the discretion of the person (Marc Lebel,
       #   2 Dec 2013).
-      # @see http://donnees.ville.montreal.qc.ca/dataset/bd-elus
+      name = "#{row['PRENOM']} #{row['NOM']}"
       person = Pupa::Person.new({
         honorific_prefix: row['APPELLATION_POLITESSE'],
-        name: "#{row['PRENOM']} #{row['NOM']}",
+        name: name,
         family_name: row['NOM'],
         given_name: row['PRENOM'],
         email: row['COURRIEL'],
@@ -73,7 +101,7 @@ class Montreal
       person.add_contact_detail('voice', row['TELEPHONE_HOTEL_DE_VILLE'], note: 'Hôtel de ville')
       person.add_contact_detail('fax', row['TELECOPIE_ARRONDISSEMENT'], note: 'Arrondissement')
       person.add_contact_detail('fax', row['TELECOPIE_HOTEL_DE_VILLE'], note: 'Hôtel de ville')
-      person.add_source('http://donnees.ville.montreal.qc.ca/fiche/bd-elus/', note: 'Portail des données ouvertes de la Ville de Montréal')
+      person.add_source('http://donnees.ville.montreal.qc.ca/dataset/bd-elus', note: 'Portail des données ouvertes de la Ville de Montréal')
 
       # Dispatch the three people who appear twice and their party memberships only once.
       if row['TITRE_MAIRIE'] == 'Maire' || ['Conseiller de la Ville désigné', 'Conseillère de la Ville désignée'].include?(row['TITRE_CONSEIL'])
@@ -85,10 +113,12 @@ class Montreal
         create_membership(properties.merge(organization_id: party_ids.fetch(row['PARTI_POLITIQUE'])))
       end
 
-      # The mayor of Montreal has an `ARRONDISSEMENT` of "Ville de Montréal",
-      # which will raise a `KeyError` if we perform the lookup eagerly.
-      borough_council_ids = Hash.new do |hash,key|
-        hash[key] = organization_ids.fetch("#{boroughs_by_name.fetch(key)}/conseil")
+      identifier = if row['TITRE_MAIRIE'] == "Maire de la Ville"
+        '0,00'
+      elsif row['TITRE_MAIRIE'] == "Maire d'arrondissement" && row['ARRONDISSEMENT'] == 'Ville-Marie'
+        '18,00'
+      else
+        identifiers.fetch(name)
       end
 
       # Inherit the post's role and label.
@@ -97,14 +127,12 @@ class Montreal
         if row['TITRE_MAIRIE'][/\AMaire/]
           role = person.gender == 'male' ? "Maire d'arrondissement" : "Mairesse d'arrondissement"
           post_role = "Maire d'arrondissement"
-          area_name = row['ARRONDISSEMENT']
         else
           role = person.gender == 'male' ? "Conseiller de ville" : "Conseillère de ville"
           post_role = "Conseiller de ville"
-          area_name = '' # @todo Once the district is added to the file.
         end
 
-        organization_id = organization_ids.fetch('ville/conseil')
+        organization_id = 'ocd-organization/country:ca/csd:2466023/council'
         create_membership(properties.merge({
           role: role,
           organization_id: organization_id,
@@ -113,13 +141,13 @@ class Montreal
               organization_id: organization_id,
             },
             role: post_role,
-            area: {
-              name: area_name,
+            identifiers: {
+              identifier: identifier,
             },
           },
         }))
 
-        organization_id = borough_council_ids[row['ARRONDISSEMENT']]
+        organization_id = "#{boroughs.fetch(row['ARRONDISSEMENT'])}/council"
         create_membership(properties.merge({
           role: role,
           organization_id: organization_id,
@@ -128,13 +156,13 @@ class Montreal
               organization_id: organization_id,
             },
             role: post_role,
-            area: {
-              name: area_name,
+            identifiers: {
+              identifier: identifier,
             },
           },
         }))
       when "Conseiller d'arrondissement", "Conseillère d'arrondissement" # should have 38
-        organization_id = borough_council_ids[row['ARRONDISSEMENT']]
+        organization_id = "#{boroughs.fetch(row['ARRONDISSEMENT'])}/council"
         create_membership(properties.merge({
           role: row['TITRE_CONSEIL'],
           organization_id: organization_id,
@@ -143,8 +171,8 @@ class Montreal
               organization_id: organization_id,
             },
             role: "Conseiller d'arrondissement",
-            area: {
-              name: '', # @todo Once the district is added to the file.
+            identifiers: {
+              identifier: identifier,
             },
           },
         }))
@@ -152,7 +180,7 @@ class Montreal
       when 'Conseiller de la Ville désigné', 'Conseillère de la Ville désignée' # should have 2
         create_membership(properties.merge({
           role: person.gender == 'male' ? 'Conseiller de ville désigné' : 'Conseillère de ville désignée',
-          organization_id: organization_ids.fetch('ville-marie/conseil'),
+          organization_id: 'ocd-organization/country:ca/csd:2466023/arrondissement:ville-marie/council',
           post: {
             label: "Conseiller de ville désigné (siège #{designated_councillor_number})",
           },
@@ -163,7 +191,7 @@ class Montreal
         if row['TITRE_MAIRIE'] == "Maire de la Ville" # should have 1
           create_membership(properties.merge({
             role: person.gender == 'male' ? "Maire de la Ville de Montréal" : "Mairesse de la Ville de Montréal",
-            organization_id: organization_ids.fetch('ville/conseil'),
+            organization_id: 'ocd-organization/country:ca/csd:2466023/council',
             post: {
               label: "Maire de la Ville de Montréal",
             },
@@ -171,7 +199,7 @@ class Montreal
         elsif row['TITRE_MAIRIE'] == "Maire d'arrondissement" && row['ARRONDISSEMENT'] == 'Ville-Marie' # should have 1
           create_membership(properties.merge({
             role: person.gender == 'male' ? "Maire d'arrondissement" : "Mairesse d'arrondissement",
-            organization_id: organization_ids.fetch('ville-marie/conseil'),
+            organization_id: 'ocd-organization/country:ca/csd:2466023/arrondissement:ville-marie/council',
             post: {
               label: "Maire de l'arrondissement de Ville-Marie",
             },
@@ -187,7 +215,7 @@ class Montreal
       when 'Président du comité exécutif'
         create_membership(properties.merge({
           label: row['TITRE_COMITE_EXECUTIF'],
-          organization_id: organization_ids.fetch('ville/comite_executif'),
+          organization_id: 'ocd-organization/country:ca/csd:2466023/executive_committee',
           post: {
             label: row['TITRE_COMITE_EXECUTIF'],
           },
@@ -195,7 +223,7 @@ class Montreal
       when 'Membre du comité exécutif', 'Vice-président du comité exécutif', 'Vice-présidente du comité exécutif'
         create_membership(properties.merge({
           label: row['TITRE_COMITE_EXECUTIF'],
-          organization_id: organization_ids.fetch('ville/comite_executif'),
+          organization_id: 'ocd-organization/country:ca/csd:2466023/executive_committee',
           post: {
             label: "Membre du comité exécutif (siège #{executive_committee_member_number})",
           },
@@ -211,7 +239,7 @@ class Montreal
         if title == "Membre du conseil d'agglomération." # Ignore others.
           create_membership(properties.merge({
             label: "Membre du conseil d'agglomération",
-            organization_id: organization_ids.fetch('agglomeration/conseil'),
+            organization_id: 'ocd-organization/country:ca/cd:2466/council',
             post: {
               label: "Membre du conseil d'agglomération (siège #{agglomeration_council_member_number})",
             },
@@ -230,7 +258,7 @@ class Montreal
 
   def create_membership(properties)
     membership = Pupa::Membership.new(properties)
-    membership.add_source('http://donnees.ville.montreal.qc.ca/fiche/bd-elus/', note: 'Portail des données ouvertes de la Ville de Montréal')
+    membership.add_source('http://donnees.ville.montreal.qc.ca/dataset/bd-elus', note: 'Portail des données ouvertes de la Ville de Montréal')
     dispatch(membership)
   end
 end
