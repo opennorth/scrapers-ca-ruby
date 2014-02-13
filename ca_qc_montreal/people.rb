@@ -39,7 +39,7 @@ class Montreal
         $1.capitalize
       end
 
-      # Fix names that won't match otherwise.
+      # @todo Remove once file is corrected.
       if family_name == 'Desousa'
         family_name = 'DeSousa'
       end
