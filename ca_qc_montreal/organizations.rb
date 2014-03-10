@@ -78,7 +78,7 @@ class Montreal
       classification: 'committee',
     })
 
-    CSV.parse(get('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-arrondissements.csv').force_encoding('utf-8')) do |row|
+    CSV.parse(get('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-boroughs.csv').force_encoding('utf-8')) do |row|
       borough = row[0].sub(/\Aocd-division\b/, 'ocd-organization')
       create_organization({
         _id: borough,
