@@ -171,17 +171,37 @@ class Montreal
 
   def pdf_to_text
     store = DownloadStore.new(File.expand_path('downloads', Dir.pwd))
-    Pupa.session['documents'].find.each do |document|
-      document = Document.new(document)
-      name = File.basename(document.source_url)
+    connection.raw_connection['documents'].find.each do |document|
+      source_url = document['sources'][0]['url']
 
+      name = File.basename(source_url)
       unless store.exist?(name)
-        value = get(document.source_url)
-        store.write(name, value)
+        store.write(name, get(source_url))
       end
 
-      value = `pdftotext -enc UTF-8 #{store.path(name)} - 2>&1`
-      store.write("#{File.basename(name, File.extname(name))}.txt", value)
+      name = "#{File.basename(name, File.extname(name))}.txt"
+      if store.exist?(name)
+        text = store.read(name)
+      else
+        text = `pdftotext -layout -enc UTF-8 #{store.path(name)} - 2>&1`
+        store.write(name, text)
+      end
+
+      begin
+        text.gsub!(/\A[[:space:]]+|[[:space:]]+\z/, '')
+      rescue => e
+        error("#{e.inspect}: #{source_url}")
+      end
+
+      # footers
+      # text.gsub!(/\n+[[:space:]]*Page[[:space:]]\d+[[:space:]]+/, "\n")
+      # section markers
+      # /^\f?[[:space:]]*#{section_number}[[:space:]][-\u2013][[:space:]][^\n]+\n+(.+?)^\f?[[:space:]]*\d0[[:space:]][-\u2013][[:space:]]/m
+
+      connection.raw_connection['documents'].find(document).update(document.merge({
+        'byte_size' => text.bytesize,
+        'text' => text,
+      }))
     end
   end
 end
