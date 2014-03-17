@@ -4,118 +4,116 @@ class Montreal
   def scrape_documents
     [
       {
-        key: 'agglomeration/conseil',
+        organization_id: 'ocd-organization/country:ca/cd:2466/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,86001600&_dad=portal&_schema=PORTAL',
         start_year: 2006,
       },
       {
-        key: 'ville/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85945578&_dad=portal&_schema=PORTAL',
         start_year: 2001,
       },
       {
-        key: 'ville/comite_executif',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/executive_committee',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85931607&_dad=portal&_schema=PORTAL',
         start_year: 2006,
       },
       {
-        key: 'ahuntsic-cartierville/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:ahuntsic-cartierville/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85975614&_dad=portal&_schema=PORTAL',
         start_year: 2002,
       },
       {
-        key: 'anjou/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:anjou/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85979752&_dad=portal&_schema=PORTAL',
         start_year: 2006,
       },
       {
-        key: 'côte-des-neiges-notre-dame-de-grâce/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:côte-des-neiges~notre-dame-de-grâce/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85979770&_dad=portal&_schema=PORTAL',
         start_year: 2002,
       },
       {
-        key: 'lachine/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:lachine/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,94713725&_dad=portal&_schema=PORTAL',
         start_year: 2010,
       },
       {
-        key: 'lasalle/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:lasalle/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=8337,92865582&_dad=portal&_schema=PORTAL',
         start_year: 2009,
       },
       {
-        key: 'le_plateau-mont-royal/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:le_plateau-mont-royal/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85979854&_dad=portal&_schema=PORTAL',
         start_year: 2009,
       },
       {
-        key: 'le_sud-ouest/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:le_sud-ouest/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85979873&_dad=portal&_schema=PORTAL',
         start_year: 2001,
       },
       {
-        key: 'l~île-bizard-sainte-geneviève/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:l~île-bizard~sainte-geneviève/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85979888&_dad=portal&_schema=PORTAL',
         start_year: 2006,
       },
       {
-        key: 'mercier-hochelaga-maisonneuve/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:mercier~hochelaga-maisonneuve/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=9417,114237611&_dad=portal&_schema=PORTAL',
         start_year: 2013,
       },
       {
-        key: 'montréal-nord/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:montréal-nord/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=8717,97161614&_dad=portal&_schema=PORTAL',
         start_year: 2009,
       },
       {
-        key: 'outremont/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:outremont/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=8517,95571598&_dad=portal&_schema=PORTAL',
         start_year: 2010,
       },
       {
-        key: 'pierrefonds-roxboro/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:pierrefonds-roxboro/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85981570&_dad=portal&_schema=PORTAL',
         start_year: 2006,
       },
       {
-        key: 'rivière-des-prairies-pointe-aux-trembles/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:rivière-des-prairies~pointe-aux-trembles/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85981591&_dad=portal&_schema=PORTAL',
         start_year: 2002,
       },
       {
-        key: 'rosemont-la_petite-patrie/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:rosemont~la_petite-patrie/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85981600&_dad=portal&_schema=PORTAL',
         start_year: 2008,
       },
       {
-        key: 'saint-laurent/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:saint-laurent/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,87943635&_dad=portal&_schema=PORTAL',
         start_year: 2009,
       },
       {
-        key: 'saint-léonard/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:saint-léonard/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85981609&_dad=portal&_schema=PORTAL',
         start_year: 2007,
       },
       {
-        key: 'verdun/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:verdun/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=8637,96027668&_dad=portal&_schema=PORTAL',
         start_year: 2011,
       },
       {
-        key: 'ville-marie/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:ville-marie/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85981620&_dad=portal&_schema=PORTAL',
         start_year: 2009,
       },
       {
-        key: 'villeray-saint-michel-parc-extension/conseil',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:villeray~saint-michel~parc-extension/council',
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=8638,96045899&_dad=portal&_schema=PORTAL',
         start_year: 2003,
       },
     ].each do |source|
-      organization_id = organization_ids.fetch(source[:key])
-
       source[:start_year].upto(Time.now.year) do |year|
         url = "#{source[:url]}&dateDebut=#{year}"
 
@@ -125,6 +123,8 @@ class Montreal
 
           doc.css('table[width="525"][cellpadding="5"]').each do |table|
             table.css('sup').remove # interrupts timestamps
+
+            date, description = table.at_css('.eDarkGrey10Bold').inner_html.gsub(/[[:space:]]+/, ' ').split('<br>')
 
             table.css('a[href^="/sel"]').each do |a|
               # The city website is flaky.
@@ -144,16 +144,14 @@ class Montreal
                 end
               end
 
-              date, description = table.at_css('.eDarkGrey10Bold').inner_html.gsub(/[[:space:]]+/, ' ').split('<br>')
               document = Document.new({
                 date: date,
                 description: description,
                 title: a.text.strip,
-                organization_id: organization_id,
+                organization_id: source[:organization_id],
               })
               document.add_source(pdf_url, note: 'Ville de Montréal')
               dispatch(document)
-
               warn(document.errors.full_messages) if document.invalid?
             end
           end
@@ -169,39 +167,22 @@ class Montreal
     end
   end
 
-  def pdf_to_text
+  def download
     store = DownloadStore.new(File.expand_path('downloads', Dir.pwd))
     connection.raw_connection['documents'].find.each do |document|
       source_url = document['sources'][0]['url']
-
       name = File.basename(source_url)
+
       unless store.exist?(name)
         store.write(name, get(source_url))
       end
 
-      name = "#{File.basename(name, File.extname(name))}.txt"
-      if store.exist?(name)
-        text = store.read(name)
-      else
-        text = `pdftotext -layout -enc UTF-8 #{store.path(name)} - 2>&1`
-        store.write(name, text)
+      properties = {'byte_size' => store.size(name)}
+      unless `which pdfinfo`.empty?
+        number_of_pages = Integer(`pdfinfo downloads/CE_ODJ_ORDI_2007-08-29_09h00_FR.pdf`.match(/^Pages: +(\d+)$/)[1])
+        properties['number_of_pages'] = number_of_pages
       end
-
-      begin
-        text.gsub!(/\A[[:space:]]+|[[:space:]]+\z/, '')
-      rescue => e
-        error("#{e.inspect}: #{source_url}")
-      end
-
-      # footers
-      # text.gsub!(/\n+[[:space:]]*Page[[:space:]]\d+[[:space:]]+/, "\n")
-      # section markers
-      # /^\f?[[:space:]]*#{section_number}[[:space:]][-\u2013][[:space:]][^\n]+\n+(.+?)^\f?[[:space:]]*\d0[[:space:]][-\u2013][[:space:]]/m
-
-      connection.raw_connection['documents'].find(document).update(document.merge({
-        'byte_size' => text.bytesize,
-        'text' => text,
-      }))
+      connection.raw_connection['documents'].find(document).update(document.merge(properties))
     end
   end
 end

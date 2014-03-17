@@ -69,11 +69,11 @@ require_relative 'documents'
 Montreal.add_scraping_task(:organizations)
 Montreal.add_scraping_task(:posts)
 Montreal.add_scraping_task(:people)
-# Montreal.add_scraping_task(:documents) # @todo uncomment
+Montreal.add_scraping_task(:documents)
 
 runner = Pupa::Runner.new(Montreal, {
   database: 'mycityhall',
   expires_in: 604800, # 1 week
 })
-runner.add_action(name: 'pdf_to_text', description: 'Transform PDF to text')
+runner.add_action(name: 'download', description: 'Download PDFs')
 runner.run(ARGV)

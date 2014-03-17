@@ -70,7 +70,7 @@ class Montreal
       end
 
       # @todo Remove once file is corrected.
-      { "L'Île-Bizard-Sainte-Geneviève" => "L'Île-Bizard—Sainte-Geneviève", #m-dash
+      { "L'Île-Bizard-Sainte-Geneviève" => "L'Île-Bizard—Sainte-Geneviève", # m-dash
         'Côte-des-Neiges-Notre-Dame-de-Grâce' => 'Côte-des-Neiges—Notre-Dame-de-Grâce', # m-dash
         'Mercier-Hochelaga-Maisonneuve' => 'Mercier—Hochelaga-Maisonneuve', # m-dash
         'Rivière-des-Prairies-Pointe-aux-Trembles' => 'Rivière-des-Prairies—Pointe-aux-Trembles', # m-dash

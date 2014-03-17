@@ -63,8 +63,14 @@ class Document
   include Pupa::Concerns::Sourceable
   include ActiveModel::Validations
 
-  attr_accessor :byte_size, :date, :description, :text, :title, :organization_id
-  dump :byte_size, :date, :description, :text, :title, :organization_id
+  # @see http://www.w3.org/TR/vocab-dcat/#Property:distribution_size
+  # @see http://dublincore.org/documents/dcmi-terms/#terms-date
+  # @see http://schema.org/numberOfPages
+  # @see http://dublincore.org/documents/dcmi-terms/#terms-description
+  # @see http://schema.org/text
+  # @see http://dublincore.org/documents/dcmi-terms/#terms-title
+  attr_accessor :byte_size, :date, :description, :number_of_pages, :text, :title, :organization_id
+  dump :byte_size, :date, :description, :text, :number_of_pages, :title, :organization_id
 
   # A single document may contain minutes of multiple meetings.
   def fingerprint
@@ -196,5 +202,13 @@ class DownloadStore
   # @param [String] a path
   def path(name)
     File.join(@output_dir, name)
+  end
+
+  # Returns the byte size of the file.
+  #
+  # @param [String] name a key
+  # @return [Integer] the file size in bytes
+  def size(name)
+    File.size(path(name))
   end
 end
