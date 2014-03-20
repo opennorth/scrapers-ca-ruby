@@ -1,6 +1,10 @@
 class Montreal
   MAXIMUM_ATTEMPTS = 5
 
+  # These datasets are not timely:
+  # http://donnees.ville.montreal.qc.ca/dataset/comite-executif-pv
+  # http://donnees.ville.montreal.qc.ca/dataset/conseil-municipal-pv
+  # http://donnees.ville.montreal.qc.ca/dataset/conseil-agglo-pv
   def scrape_documents
     [
       {

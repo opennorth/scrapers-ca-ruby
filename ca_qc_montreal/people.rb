@@ -1,4 +1,14 @@
 class Montreal
+  # @note New datasets are now available. Waiting on:
+  # * Publier les données sous format CSV
+  # * Include le numéro de poste (par exemple, 1,00, 1,10, etc.)
+  # * Mettre le bureau d'arrondissement dans son propre champs
+  # * Mettre le numéro de téléphone d'arrondissement dans son propre champs
+  # * Éliminer les préfixes "Tél:" et "Arr.:"
+  # * Ajouter le URL pour la photo de la personne (FICHIER_IMAGE dans l'ancien jeu de données)
+  # http://donnees.ville.montreal.qc.ca/dataset/listes-des-elus-de-la-ville-de-montreal
+  # http://donnees.ville.montreal.qc.ca/dataset/listes-des-elus-du-conseil-d-agglomeration
+  # http://donnees.ville.montreal.qc.ca/dataset/commissions-permanentes-du-conseil-membres
   def scrape_people # should have 103
     boroughs = {}
     rows = CSV.parse(get('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-boroughs.csv').force_encoding('utf-8'))
