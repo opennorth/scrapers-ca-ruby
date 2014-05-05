@@ -1,6 +1,6 @@
-## Montreal
+# Montreal
 
-### Conseil municipal
+## Conseil municipal
 
 65 posts held by 65 people.
 
@@ -8,7 +8,7 @@
 * 18 Maire d'arrondissement
 * 46 Conseiller de ville
 
-### Conseil d'arrondissement
+## Conseil d'arrondissement
 
 105 posts held by 103 people.
 
