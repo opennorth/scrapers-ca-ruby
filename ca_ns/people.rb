@@ -22,8 +22,17 @@ class NovaScotia
     })
     dispatch(legislature)
 
-    person = Pupa::Person.new(name: 'The Speaker')
+    person = Pupa::Person.new(name: 'Speaker')
     person.add_source('http://nslegislature.ca/index.php/people/speaker')
+    dispatch(person)
+
+    person = Pupa::Person.new(name: 'Clerk')
+    person.add_source('http://nslegislature.ca/index.php/people/offices/clerk')
+    dispatch(person)
+
+
+    person = Pupa::Person.new(name: 'Sergeant-at-Arms')
+    person.add_source('http://nslegislature.ca/index.php/people/offices/sergeant-at-arms')
     dispatch(person)
 
     get('http://nslegislature.ca/index.php/people/members/').css('#content tbody tr').each do |tr|
