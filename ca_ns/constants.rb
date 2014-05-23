@@ -8,7 +8,7 @@ TYPOS = {
   'michael samson' => 'http://nslegislature.ca/index.php/people/members/michel_p_samson1',
   'stephen macneil' => 'http://nslegislature.ca/index.php/people/members/Stephen_McNeil',
   # http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14apr16/ family name
-  'sterling bellieau' => 'http://nslegislature.ca/index.php/people/members/Sterling_Belliveau',
+  'sterling bellieau' => 'http://nslegislature.ca/index.php/people/members/sterling_belliveau1',
   # http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14mar31/ given name
   'gordon gosse' => 'http://nslegislature.ca/index.php/people/members/gordie_gosse1',
   # http://nslegislature.ca/index.php/proceedings/hansard/C94/house_13dec11/ given name
@@ -18,15 +18,15 @@ TYPOS = {
   # http://nslegislature.ca/index.php/proceedings/hansard/C90/house_13may08/ given name
   'mailyn more' => 'http://nslegislature.ca/index.php/people/members/Marilyn_More',
   # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12nov27/ given name
-  'sterlng belliveau' => 'http://nslegislature.ca/index.php/people/members/Sterling_Belliveau',
+  'sterlng belliveau' => 'http://nslegislature.ca/index.php/people/members/sterling_belliveau1',
   # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12nov07/ family name
-  'bellieveau' => 'http://nslegislature.ca/index.php/people/members/Sterling_Belliveau',
+  'bellieveau' => 'http://nslegislature.ca/index.php/people/members/sterling_belliveau1',
   # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12nov08/ given name
   'jaimie baillie' => 'http://nslegislature.ca/index.php/people/members/jamie_baillie',
   # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12oct31/ given name
   'bekcy kent' => 'http://nslegislature.ca/index.php/people/members/Becky_Kent',
   # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12oct25/ family name
-  "d'entremount" => 'http://nslegislature.ca/index.php/people/members/Christopher_A_dEntremont',
+  "d'entremount" => 'http://nslegislature.ca/index.php/people/members/christopher_a_dentremont1',
   # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12may10/ given name
   'mariyln more' => 'http://nslegislature.ca/index.php/people/members/Marilyn_More',
   # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12apr17/ family name
@@ -34,9 +34,9 @@ TYPOS = {
   # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12apr10/ family name
   'macneil' => 'http://nslegislature.ca/index.php/people/members/Stephen_McNeil',
   # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12apr04/ family name
-  "d'enteremont" => 'http://nslegislature.ca/index.php/people/members/Christopher_A_dEntremont',
+  "d'enteremont" => 'http://nslegislature.ca/index.php/people/members/christopher_a_dentremont1',
   # http://nslegislature.ca/index.php/proceedings/hansard/C81/house_12mar29/ role-based
-  'sergeant-at-arms' => 'http://nslegislature.ca/sergeant-at-arms',
+  'sergeant-at-arms' => 'http://nslegislature.ca/index.php/people/offices/sergeant-at-arms/',
   # http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec06/ given name, role-based
   'vickie conrad' => 'http://nslegislature.ca/index.php/people/members/Vicki_Conrad',
   'chairman' => 'http://nslegislature.ca/chairman',
@@ -45,9 +45,9 @@ TYPOS = {
   # http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec02/ family name
   'harold therault' => 'http://nslegislature.ca/index.php/people/members/Harold_Theriault',
   # http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov25/ family name
-  "christopher d'entromont" => 'http://nslegislature.ca/index.php/people/members/Christopher_A_dEntremont',
+  "christopher d'entromont" => 'http://nslegislature.ca/index.php/people/members/christopher_a_dentremont1',
   # http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov23/ family name, family name
-  'sterling bellieveau' => 'http://nslegislature.ca/index.php/people/members/Sterling_Belliveau',
+  'sterling bellieveau' => 'http://nslegislature.ca/index.php/people/members/sterling_belliveau1',
   'maureen macdonld' => 'http://nslegislature.ca/index.php/people/members/Maureen_MacDonald',
   # http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov01/ both names
   'william estabooks' => 'http://nslegislature.ca/index.php/people/members/Bill_Estabrooks',
