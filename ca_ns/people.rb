@@ -8,10 +8,8 @@ class NovaScotia
       organization = Pupa::Organization.new({
         name: name,
         classification: 'political party',
-        other_names: [{
-          name: abbreviation,
-        }],
       })
+      organization.add_name(abbreviation)
       organization.add_source('http://electionsnovascotia.ca/candidates-and-parties/registered-parties', note: 'Elections Nova Scotia')
       dispatch(organization)
       party_ids[abbreviation] = organization._id
@@ -24,13 +22,17 @@ class NovaScotia
     })
     dispatch(legislature)
 
+    person = Pupa::Person.new(name: 'The Speaker')
+    person.add_source('http://nslegislature.ca/index.php/people/speaker')
+    dispatch(person)
+
     get('http://nslegislature.ca/index.php/people/members/').css('#content tbody tr').each do |tr|
       tds = tr.css('td')
 
       # Create the person.
       url = "http://nslegislature.ca#{tr.at_css('a')[:href]}"
-      document = get(url)
-      characters = document.at_css('dd script').text.scan(/'( \d+|..?)'/).flatten.reverse
+      doc = get(url)
+      characters = doc.at_css('dd script').text.scan(/'( \d+|..?)'/).flatten.reverse
       family_name, given_name = tds[0].text.split(', ', 2)
 
       person = Pupa::Person.new({
@@ -38,7 +40,7 @@ class NovaScotia
         family_name: family_name,
         given_name: given_name,
         email: characters[characters.index('>') + 1..characters.rindex('<') - 1].map{|c| Integer(c).chr}.join,
-        image: document.at_css('.portrait')[:src],
+        image: doc.at_css('.portrait')[:src],
       })
       person.add_source('http://nslegislature.ca/index.php/people/members/', note: 'Legislature MLA list')
       person.add_source(url, note: 'Legislature MLA page')
