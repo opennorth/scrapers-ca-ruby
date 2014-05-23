@@ -2,6 +2,8 @@ require File.expand_path(File.join('..', 'utils.rb'), __dir__)
 
 class Debate
   include Pupa::Model
+  include Pupa::Concerns::Timestamps
+  include Pupa::Concerns::Sourceable
   include ActiveModel::Validations
 
   attr_accessor :name, :docTitle, :docNumber, :docDate, :docDate_date,
@@ -20,6 +22,7 @@ end
 
 class Section
   include Pupa::Model
+  include Pupa::Concerns::Timestamps
   include ActiveModel::Validations
 
   attr_accessor :identifier, :heading, :section_id
@@ -43,6 +46,7 @@ end
 
 class Speech
   include Pupa::Model
+  include Pupa::Concerns::Timestamps
   include ActiveModel::Validations
 
   attr_accessor :index, :time, :from, :html, :text, :division, :person_id, :debate_id
