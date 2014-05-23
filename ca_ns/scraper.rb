@@ -72,6 +72,7 @@ end
 class NovaScotia < GovernmentProcessor
 end
 
+require_relative 'constants'
 require_relative 'people'
 require_relative 'speeches'
 
@@ -79,7 +80,7 @@ NovaScotia.add_scraping_task(:people)
 NovaScotia.add_scraping_task(:speeches)
 
 runner = Pupa::Runner.new(NovaScotia, {
-  database: 'mycityhall',
+  database: 'sayit',
   expires_in: 604800, # 1 week
 })
 runner.run(ARGV)
