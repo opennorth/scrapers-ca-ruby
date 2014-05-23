@@ -3,16 +3,19 @@ require 'bundler/setup'
 require 'csv'
 
 require 'active_model'
+require 'dalli'
 require 'multi_xml'
 require 'nokogiri'
 require 'pupa'
+require 'redis-store'
+require 'hiredis'
 require 'zip/zip'
 require 'unicode_utils'
 
 class Pupa::Membership
   attr_reader :person, :post
-  foreign_object :person, :post
   dump :person, :post
+  foreign_object :person, :post
 
   def person=(person)
     @person = {_type: 'pupa/person'}.merge(symbolize_keys(person))

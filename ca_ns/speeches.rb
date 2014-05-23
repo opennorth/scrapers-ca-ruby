@@ -5,66 +5,16 @@ require 'active_support/core_ext/integer/inflections'
 # @see http://www.akomantoso.org/release-notes/akoma-ntoso-3.0-schema/naming-conventions-1/bungenihelpcenterreferencemanualpage.2008-01-09.1484954524
 # @todo Ask about https://github.com/mysociety/za-hansard/tree/master/za_hansard/importers
 class NovaScotia
-  # Names are not linked if there are errors in the given name or family name,
-  # if the honorary prefix is missing, unabbreviated or missing a period, or if
-  # the name is of a role.
-  TYPOS = {
-    # http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14may01/ given name
-    'pan eyking' => 'http://nslegislature.ca/index.php/en/people/members/pam_eyking',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14apr28/ given name, family name
-    'michael samson' => 'http://nslegislature.ca/index.php/en/people/members/michel_p_samson1',
-    'stephen macneil' => 'http://nslegislature.ca/index.php/en/people/members/Stephen_McNeil',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14apr16/ family name
-    'sterling bellieau' => 'http://nslegislature.ca/index.php/en/people/members/Sterling_Belliveau',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14mar31/ given name
-    'gordon gosse' => 'http://nslegislature.ca/index.php/en/people/members/gordie_gosse1',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C94/house_13dec11/ given name
-    'diane whalen' => 'http://nslegislature.ca/index.php/en/people/members/diana_whalen1',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C90/house_13may09/
-    'michele raymond' => 'http://nslegislature.ca/index.php/en/people/members/Michele_Raymond',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C90/house_13may08/ given name
-    'mailyn more' => 'http://nslegislature.ca/index.php/en/people/members/Marilyn_More',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12nov27/ given name
-    'sterlng belliveau' => 'http://nslegislature.ca/index.php/en/people/members/Sterling_Belliveau',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12nov07/ family name
-    'bellieveau' => 'http://nslegislature.ca/index.php/en/people/members/Sterling_Belliveau',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12nov08/ given name
-    'jaimie baillie' => 'http://nslegislature.ca/index.php/en/people/members/jamie_baillie',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12oct31/ given name
-    'bekcy kent' => 'http://nslegislature.ca/index.php/en/people/members/Becky_Kent',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12oct25/ family name
-    "d'entremount" => 'http://nslegislature.ca/index.php/en/people/members/Christopher_A_dEntremont',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12may10/ given name
-    'mariyln more' => 'http://nslegislature.ca/index.php/en/people/members/Marilyn_More',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12apr17/ family name
-    'peterson-rayfuse' => 'http://nslegislature.ca/index.php/en/people/members/Denise_Peterson-Rafuse',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12apr10/ family name
-    'macneil' => 'http://nslegislature.ca/index.php/en/people/members/Stephen_McNeil',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12apr04/ family name
-    "d'enteremont" => 'http://nslegislature.ca/index.php/en/people/members/Christopher_A_dEntremont',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C81/house_12mar29/ role-based
-    'sergeant-at-arms' => 'http://nslegislature.ca/sergeant-at-arms',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec06/ given name, role-based
-    'vickie conrad' => 'http://nslegislature.ca/index.php/en/people/members/Vicki_Conrad',
-    'chairman' => 'http://nslegislature.ca/chairman',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12dec04/ family name
-    'ross laundry' => 'http://nslegislature.ca/index.php/en/people/members/Ross_Landry',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec02/ family name
-    'harold therault' => 'http://nslegislature.ca/index.php/en/people/members/Harold_Theriault',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov25/ family name
-    "christopher d'entromont" => 'http://nslegislature.ca/index.php/en/people/members/Christopher_A_dEntremont',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov23/ family name, family name
-    'sterling bellieveau' => 'http://nslegislature.ca/index.php/en/people/members/Sterling_Belliveau',
-    'maureen macdonld' => 'http://nslegislature.ca/index.php/en/people/members/Maureen_MacDonald',
-    # http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov01/ both names
-    'william estabooks' => 'http://nslegislature.ca/index.php/en/people/members/Bill_Estabrooks',
-  }
-
   def scrape_speeches
     Time.zone = 'Atlantic Time (Canada)'
 
-    # A map between speaker names and URLs.
-    @speakers = {}
+    # A map between speaker names and URLs, for cases where we have only a name,
+    # and to have consistent URLs for names.
+    @speaker_urls = {}
+    # A map between URLs and person IDs of people created by this script.
+    # @todo Use IDs for all - it takes 30 minutes without a dependency graph.
+    # --cache_dir memcached://localhost:11211 --output_dir redis://localhost:6379/15 --pipelined --no-validate
+    @speaker_ids = {}
 
     # @note Can extract the majority party, the assembly dates, and the session dates.
     doc = get('http://nslegislature.ca/index.php/proceedings/hansard/')
@@ -137,6 +87,7 @@ private
           session: "#{session_value.ordinalize} Session",
           session_value: session_value,
         })
+        debate.add_source(@a[:href])
         dispatch(debate)
 
         # Remove empty paragraphs immediately after a division heading, because
@@ -175,7 +126,49 @@ private
         # Generate the list of speakers, in case an unlinked name occurs
         # before its matching linked name.
         doc.css('.hsd_body p a[title="View Profile"]').each do |person_a|
-          @speakers[to_key(person_a.text)] = "http://nslegislature.ca#{person_a[:href]}"
+          key = to_key(person_a.text)
+
+          # The premier changes over time and will not have a stable URL.
+          next if key == 'the premier'
+
+          original_url = to_url(person_a[:href])
+
+          response = client.head(original_url)
+          case response.status
+          when 200
+            # If it is a present MLA with a good URL.
+            url = original_url
+          when 301
+            # If it is a past MLA.
+            if response.headers['Location'] == 'http://nslegislature.ca/index.php/people/members/'
+              url = original_url
+            # If it is a present MLA with a bad URL.
+            else
+              url = response.headers['Location']
+            end
+          else
+            raise "Unexpected status #{response.status} for #{url}: #{@a[:href]} #{key}"
+          end
+
+          # It is conceivable to have different URLs for the same person using
+          # different names. # @todo Check in MongoDB.
+          if @speaker_urls.key?(key)
+            if @speaker_urls[key] != url
+              # This is a known error. FIXME
+              unless response.status == 301 && response.headers['Location'] == 'http://nslegislature.ca/index.php/people/members/' && key == 'maureen macdonald' && url == 'http://nslegislature.ca/index.php/people/members/Manning_MacDonald'
+                raise "Expected #{@speaker_urls[key]} but was #{url}: #{@a[:href]} #{key}"
+              end
+            end
+          else
+            # If it is a past MLA whose URL we haven't seen yet.
+            if response.status == 301 && response.headers['Location'] == 'http://nslegislature.ca/index.php/people/members/' && !@speaker_urls.has_value?(url)
+              person = Pupa::Person.new(name: person_a.text)
+              person.add_source(url)
+              dispatch(person)
+              @speaker_ids[url] = person._id
+            end
+            @speaker_urls[key] = url
+          end
         end
 
         doc.css('.hsd_body p').each_with_index do |p,index|
@@ -193,16 +186,31 @@ private
 
               person_a.remove
 
+              from = person_a.text
+              key = to_key(from)
+
+              # The premier changes over time and will not have a stable URL.
+              url = if key == 'the premier'
+                to_url(person_a[:href])
+              else
+                @speaker_urls.fetch(key)
+              end
+
               @speech = {
                 index: index,
                 # @todo speech(by) with TLCPerson(href id showAs) in references
-                from: person_a.text,
+                from: from,
                 # @todo Need to figure out what to preserve in text version.
                 # @todo Need to remove leading colon: .sub(/\A:/, '')
                 html: p.to_s.strip,
-                person: {'links.url' => "http://nslegislature.ca#{person_a[:href]}"},
                 debate_id: debate._id,
               }
+
+              if @speaker_ids.key?(url)
+                @speech[:person_id] = @speaker_ids[url]
+              else
+                @speech[:person] = {'sources.url' => url}
+              end
 
               # We don't know if there is a continuation.
 
@@ -217,7 +225,9 @@ private
               from = match.squeeze(' ').sub(/(?<=\S )[A-Z]\. (?=\S)/, '')
               key = to_key(from)
 
-              if @speakers.key?(key) || TYPOS.key?(key)
+              if @speaker_urls.key?(key) || TYPOS.key?(key)
+                url = @speaker_urls.fetch(key){TYPOS.fetch(key)}
+
                 @speech = {
                   index: index,
                   # @todo speech(by) with TLCPerson(href id showAs) in references
@@ -225,9 +235,14 @@ private
                   # @todo Need to figure out what to preserve in text version.
                   # @todo Need to remove leading name and colon.
                   html: p.to_s.strip,
-                  person: {'links.url' => @speakers.fetch(key){TYPOS.fetch(key)}},
                   debate_id: debate._id,
                 }
+
+                if @speaker_ids.key?(url)
+                  @speech[:person_id] = @speaker_ids[url]
+                else
+                  @speech[:person] = {'sources.url' => url}
+                end
               else
                 warn("Unrecognized speaker #{index}: #{@a[:href]} #{key}")
               end
@@ -367,6 +382,12 @@ private
   end
 
   def to_key(string)
-    string.sub(/\A(?:Hon|Mr|Ms)\b\.?|\A(?:Honourable|Madam)\b/i, '').squeeze(' ').strip.downcase
+    # Mr. and Ms. can disambiguate Maureen MacDonald from Manning MacDonald.
+    string.sub(/\A(?:#{string[/\bMacDonald\b/i] ? /Hon/i : /(?:Hon|Mr|Ms)/i}\b\.?|Honourable\b|Madam\b)/i, '').squeeze(' ').strip.downcase
+  end
+
+  def to_url(path)
+    # Normalize all URLs to exclude the "/en/" part of the path.
+    "http://nslegislature.ca#{path.sub('/en/', '/')}"
   end
 end

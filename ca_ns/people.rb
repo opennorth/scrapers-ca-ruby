@@ -30,7 +30,6 @@ class NovaScotia
     person.add_source('http://nslegislature.ca/index.php/people/offices/clerk')
     dispatch(person)
 
-
     person = Pupa::Person.new(name: 'Sergeant-at-Arms')
     person.add_source('http://nslegislature.ca/index.php/people/offices/sergeant-at-arms')
     dispatch(person)

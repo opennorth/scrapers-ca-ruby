@@ -36,10 +36,11 @@ TYPOS = {
   # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12apr04/ family name
   "d'enteremont" => 'http://nslegislature.ca/index.php/people/members/christopher_a_dentremont1',
   # http://nslegislature.ca/index.php/proceedings/hansard/C81/house_12mar29/ role-based
-  'sergeant-at-arms' => 'http://nslegislature.ca/index.php/people/offices/sergeant-at-arms/',
+  'sergeant-at-arms' => 'http://nslegislature.ca/index.php/people/offices/sergeant-at-arms',
   # http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec06/ given name, role-based
   'vickie conrad' => 'http://nslegislature.ca/index.php/people/members/Vicki_Conrad',
-  'chairman' => 'http://nslegislature.ca/chairman',
+  # Chairman always seems to refer to the Speaker.
+  'chairman' => 'http://nslegislature.ca/index.php/people/speaker',
   # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12dec04/ family name
   'ross laundry' => 'http://nslegislature.ca/index.php/people/members/Ross_Landry',
   # http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec02/ family name
