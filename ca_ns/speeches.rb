@@ -90,15 +90,15 @@ private
         # empty paragraphs, in case a page number appears within a division.
         # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12apr02/
         # has two empty paragraphs.
-        %w(HPage IPage).each do |name|
-          doc.xpath("//p[./a[starts-with(@name, '#{name}')][not(node())]]/preceding-sibling::p[1]").each do |p|
-            p.remove if p.text.strip.empty?
-          end
-          doc.xpath("//p[./a[starts-with(@name, '#{name}')][not(node())]]/following-sibling::p[position()<=2]").each do |p|
-            p.remove if p.text.strip.empty?
-          end
-          doc.xpath("//p[./a[starts-with(@name, '#{name}')][not(node())]]").remove
+        doc.xpath('//p[./a[starts-with(@name, "HPage")][not(node())]]/preceding-sibling::p[1]').each do |p|
+          p.remove if p.text.strip.empty?
         end
+        doc.xpath('//p[./a[starts-with(@name, "HPage")][not(node())]]/following-sibling::p[position()<=2]').each do |p|
+          p.remove if p.text.strip.empty?
+        end
+        doc.xpath('//p[./a[starts-with(@name, "HPage")][not(node())]]').remove
+        # A few have no a tag with a name attribute.
+        doc.xpath('//p[./a[starts-with(@href, "#IPage")]]').remove
         doc.xpath('//p[@class="hsd_center"]').each do |p|
           p.remove if p.text.strip[/\A\d{1,4}\z/]
         end
@@ -251,7 +251,7 @@ private
               @division = true
 
             # A recorded time, which will have a single paragraph.
-            elsif text[/\A\[(\d{1,2}):(\d\d) ([ap]\.\m\.)\]/]
+            elsif text[/\A\[(\d{1,2}):(\d\d) +([ap]\.\m\.)\]/]
               create_speech
 
               # <recordedTime time="%FT%T%:z">5:15 p.m.</recordedTime>
@@ -277,19 +277,44 @@ private
             # A section, which will have a single paragraph. All-caps lines are
             # section headings. Must appear before narrative matching, as some
             # sections begin and end with square brackets.
-            elsif text[/\A[A-Z\d,\.\(\)\[\][:space:]]+\z|\ATabled \S+ \d{1,2}, +201\d\z/] ||
+            elsif !text.empty? && text[/\A[A-Z\d',\.\(\)\[\][:space:]]+\z|\ATabled \S+ \d{1,2}, +201\d\z/] ||
               # All-bold lines may appear within a speech. Parentheses and
               # brackets may not be inside the b tags.
-              @speech.nil? && p.at_css('b') && text.chomp(')') == p.css('b').text.strip.chomp(')') ||
-              @speech.nil? && p.at_css('b') && text.sub(/\A\[/, '').sub(/\]\z/, '') == p.css('b').text.strip.sub(/\A\[/, '').sub(/\]\z/, '')
+              !text.empty? && @speech.nil? && p.at_css('b') && text.chomp(')') == p.css('b').text.strip.chomp(')') ||
+              !text.empty? && @speech.nil? && p.at_css('b') && text.sub(/\A\[/, '').sub(/\]\z/, '') == p.css('b').text.strip.sub(/\A\[/, '').sub(/\]\z/, '')
               create_speech
 
-              # @todo check whether these are all debateSection(name id) and heading(id); otherwise, choose between scene, narrative or summary
+              text = p.text.squeeze(' ').strip.sub(/\A\[/, '').sub(/\]\z/, '')
+              HEADING_TYPOS.each do |incorrect,correct|
+                case incorrect
+                when String
+                  if text == incorrect
+                    text = correct
+                    break
+                  end
+                when Regexp
+                  if text[incorrect]
+                    text.sub!(incorrect, correct)
+                    break
+                  end
+                end
+              end
+
+              unless HEADINGS.include?(text) || HEADINGS_RE.any?{|pattern| text[pattern]}
+                warn("Unrecognized heading #{index}: #{@a[:href]}: #{text}")
+              end
+
+              # @todo debateSection(name id) and heading(id) ?
+              # Find all headings.
+              # db.speeches.distinct('html', {element: 'debateSection'}).sort()
+              # Find all headings with non-b tags.
+              # db.speeches.distinct('html', {element: 'debateSection', html: /<[^\/bp]/}).sort()
               dispatch(Speech.new({
                 index: index,
                 element: 'debateSection',
                 html: p.to_s,
                 # @todo Need to figure out what to preserve in text version.
+                text: text,
                 debate_id: debate._id,
               }))
 
@@ -297,10 +322,10 @@ private
             elsif text[/\A\[/] && text[/\]\z/]
               create_speech
 
-              # Find all one-paragraph narratives. (535)
-              # db.speeches.find({html: new RegExp('> *\\[[^<]*\\]')}).map(function(e){return e.html}).sort()
-              # Find any one-paragraph narratives with tags. (41)
-              # db.speeches.find({$or: [{html: new RegExp('> *\\[[^<]*<[^\/]')}, {html: new RegExp('>[^<]*<[^\/][^>]*> *\\[')}]}).map(function(e){return e.html}).sort()
+              # Find all one-paragraph narratives.
+              # db.speeches.distinct('html', {element: 'narrative', html: {$not: /.<p>/}}).sort()
+              # Find any narratives with tags.
+              # db.speeches.distinct('html', {element: 'narrative', html: /<[^\/p]/}).sort()
               dispatch(Speech.new({
                 index: index,
                 element: 'narrative',
@@ -313,8 +338,8 @@ private
             elsif text[/\A\[/]
               create_speech
 
-              # Find all multi-paragraph narratives. (12)
-              # db.speeches.find({html: new RegExp('> *\\[.*<p>')}).map(function(e){return e.html}).sort()
+              # Find all multi-paragraph narratives.
+              # db.speeches.distinct('html', {element: 'narrative', html: /.<p>/}).sort()
               @speech = {
                 index: index,
                 element: 'narrative',
@@ -333,7 +358,7 @@ private
                 @speech[:html] += p.to_s
               elsif text[/\AThe +honourable +(?:member |[A-Z]).+\./]
                 # Unattributed speeches by the Speaker.
-                # db.speeches.find({from: null, html: /> *The +honourable/}).map(function(e){return e.html}).sort()
+                # db.speeches.distinct('html', {from: null, person_id: {$ne: null}}).sort()
                 dispatch(Speech.new({
                   index: index,
                   element: 'speech',
