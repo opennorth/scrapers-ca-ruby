@@ -72,7 +72,7 @@ Montreal.add_scraping_task(:people)
 Montreal.add_scraping_task(:documents)
 
 runner = Pupa::Runner.new(Montreal, {
-  database: 'mycityhall',
+  database_url: 'mongodb://localhost:27017/mycityhall',
   expires_in: 604800, # 1 week
 })
 runner.add_action(name: 'download', description: 'Download PDFs')
