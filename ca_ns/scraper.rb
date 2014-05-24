@@ -111,7 +111,7 @@ NovaScotia.add_scraping_task(:people)
 NovaScotia.add_scraping_task(:speeches)
 
 runner = Pupa::Runner.new(NovaScotia, {
-  database: 'sayit',
+  database_url: 'mongodb://localhost:27017/sayit',
   expires_in: 604800, # 1 week
 })
 runner.run(ARGV)
