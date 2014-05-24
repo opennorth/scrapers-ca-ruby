@@ -1,5 +1,3 @@
-require 'active_support/core_ext/integer/inflections'
-
 # @todo Find good documentation for URIs (use lowerCamelCase for committee, use ca-ns instead of country code)
 # @see https://code.google.com/p/akomantoso/wiki/Using_Akoma_Ntoso_URIs#TLC_Organization
 # @see http://www.akomantoso.org/release-notes/akoma-ntoso-3.0-schema/naming-conventions-1/bungenihelpcenterreferencemanualpage.2008-01-09.1484954524
@@ -7,14 +5,6 @@ require 'active_support/core_ext/integer/inflections'
 class NovaScotia
   def scrape_speeches
     Time.zone = 'Atlantic Time (Canada)'
-
-    # A map between speaker names and URLs, for cases where we have only a name,
-    # and to have consistent URLs for names.
-    @speaker_urls = {}
-    # A map between URLs and person IDs of people created by this script.
-    # @todo Use IDs for all - it takes 30 minutes without a dependency graph.
-    # --cache_dir memcached://localhost:11211 --output_dir redis://localhost:6379/15 --pipelined --no-validate
-    @speaker_ids = {}
 
     # @note Can extract the majority party, the assembly dates, and the session dates.
     doc = get('http://nslegislature.ca/index.php/proceedings/hansard/')
@@ -100,16 +90,18 @@ private
         # empty paragraphs, in case a page number appears within a division.
         # http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12apr02/
         # has two empty paragraphs.
-        doc.xpath('//p[./a[starts-with(@name, "HPage")][not(node())]]/preceding-sibling::p[1]').each do |p|
-          p.remove if p.text.strip.empty?
-        end
-        doc.xpath('//p[./a[starts-with(@name, "HPage")][not(node())]]/following-sibling::p[position()<=2]').each do |p|
-          p.remove if p.text.strip.empty?
+        %w(HPage IPage).each do |name|
+          doc.xpath("//p[./a[starts-with(@name, '#{name}')][not(node())]]/preceding-sibling::p[1]").each do |p|
+            p.remove if p.text.strip.empty?
+          end
+          doc.xpath("//p[./a[starts-with(@name, '#{name}')][not(node())]]/following-sibling::p[position()<=2]").each do |p|
+            p.remove if p.text.strip.empty?
+          end
+          doc.xpath("//p[./a[starts-with(@name, '#{name}')][not(node())]]").remove
         end
         doc.xpath('//p[@class="hsd_center"]').each do |p|
           p.remove if p.text.strip[/\A\d{1,4}\z/]
         end
-        doc.xpath('//p[./a[starts-with(@name, "HPage")][not(node())]]').remove
         # Remove links and anchors appearing after a speaker's name.
         doc.css('a[title="Previous"],a[title="Next"]').remove
         doc.xpath('//a[@name][not(node())]').remove
@@ -151,7 +143,8 @@ private
           end
 
           # It is conceivable to have different URLs for the same person using
-          # different names. # @todo Check in MongoDB.
+          # different names. This does not seem to occur.
+          # db.people.find().map(function (e) {return e.sources[0].url.toLowerCase() + ' ' + e.name}).sort()
           if @speaker_urls.key?(key)
             if @speaker_urls[key] != url
               # This is a known error. FIXME
@@ -162,10 +155,7 @@ private
           else
             # If it is a past MLA whose URL we haven't seen yet.
             if response.status == 301 && response.headers['Location'] == 'http://nslegislature.ca/index.php/people/members/' && !@speaker_urls.has_value?(url)
-              person = Pupa::Person.new(name: person_a.text)
-              person.add_source(url)
-              dispatch(person)
-              @speaker_ids[url] = person._id
+              create_person(Pupa::Person.new(name: person_a.text), url)
             end
             @speaker_urls[key] = url
           end
@@ -198,21 +188,16 @@ private
 
               @speech = {
                 index: index,
+                element: 'speech',
                 # @todo speech(by) with TLCPerson(href id showAs) in references
                 from: from,
                 # @todo Need to figure out what to preserve in text version.
-                # @todo Need to remove leading colon: .sub(/\A:/, '')
-                html: p.to_s.strip,
+                # @todo Need to remove leading colon: .sub(/\A:/, '') (Does speaker have square brackets when linked?)
+                html: p.to_s,
                 debate_id: debate._id,
               }
 
-              if @speaker_ids.key?(url)
-                @speech[:person_id] = @speaker_ids[url]
-              else
-                @speech[:person] = {'sources.url' => url}
-              end
-
-              # We don't know if there is a continuation.
+              @speech[:person_id] = @speaker_ids.fetch(url)
 
             # A speech by an unlinked person, which may have many paragraphs. FIXME
             elsif match = text[/\A(?:By|Proposé par): +([A-Z].+?) *[,(]/, 1] ||
@@ -230,19 +215,23 @@ private
 
                 @speech = {
                   index: index,
+                  element: 'speech',
                   # @todo speech(by) with TLCPerson(href id showAs) in references
                   from: match,
                   # @todo Need to figure out what to preserve in text version.
-                  # @todo Need to remove leading name and colon.
-                  html: p.to_s.strip,
+                  # @todo Need to remove leading name and colon. (Does speaker have square brackets when unlinked?)
+                  html: p.to_s,
                   debate_id: debate._id,
+                  fuzzy: true,
                 }
 
-                if @speaker_ids.key?(url)
-                  @speech[:person_id] = @speaker_ids[url]
-                else
-                  @speech[:person] = {'sources.url' => url}
+                # If the first occurrence of a person's name is unlinked, that
+                # person will not have been created yet.
+                unless @speaker_ids.key?(url)
+                  create_person(Pupa::Person.new(name: from), url)
                 end
+
+                @speech[:person_id] = @speaker_ids.fetch(url)
               else
                 warn("Unrecognized speaker #{index}: #{@a[:href]} #{key}")
               end
@@ -268,6 +257,7 @@ private
               # <recordedTime time="%FT%T%:z">5:15 p.m.</recordedTime>
               dispatch(Speech.new({
                 index: index,
+                element: 'recordedTime',
                 time: Time.zone.local(docDate_date.year, docDate_date.month, docDate_date.day, $1, $2),
                 debate_id: debate._id,
               }))
@@ -276,11 +266,30 @@ private
             elsif text[/\A(?:Given on \S+ \d{1,2}, +201\d|\(?Pursuant to Rule +30(?:\(1\))?\))\z/]
               create_speech
 
-              # <other>...</other>
               dispatch(Speech.new({
                 index: index,
+                element: 'other',
+                html: p.to_s, # text is centered
+                text: p.text.squeeze(' ').strip,
+                debate_id: debate._id,
+              }))
+
+            # A section, which will have a single paragraph. All-caps lines are
+            # section headings. Must appear before narrative matching, as some
+            # sections begin and end with square brackets.
+            elsif text[/\A[A-Z\d,\.\(\)\[\][:space:]]+\z|\ATabled \S+ \d{1,2}, +201\d\z/] ||
+              # All-bold lines may appear within a speech. Parentheses and
+              # brackets may not be inside the b tags.
+              @speech.nil? && p.at_css('b') && text.chomp(')') == p.css('b').text.strip.chomp(')') ||
+              @speech.nil? && p.at_css('b') && text.sub(/\A\[/, '').sub(/\]\z/, '') == p.css('b').text.strip.sub(/\A\[/, '').sub(/\]\z/, '')
+              create_speech
+
+              # @todo check whether these are all debateSection(name id) and heading(id); otherwise, choose between scene, narrative or summary
+              dispatch(Speech.new({
+                index: index,
+                element: 'debateSection',
+                html: p.to_s,
                 # @todo Need to figure out what to preserve in text version.
-                html: p.to_s.strip,
                 debate_id: debate._id,
               }))
 
@@ -288,11 +297,15 @@ private
             elsif text[/\A\[/] && text[/\]\z/]
               create_speech
 
-              # <narrative>...</narrative>
+              # Find all one-paragraph narratives. (535)
+              # db.speeches.find({html: new RegExp('> *\\[[^<]*\\]')}).map(function(e){return e.html}).sort()
+              # Find any one-paragraph narratives with tags. (41)
+              # db.speeches.find({$or: [{html: new RegExp('> *\\[[^<]*<[^\/]')}, {html: new RegExp('>[^<]*<[^\/][^>]*> *\\[')}]}).map(function(e){return e.html}).sort()
               dispatch(Speech.new({
                 index: index,
-                # @todo Need to figure out what to preserve in text version.
-                html: p.to_s.strip,
+                element: 'narrative',
+                html: p.to_s, # no classes or tags
+                text: p.text.squeeze(' ').strip.sub(/\A\[/, '').sub(/\]\z/, ''),
                 debate_id: debate._id,
               }))
 
@@ -300,45 +313,37 @@ private
             elsif text[/\A\[/]
               create_speech
 
+              # Find all multi-paragraph narratives. (12)
+              # db.speeches.find({html: new RegExp('> *\\[.*<p>')}).map(function(e){return e.html}).sort()
               @speech = {
                 index: index,
-                # @todo Need to figure out what to preserve in text version.
-                html: p.to_s.strip,
+                element: 'narrative',
+                html: p.to_s, # no classes or tags
+                text: p.to_s.squeeze(' ').gsub(/(?<=<p>) /, '').gsub(/(?<=<\/p>)(?=.)/, "\n"),
                 debate_id: debate._id,
               }
 
               # We expect a continuation.
               @narrative = true
 
-            # A section, which will have a single paragraph. All-caps lines are
-            # sectio headings.
-            elsif text[/\A[A-Z\d,\.\(\)\[\][:space:]]+\z|\ATabled \S+ \d{1,2}, +201\d\z/] ||
-              # All-bold lines may appear within a speech. The closing b tag may
-              # occur inside the closing parenthesis. FIXME
-              @speech.nil? && p.at_css('b') && text.chomp(')') == p.at_css('b').text.strip.chomp(')')
-              create_speech
-
-              # @todo check whether these are all debateSection(name id) and heading(id); otherwise, choose between scene, narrative or summary
-              dispatch(Speech.new({
-                index: index,
-                # @todo Need to figure out what to preserve in text version.
-                html: p.to_s.strip,
-                debate_id: debate._id,
-              }))
-
             # Assumed to be a continuation. # @todo Check if this assumption holds.
             elsif !text.empty?
               if @speech
-                @speech[:html] += p.to_s.strip
+                # @todo transform this HTML appropriately.
+                @speech[:html] += p.to_s
               elsif text[/\AThe +honourable +(?:member |[A-Z]).+\./]
+                # Unattributed speeches by the Speaker.
+                # db.speeches.find({from: null, html: /> *The +honourable/}).map(function(e){return e.html}).sort()
                 dispatch(Speech.new({
                   index: index,
-                  # @todo Need to figure out what to preserve in text version.
-                  html: p.to_s.strip,
+                  element: 'speech',
+                  html: p.to_s, # no classes or tags
+                  text: p.text.squeeze(' ').strip,
                   debate_id: debate._id,
+                  person_id: @speaker_ids.fetch('http://nslegislature.ca/index.php/people/speaker'),
                 }))
               elsif !text[/\A\d+\z/] # unlinked page number
-                warn("Unclassified paragraph #{index}: #{@a[:href]}: #{p.to_s.strip.inspect}")
+                warn("Unclassified paragraph #{index}: #{@a[:href]}: #{p.to_s.inspect}")
               end
 
               if text[/\]\z/]
@@ -346,7 +351,7 @@ private
                   @narrative = false
                   create_speech
                 else
-                  warn("Unmatched ] #{index}: #{@a[:href]}: #{p.to_s.strip.inspect}")
+                  warn("Unmatched ] #{index}: #{@a[:href]}: #{p.to_s.inspect}")
                 end
               end
             # An empty paragraph follows the end of a division. We don't want a

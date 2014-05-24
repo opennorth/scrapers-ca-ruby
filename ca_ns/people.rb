@@ -22,17 +22,19 @@ class NovaScotia
     })
     dispatch(legislature)
 
-    person = Pupa::Person.new(name: 'Speaker')
-    person.add_source('http://nslegislature.ca/index.php/people/speaker')
-    dispatch(person)
+    create_person(Pupa::Person.new(name: 'Speaker'), 'http://nslegislature.ca/index.php/people/speaker')
+    create_person(Pupa::Person.new(name: 'Clerk'), 'http://nslegislature.ca/index.php/people/offices/clerk')
+    create_person(Pupa::Person.new(name: 'Sergeant-at-Arms'), 'http://nslegislature.ca/index.php/people/offices/sergeant-at-arms')
 
-    person = Pupa::Person.new(name: 'Clerk')
-    person.add_source('http://nslegislature.ca/index.php/people/offices/clerk')
-    dispatch(person)
-
-    person = Pupa::Person.new(name: 'Sergeant-at-Arms')
-    person.add_source('http://nslegislature.ca/index.php/people/offices/sergeant-at-arms')
-    dispatch(person)
+    # Darrell Dexter first appears in the debates as the Premier. However, we
+    # don't want to create a person's whose name is "THE PREMIER".
+    # @see http://nslegislature.ca/index.php/proceedings/hansard/C90/house_13may10/
+    person = Pupa::Person.new({
+      name: 'Darrell Dexter',
+      family_name: 'Dexter',
+      given_name: 'Darrell',
+    })
+    create_person(person, 'http://nslegislature.ca/index.php/people/members/Darrell_Dexter')
 
     get('http://nslegislature.ca/index.php/people/members/').css('#content tbody tr').each do |tr|
       tds = tr.css('td')
@@ -50,9 +52,7 @@ class NovaScotia
         email: characters[characters.index('>') + 1..characters.rindex('<') - 1].map{|c| Integer(c).chr}.join,
         image: doc.at_css('.portrait')[:src],
       })
-      person.add_source('http://nslegislature.ca/index.php/people/members/', note: 'Legislature MLA list')
-      person.add_source(url, note: 'Legislature MLA page')
-      dispatch(person)
+      create_person(person, url)
 
       # Shared post and membership properties.
       area_name = tds[2].text
@@ -87,5 +87,13 @@ class NovaScotia
       membership.add_source('http://nslegislature.ca/index.php/people/members/', note: 'Legislature MLA list')
       dispatch(membership)
     end
+  end
+
+private
+
+  def create_person(person, url)
+    person.add_source(url)
+    dispatch(person)
+    @speaker_ids[url] = person._id
   end
 end
