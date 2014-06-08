@@ -22,6 +22,7 @@ class NovaScotia
     })
     dispatch(legislature)
 
+    create_person(Pupa::Person.new(name: 'Lieutenant Governor'), 'http://nslegislature.ca/index.php/people/lt-gov/')
     create_person(Pupa::Person.new(name: 'Speaker'), 'http://nslegislature.ca/index.php/people/speaker')
     create_person(Pupa::Person.new(name: 'Clerk'), 'http://nslegislature.ca/index.php/people/offices/clerk')
     create_person(Pupa::Person.new(name: 'Sergeant-at-Arms'), 'http://nslegislature.ca/index.php/people/offices/sergeant-at-arms')
@@ -94,6 +95,6 @@ private
   def create_person(person, url)
     person.add_source(url)
     dispatch(person)
-    @speaker_ids[url] = person._id
+    @speaker_ids[url] = person._id # XXX
   end
 end
