@@ -4,74 +4,89 @@ class NovaScotia < GovernmentProcessor
   def initialize(*args)
     super
 
-    @state = @initial_state
+    @initial_state = :not_started
+    @previous_state = nil
 
     # If the machine is in a state ending in "_begin", the next state is
     # expected to be that state.
-    @states = [
-      :not_started,
-      :started,
-
-      :speech_begin,
-      :speech,
-      :speech_continue,
-
-      :division_begin,
-      :division,
-      :division_continue,
-
-      :recorded_time,
-
-      :heading_begin,
-      :heading,
-
-      :question_by,
-      :question_to,
-      :question,
-      :question_continue,
-
-      :answer_begin,
-      :answer,
-      :answer_continue,
-
-      :resolution,
-      :resolution_continue,
-
-      :narrative,
-      :narrative_continue,
-    ]
-
     @transitions = {
-      not_started: [:started],
-      started: [:speech],
+      not_started: [:speech_begin],
 
       speech_begin: [:speech],
-      speech: [:speech_begin, :speech_continue],
-      speech_continue: [:speech_continue],
+      speech: [
+        # Multi-line speech
+        :speech_continue,
+        # One-line speech
+        :heading,
+        :speech,
+      ],
+      speech_continue: [
+        :speech_continue,
+        :division,
+        :heading,
+        :narrative,
+        :recorded_time,
+        :speech,
+      ],
 
-      division_begin: [:division],
       division: [:division_continue],
-      division_continue: [:division_continue],
+      division_continue: [
+        :division_continue,
+        :speech,
+      ],
 
-      recorded_time: [:speech],
+      recorded_time: [
+        :division,
+        :narrative,
+        :speech,
+      ],
 
-      heading_begin: [:heading],
-      heading: [:question_by],
+      heading: [
+        # Predicted
+        :answer,
+        :question_line1,
+        :resolution_by,
+        # Unpredicted
+        :heading,
+        :speech,
+      ],
 
-      question_by: [:question_to],
-      question_to: [:question],
+      question_line1: [:question_line2],
+      question_line2: [:question],
       question: [:question_continue],
-      question_continue: [:question_continue],
+      question_continue: [
+        :question_continue,
+        :heading,
+      ],
 
-      answer_begin: [:answer],
       answer: [:answer_continue],
-      answer_continue: [:answer_continue],
+      answer_continue: [
+        :answer_continue,
+        :heading,
+      ],
 
+      resolution_by: [:resolution],
       resolution: [:resolution_continue],
-      resolution_continue: [:resolution_continue],
+      resolution_continue: [
+        :resolution_continue,
+        :heading,
+      ],
 
-      narrative: [:narrative_continue],
-      narrative_continue: [:narrative_continue, :speech_begin],
+      narrative: [
+        # Multi-line narrative
+        :narrative_continue,
+        # One-line narrative
+        :heading,
+        :narrative,
+        :recorded_time,
+        :speech,
+      ],
+      narrative_continue: [
+        # Unclosed narrative
+        :narrative_continue,
+        # Closed narrative
+        :speech_begin,
+      ],
     }
 
     # A map between speaker names and URLs, for cases where we have only a name,
@@ -92,8 +107,10 @@ class NovaScotia < GovernmentProcessor
 
   def transition_to(to)
     unless can_transition_to?(to)
-      warn "Illegal transition from #{@state} to #{to}"
+      error("Illegal transition from #{@state} to #{to} (previously #{@previous_state}) #{@a[:href]}")
+      error(JSON.pretty_generate(@speech)) if @speech
     end
+    @previous_state = @state
     @state = to
   end
 end
@@ -157,29 +174,29 @@ class Speech
   attr_accessor :time
   # @return [String] the label for the person speaking
   attr_accessor :from
+  # @return [String] the ID of the person speaking
+  attr_accessor :from_id
+  # @return [String] the label for the person being spoken to
+  attr_accessor :to
+  # @return [String] the ID of the person being spoken to
+  attr_accessor :to_id
   # @return [String] the HTML of the paragraph
   attr_accessor :html
   # @return [String] a clean version of the paragraph
   attr_accessor :text
-  # @return [Boolean] whether the speech is a voting division # @todo use element?
-  attr_accessor :division
+  # @return [Boolean] whether the speech is a division or a resolution
+  attr_accessor :note
   # @return [Boolean] whether the speaker's name was hyperlinked
   attr_accessor :fuzzy
-  # @return [String] the ID of the person speaking
-  attr_accessor :person_id
   # @return [String] the ID of the debate to which this speech belongs
   attr_accessor :debate_id
 
-  dump :index, :element, :num_title, :time, :from, :html, :text, :division, :fuzzy, :person_id, :debate_id
-  foreign_key :debate_id, :person_id
+  dump :index, :element, :num_title, :time, :from, :from_id, :to, :to_id, :html, :text, :note, :fuzzy, :debate_id
+  foreign_key :debate_id, :from_id
 
   validates_numericality_of :index
   validates_inclusion_of :element, in: %w(recordedTime speech narrative other), allow_blank: true
   validates_presence_of :debate_id
-
-  def person=(person)
-    @person = {_type: 'pupa/person'}.merge(person)
-  end
 
   def fingerprint
     to_h.slice(:index, :debate_id)
