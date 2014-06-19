@@ -56,7 +56,6 @@ HEADING_TYPOS = {
   /\ARESOLUTON\b/ => 'RESOLUTION',
 }
 
-# @todo count occurrences of headings, to find any to add/remove from this list
 HEADINGS = [
   'ADJOURNMENT',
   'ANSWERS TO WRITTEN QUESTIONS',

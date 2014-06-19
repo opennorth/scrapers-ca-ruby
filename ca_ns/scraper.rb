@@ -119,6 +119,7 @@ require_relative 'models'
 require_relative 'constants'
 require_relative 'people'
 require_relative 'speeches'
+require_relative 'akoma_ntoso'
 
 NovaScotia.add_scraping_task(:people)
 NovaScotia.add_scraping_task(:speeches)

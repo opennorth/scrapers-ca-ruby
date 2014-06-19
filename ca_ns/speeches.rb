@@ -1,7 +1,3 @@
-# @todo speech(by), question(by), answer(by) with TLCPerson(href id showAs) in references
-# @todo Find good documentation for URIs (use lowerCamelCase for committee, use ca-ns instead of country code)
-# @see https://code.google.com/p/akomantoso/wiki/Using_Akoma_Ntoso_URIs#TLC_Organization
-# @see http://www.akomantoso.org/release-notes/akoma-ntoso-3.0-schema/naming-conventions-1/bungenihelpcenterreferencemanualpage.2008-01-09.1484954524
 class NovaScotia
   def scrape_speeches
     Time.zone = 'Atlantic Time (Canada)'
@@ -49,27 +45,12 @@ private
         doc = get(@a[:href])
 
         # The sitting on the list page can be incorrect. FIXME
+        # @see http://nslegislature.ca/index.php/en/proceedings/session_hansards/C94/
         docNumber = doc.at_xpath('//p[@class="hansard_title"]/span[@class="alignright"]').text
+        # The sitting on the hansard page can be incorrect. FIXME
+        # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov03/
+        docNumber = "1#{docNumber}" if docNumber[/\A\d-\d\d\z/]
 
-        # <akomaNtoso>
-        #   <debate name="hansard">
-        #     <meta>
-        #       <references source="#source">
-        #         <TLCOrganization id="source" href="/ontology/organization/ca/Open%20North%20Inc." showAs="Open North Inc.">
-        #       </references>
-        #     </meta>
-        #     <preface>
-        #       <docTitle>Debates, 1 May 2014</docTitle>
-        #       <docNumber>14-38</docNumber>
-        #       <docDate date="2014-05-01">Thursday, May 1, 2014</docDate>
-        #       <docProponent>Nova Scotia House of Assembly</docProponent>
-        #       <legislature value="62">62nd General Assembly</legislature>
-        #       <session value="1">1st Session</session>
-        #     </preface>
-        #     <debateBody>
-        #     </debateBody>
-        #   </debate>
-        # </akomaNtoso>
         debate = Debate.new({
           name: 'hansard',
           docTitle: "Debates, #{docDate_date.strftime('%-e %B %Y')}",
@@ -140,6 +121,9 @@ private
         @speech = nil
         # Whether "NOTICES OF MOTION UNDER RULE 32(3)" has been seen.
         rule_32 = false
+        # The person being asked a question.
+        answer_from = nil
+        answer_from_id = nil
 
         # Parse the hansard.
         doc.xpath('//div[@class="hsd_body"]/p|//div[@class="hsd_body"]/blockquote').each_with_index do |p,index|
@@ -159,7 +143,7 @@ private
           # This debate contains a lot of cruft in the footer.
           break if @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C94/house_13dec12/' && p.to_s.strip == '<p class="hsd_center"><b>Province of Nova Scotia</b></p>'
 
-          text = p.text.gsub(/[[:space:]]+/, ' ').strip.sub(/\A�/, '')
+          text = p.text.gsub(/[[:space:]]+/, ' ').strip.sub(/\A�/, '').gsub('&amp;', '&')
 
           # An empty paragraph follows the end of a division. We don't want a
           # division collecting more than necessary. If an empty paragraph
@@ -172,7 +156,7 @@ private
             end
 
           # A question.
-          elsif %i(question_line1 question_line2).include?(@state)
+          elsif [:question_line1, :question_line2].include?(@state)
             person = person_a && person_a.text.strip.squeeze(' ') || text.match(/\A(?:BY|By|TO|To): ([A-Z].+?)(?:,| \(|\z)/)[1]
             key = to_key(person.sub(/(?<=\S )[A-Z]\. (?=\S)/, ''))
 
@@ -181,20 +165,23 @@ private
               unless @speaker_ids.key?(url)
                 create_person(Pupa::Person.new(name: 'Premier'), url)
               end
+            # @see http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12may17/
             elsif person != 'Deputy Premier and Minister responsible for Communications Nova Scotia'
               url = @speaker_urls.fetch(key){TYPOS.fetch(key)}
             end
 
-            @speech = {
-              index: index,
-              element: 'question',
-              debate_id: debate._id,
-            }
+            if @state == :question_line1
+              @speech = {
+                index: index,
+                element: 'question',
+                debate_id: debate._id,
+              }
+            end
 
-            key = text[/\ABy:/i] ? :from : :to
+            field = text[/\A(?:BY|By): /] ? :from : :to
 
-            @speech[key] = person
-            @speech["#{key}_id".to_sym] = @speaker_ids.fetch(url) if url
+            @speech[field] = person
+            @speech["#{field}_id".to_sym] = @speaker_ids.fetch(url) if url
 
             if @state == :question_line1
               transition_to(:question_line2)
@@ -213,7 +200,6 @@ private
               debate_id: debate._id,
             }
 
-            # Explicit exceptions are made for unattributed resolutions.
             if from
               key = to_key(from.sub(/(?<=\S )[A-Z]\. (?=\S)/, ''))
 
@@ -221,49 +207,51 @@ private
                 from: from,
                 from_id: @speaker_ids.fetch(@speaker_urls.fetch(key){TYPOS.fetch(key)}),
               })
+            # Explicit exceptions are made for unattributed resolutions.
             elsif @a[:href] != 'http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14apr02/'
-              warn("Speaker not found #{text} | #{index} #{@a[:href]}")
+              error("Speaker not found #{text} | #{index} #{@a[:href]}")
             end
 
             transition_to(:resolution)
 
-          # Rest of a question.
+          # Question text.
           elsif @state == :question
-            # @todo Need to figure out what to preserve in text version.
-
             @speech.merge!({
               html: p.to_s,
-              text: text,
+              text: clean_paragraph(p),
             })
-
             transition_to(:question_continue)
 
-          # Rest of a resolution.
+          # Resolution text.
           elsif @state == :resolution
-            # @todo Need to figure out what to preserve in text version.
-
             @speech.merge!({
               html: p.to_s,
-              text: text,
+              text: clean_paragraph(p),
             })
-
             transition_to(:resolution_continue)
 
           # An answer.
           elsif @state == :answer
             unless p.at_css('i')
-              warn("Expected i tag in answer #{p.to_s.inspect} | #{index} #{a[:href]}")
+              error("Expected i tag in answer #{p.to_s.inspect} | #{index} #{a[:href]}")
             end
-
-            # @todo Need to figure out what to preserve in text version.
 
             @speech = {
               index: index,
               element: 'answer',
               html: p.to_s,
-              text: text,
+              text: clean_paragraph(p),
               debate_id: debate._id,
             }
+
+            if answer_from && answer_from_id
+              @speech.merge!({
+                from: answer_from,
+                from_id: answer_from_id,
+              })
+              answer_from = nil
+              answer_from_id = nil
+            end
 
             transition_to(:answer_continue)
 
@@ -278,8 +266,8 @@ private
               })
             end
 
-            # @todo transform this HTML to text appropriately.
             @speech[:html] += "\n#{p.to_s}"
+            @speech[:text] += "\n#{clean_paragraph(p)}"
 
           # A speech, which may have many paragraphs.
           elsif person_a
@@ -299,52 +287,40 @@ private
             # Remove the name from the text of the speech.
             person_a.remove
 
-            # Speeches should not have any centered paragraphs.
-            # db.speeches.count({element: 'speech', fuzzy: {$ne: true}, html: /<p class/})
-            # db.speeches.count({element: 'speech', fuzzy: {$ne: true}, html: /<p class="hsd_general"/})
-            # db.speeches.distinc('html', {element: 'speech', fuzzy: {$ne: true}, html: /<p class="hsd_center"/})
-            # @todo Need to figure out what to preserve in text version. Remove colon, brackets? .sub(/\A:/, '')
-            text = text
-
             @speech = {
               index: index,
               element: 'speech',
               from: from,
               from_id: @speaker_ids.fetch(url),
               html: p.to_s,
-              text: text,
+              text: clean_paragraph(p).sub(/\A:\s*/, ''),
               debate_id: debate._id,
             }
 
             transition_to(:speech_continue)
 
           # A speech by an unlinked person, which may have many paragraphs.
-          # @see http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12may01/
-          elsif from = (
-            # No space after honorific prefix: HON.JAMIE  BAILLIE:
-            # No period after abbreviation: MR DAVID WILSON:
-            # Family name with apostrophe: Hon. Christopher d'Entremont
-            # Family name with hyphen: MS. PETERSON-RAFUSE
-            # Period after name: MR. KEITH BAIN.
-            # Space after name: MR. LEO GLAVINE
-            text[/\A((?:HON|M[RS])\b\.? ?[A-Z]+ [A-Z'-]+)[.:; ]/, 1] ||
-            # Role-based speeches.
-            text[/\A(MR\. (?:CHAIRMAN|SPEAKER)|MADAM CHAIRMAN|SERGEANT-AT-ARMS|THE (?:ADMINISTRATOR|LIEUTENANT GOVERNOR)):/, 1]
-          )
+          # No space after honorific prefix: HON.JAMIE  BAILLIE:
+          # No period after abbreviation: MR DAVID WILSON:
+          # Family name with apostrophe: Hon. Christopher d'Entremont
+          # Family name with hyphen: MS. PETERSON-RAFUSE
+          # Period after name: MR. KEITH BAIN.
+          # Space after name: MR. LEO GLAVINE
+          # Role-based speeches.
+          elsif match = text.match(/\A((?:HON|M[RS])\b\.? ?[A-Z]+ [A-Z'-]+)[.:; ]|\A(MR\. (?:CHAIRMAN|SPEAKER)|MADAM CHAIRMAN|SERGEANT-AT-ARMS|THE (?:ADMINISTRATOR|LIEUTENANT GOVERNOR)):/)
             transition_to(:speech)
             create_speech
 
             # A person may be unlinked due to a middle initial.
+            from = match[1] || match[2]
             key = to_key(from.sub(/(?<=\S )[A-Z]\. (?=\S)/, ''))
-
-            # @todo Need to figure out what to preserve in text version. Remove name, colon, brackets?
 
             @speech = {
               index: index,
               element: 'speech',
               from: from,
               html: p.to_s,
-              text: text,
+              text: clean_paragraph(p).sub(/\A#{Regexp.escape(match[0])}\s*/, ''),
               fuzzy: true,
               debate_id: debate._id,
             }
@@ -360,12 +336,12 @@ private
 
               @speech[:from_id] = @speaker_ids.fetch(url)
             else
-              warn("Unrecognized speaker #{key} | #{index} #{@a[:href]}")
+              error("Unrecognized speaker #{key} | #{index} #{@a[:href]}")
             end
 
             transition_to(:speech_continue)
 
-          # A short, unattributed speech.
+          # A short, anonymous speech.
           elsif from = text[/\A(AN(?:OTHER)? HON\. MEMBER): /, 1]
             transition_to(:speech)
             create_speech
@@ -375,8 +351,7 @@ private
               element: 'speech',
               from: from,
               html: p.to_s,
-              # Text may contain <i> and <sup> tags.
-              text: p.inner_html.strip.squeeze(' ').sub(/\AAN(?:OTHER)? HON\. MEMBER: /, ''),
+              text: clean_paragraph(p.inner_html).sub(/\AAN(?:OTHER)? HON\. MEMBER: /, ''),
               debate_id: debate._id,
             }))
 
@@ -401,13 +376,12 @@ private
             transition_to(:recorded_time)
             create_speech
 
-            # <recordedTime time="%FT%T%:z">5:15 p.m.</recordedTime>
             dispatch(Speech.new({
               index: index,
               element: 'recordedTime',
               time: Time.zone.local(docDate_date.year, docDate_date.month, docDate_date.day, $1, $2),
               html: p.to_s,
-              text: text,
+              text: clean_paragraph(p.inner_html).sub('[', '').sub(']', ''),
               debate_id: debate._id,
             }))
 
@@ -416,7 +390,8 @@ private
           #   headings begin and end with square brackets.
           elsif (
             # Avoids capturing "<p>.</p>".
-            text[/\A[A-ZÉ\d&',.:()\/\[\][:space:]-]{2,}\z|\A(?:Tabled|Given on) \S+ \d{1,2}, 20\d\d\z|\A\(?Pursuant to Rule 30(?:\(1\))?\)?\z/] &&
+            # Allow some lowercase letters, e.g. "CBC  - ANNIV. (75th)" and "PREM.: DHAs -  AMALGAMATION/SAVINGS".
+            text[/\A[A-ZÉths\d"&'(),.:\/\[\][:space:]–-]{2,}\z|\A(?:Tabled|Given on) \S+ \d{1,2}, 20\d\d\z|\A\(?Pursuant to Rule 30(?:\(1\))?\)?\z/] &&
             # Ignore non-heading paragraphs.
             !["SPEAKER'S RULING:", "THEREFORE BE IT RESOLVED AS FOLLOWS:"].include?(text) ||
             # All-bold lines may appear within a speech. Parentheses and brackets may not be inside the b tags.
@@ -424,17 +399,16 @@ private
             @speech.nil? && p.at_css('b') && text.chomp(')') == p.css('b').text.strip.squeeze(' ').chomp(')') ||
             @speech.nil? && p.at_css('b') && text.gsub(/[\[\]]/, '') == p.css('b').text.strip.squeeze(' ').gsub(/[\[\]]/, '')
           )
+            text = clean_heading(text) # @todo check this method
+
+            # The person answering a question is hard to parse.
+            if text == 'RESPONSE:' && @state == :question_continue
+              answer_from = @speech[:to]
+              answer_from_id = @speech[:to_id]
+            end
+
             transition_to(:heading)
             create_speech
-
-            # Find all headings.
-            # db.speeches.distinct('html', {element: 'heading'}).sort()
-            # Find all headings with non-b tags.
-            # db.speeches.distinct('html', {element: 'heading', html: /<[^\/bp]/}).sort()
-            # Check whether the previous regular expression is aggressive.
-            # db.speeches.distinct('html', {element: 'heading', html: /<b\B/}).sort()
-            # db.speeches.distinct('html', {element: 'heading', html: /<p\B/}).sort()
-            text = clean_heading(text)
 
             # There are hundreds of possible prefixes and suffixes for issue-
             # based headings, so check the format. Avoid matching on colons,
@@ -443,22 +417,6 @@ private
               warn("Unrecognized heading #{text} | #{index} #{@a[:href]}")
             end
 
-            # <questions id="">
-            #   <heading>ORAL QUESTIONS PUT BY MEMBERS</heading>
-            #   <subheading>WAIT TIMES - EFFECTS</subheading>
-            # </questions>
-            # <resolutions id="">
-            #   <heading>NOTICES OF MOTION UNDER RULE 32(3)</heading>
-            #   <num title="1227">RESOLUTION NO. 1227</num>
-            # </resolutions>
-            # <question by="#foo" to="#bar">
-            #   <from>MR. FOO</from>
-            #   <p>Baz?</p>
-            # </question>
-            # <answer by="#bar">
-            #   <from>MS. BAR</from>
-            #   <p>Yes.</p>
-            # </answer>
             dispatch(Speech.new({
               index: index,
               element: 'heading',
@@ -483,21 +441,11 @@ private
             transition_to(:narrative)
             create_speech
 
-            # Find all one-paragraph narratives.
-            # db.speeches.distinct('html', {element: 'narrative', html: {$not: /.<p>/}}).sort()
-            # Find any narratives with tags.
-            # db.speeches.distinct('html', {element: 'narrative', html: /<[^\/p]/}).sort()
-            # Check whether the previous regular expression is aggressive.
-            # db.speeches.distinct('html', {element: 'narrative', html: /<p\B/}).sort()
-            # Single-paragraph narratives have no classes or tags.
-            text.gsub!(/[\[\]]/, '')
-
-            # <narrative>The Clerk calls the roll.</narrative>
             dispatch(Speech.new({
               index: index,
               element: 'narrative',
               html: p.to_s,
-              text: text,
+              text: clean_paragraph(p.inner_html).sub('[', '').sub(']', ''),
               debate_id: debate._id,
             }))
 
@@ -506,53 +454,45 @@ private
             transition_to(:narrative)
             create_speech
 
-            # Find all multi-paragraph narratives.
-            # db.speeches.distinct('html', {element: 'narrative', html: /.<p>/}).sort()
-            # Multi-paragraph narratives have no classes or tags.
-            text = p.to_s.strip.squeeze(' ').gsub(/[\[\]]/, '').sub(/(?<=<p>) /, '')
-
-            # <narrative>
-            #   <p>The Speaker and the Clerks left the Chamber.</p>
-            #   <p>The Lieutenant Governor and his escorts left the Chamber preceded by the Sergeant-at-Arms.</p>
-            # </narrative>
             @speech = {
               index: index,
               element: 'narrative',
               html: p.to_s,
-              text: text,
+              text: clean_paragraph(p).sub('[', ''),
               debate_id: debate._id,
             }
 
             # We expect a continuation.
             transition_to(:narrative_continue)
 
-          # Assumed to be a continuation. # @todo Check if this assumption holds.
           else
+            # A continuation.
             if @speech
               if @state.to_s[/_continue\z/]
                 transition_to(@state)
               else
-                warn("Illegal transition from #{@state} to a continuation")
+                error("Illegal transition from #{@state} to a continuation")
               end
 
-              # @todo transform this HTML to text appropriately.
               @speech[:html] += "\n#{p.to_s}"
+              @speech[:text] += "\n#{clean_paragraph(p)}"
+              if @state == :narrative_continue
+                @speech[:text].sub!(']', '')
+              end
+            # An unattributed speech by the speaker.
             elsif text[/\AThe honourable (?:member |[A-Z]).+\.\]?\z/] || text[/\ASPEAKER'S RULING: /]
               transition_to(:speech)
-
-              # Unattributed speeches by the Speaker.
-              # db.speeches.distinct('html', {from: null, from_id: {$ne: null}}).sort()
-              # Unattributed speeches have no classes or tags.
 
               dispatch(Speech.new({
                 index: index,
                 element: 'speech',
                 from_id: @speaker_ids.fetch('http://nslegislature.ca/index.php/people/speaker'),
                 html: p.to_s,
-                text: text,
+                text: clean_paragraph(p.inner_html),
                 debate_id: debate._id,
               }))
-            elsif !text[/\A\d+\z/] # Don't record unlinked page numbers.
+            # An unknown paragraph.
+            elsif !text[/\A\d+\z/] # unlinked page numbers
               warn("Unsaved paragraph #{p.to_s.inspect} #{text} | #{index} #{@a[:href]}")
             end
 
@@ -620,9 +560,56 @@ private
     string
   end
 
+  def clean_paragraph(p)
+    # Text may contain <a>, <br>, <i>, <sup>, <u> tags.
+    p.to_s.strip.squeeze(' ').
+      # Use proper characters.
+      gsub('. . .', '…').gsub('...', '…').gsub('&amp;', '&').
+      # Remove formatting.
+      sub(' class="hsd_general"', '').sub(' style="font-size: .7em"', '').
+      # Remove leading and trailing whitespace inside paragraphs.
+      sub(/(<p>(?:<[^>]+>)*)\s+/, '\1').sub(/\s+((?:<\/[^>]+>)*<\/p>)/, '\1').
+      # Remove leading and trailing <br> tags inside paragraphs.
+      sub(/(<p>(?:<[^>]+>)*?)(?:<br>\s*)+/, '\1').sub(/(?:\s*<br>)+((?:<\/[^>]+>)*<\/p>)/, '\1').
+      # Remove spaces between list items.
+      gsub(/<\/li>\s+<li>/, "</li>\n<li>").
+      # Replace double <br> with paragraphs.
+      # gsub('\s*<br>\s*<br>\s*', "</p>\n<p>").
+      # Remove single <br>, which always appears to be accidental.
+      # gsub('\s*<br>\s*', ' ').
+      # Remove linked names from answers to questions. One resolution has a hyperlink to an external website.
+      # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec15/
+      gsub(%r{<a href="/index.php/en/people/members/\S+" class="hsd_mla" title="View Profile">([^<]+)</a>}, '\1').
+      gsub(%r{<a href="/index.php/people/speaker" title="View Profile">([^<]+)</a>}, '\1').
+      gsub(%r{<a name="\w+">([^<]+)</a>}, '\1')
+  end
+
   def clean_document(doc)
-    # Remove empty b tags.
-    doc.xpath('//b[not(normalize-space(text()))]').remove
+    # Remove empty <b> and <i> tags (which may nonetheless break up words).
+    doc.xpath('//b[not(normalize-space(text()))]|//i[not(normalize-space(text()))]').each do |e|
+      e.replace(doc.create_text_node(e.text))
+    end
+    # Fix crazy formatting of Hydro-Québec.
+    # <strong>Hydro</strong><b>-</b><strong>Québec</strong>
+    doc.xpath('//strong[text()="Hydro"]|//strong[text()="Québec"]').each do |e|
+      e.replace(doc.create_text_node(e.text))
+    end
+    # Remove accidental <b> tags.
+    # <strong>Hydro</strong><b>-<strong>Québec</strong></b>
+    doc.xpath('//b[string-length(normalize-space(text()))=1]|//b[text()="-Québec"]').each do |e|
+      e.replace(doc.create_text_node(e.text))
+    end
+    # Remove accidental <sup> tags.
+    doc.xpath('//sup[string-length(normalize-space(text()))=1]').each do |e|
+      e.replace(doc.create_text_node(e.text))
+    end
+
+    # Remove script tags (for encoding email addresses).
+    doc.xpath('//script').remove
+    # Replace hidden email addresses.
+    doc.xpath('//span[contains(@id, "eeEncEmail_")]').each do |span|
+      span.replace(doc.create_text_node('(hidden)'))
+    end
 
     # Remove empty paragraphs immediately after a division heading, because
     # empty paragraphs are used as markers for the end of the division.
@@ -644,7 +631,7 @@ private
     doc.xpath('//p[./a[starts-with(@name, "HPage")][not(node())]]').each do |p|
       p.remove if p.text.strip[/\[Page \d{1,4}\]/]
     end
-    # A few have no a tag with a name attribute preceding the link.
+    # A few have no <a> tag with a name attribute preceding the link.
     doc.xpath('//p[./a[starts-with(@href, "#IPage")]]').remove
     doc.xpath('//p[./a[starts-with(@href, "#pagetop")]]').remove
     doc.xpath('//p[@class="hsd_center"]').each do |p|

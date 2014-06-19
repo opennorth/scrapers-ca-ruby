@@ -4,6 +4,7 @@ class NovaScotia
     { 'Liberal' => 'Nova Scotia Liberal Party',
       'NDP' => 'Nova Scotia New Democratic Party',
       'PC' => 'Progressive Conservative Association of Nova Scotia',
+      'I' => 'Independent',
     }.each do |abbreviation,name|
       organization = Pupa::Organization.new({
         name: name,
