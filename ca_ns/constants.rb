@@ -1,6 +1,7 @@
 ROLES = [
   'administrator',
   'chairman',
+  'assistant clerk',
   'clerk',
   'lieutenant governor',
   'sergeant-at-arms',
