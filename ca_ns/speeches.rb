@@ -83,6 +83,11 @@ private
         doc.xpath('//div[@class="hsd_body"]/*').each_with_index do |p,index|
           text = p.text.gsub(/[[:space:]]+/, ' ').strip.sub(/\A�/, '').gsub('&amp;', '&')
 
+          if text == 'QUESTION'
+            warn(@speech.inspect)
+            warn(@state.to_s)
+          end
+
           unless %w(blockquote p ul table).include?(p.node_name)
             if text.empty?
               next
@@ -392,12 +397,13 @@ private
             text[/\A[A-ZÉths\d"&'(),.:\/\[\][:space:]–-]{2,}\z|\A(?:Tabled|Given on) \S+ \d{1,2}, 20\d\d\z|\A\(?Pursuant to Rule 30(?:\(1\))?\)?\z/] &&
             # Ignore non-heading paragraphs.
             !["SPEAKER'S RULING:", "THEREFORE BE IT RESOLVED AS FOLLOWS:"].include?(text) ||
-            # All-bold lines may appear within a speech. Parentheses and brackets may not be inside the b tags.
-            # @todo This is causing headings to be captured by speeches...
-            @speech.nil? && p.at_css('b') && text.chomp(')') == p.css('b').text.strip.squeeze(' ').chomp(')') ||
-            @speech.nil? && p.at_css('b') && text.gsub(/[\[\]]/, '') == p.css('b').text.strip.squeeze(' ').gsub(/[\[\]]/, '')
+            # Resolutions headers are hard to find.
+            @speech.nil? && @state == :heading_begin && text[/\ARes\. (?:No\. ?)?\d+/] ||
+            # All-bold lines may appear within a speech. Punctuation may not be inside the b tags.
+            # @todo This is causing headings to be captured in non-headings.
+            @speech.nil? && p.at_css('b') && text.gsub(/[().\[\]]/, '') == p.css('b').text.strip.squeeze(' ').gsub(/[().\[\]]/, '')
           )
-            text = clean_heading(text) # @todo check this method
+            text = clean_heading(text)
 
             # The person answering a question is hard to parse.
             if text == 'RESPONSE:' && @state == :question_continue
@@ -411,7 +417,7 @@ private
             # There are hundreds of possible prefixes and suffixes for issue-
             # based headings, so check the format. Avoid matching on colons,
             # because colons may indicate speakers.
-            unless HEADINGS.include?(text) || HEADINGS_RE.any?{|pattern| text[pattern]} || text[/\A- | [&-] /] || text[/[\.)]:/]
+            unless HEADINGS.include?(text) || HEADINGS_RE.any?{|pattern| text[pattern]} || text[/\A- | [&–-] /] || text[/[\.)]:/]
               warn("Unrecognized heading #{text} | #{index} #{@a[:href]}")
             end
 
@@ -465,7 +471,7 @@ private
 
           else
             # A continuation.
-            if @speech
+            if @speech && (!text[/\ASPEAKER'S RULING: /] || @speech[:from_as] == 'speaker')
               if @state.to_s[/_continue\z/]
                 transition_to(@state)
               else
@@ -481,6 +487,7 @@ private
             # An unattributed speech by the speaker.
             elsif text[/\AThe honourable (?:member |[A-Z]).+\.\]?\z/] || text[/\ASPEAKER'S RULING: /]
               transition_to(:speech)
+              create_speech
 
               dispatch(Speech.new({
                 index: index,
@@ -574,14 +581,15 @@ private
       sub(/(<p>(?:<[^>]+>)*)\s+/, '\1').
       sub(/\s+((?:<\/[^>]+>)*<\/p>)/, '\1').
       # Remove leading and trailing <br> tags inside paragraphs.
+      sub(/(?:<br>\s*)+\z/, '').
       sub(/(<p>(?:<[^>]+>)*?)(?:<br>\s*)+/, '\1').
       sub(/(?:\s*<br>)+((?:<\/[^>]+>)*<\/p>)/, '\1').
       # Remove spaces between list items.
       gsub(/<\/li>\s+<li>/, "</li>\n<li>").
       # Replace double <br> with paragraphs.
-      # gsub('\s*<br>\s*<br>\s*', "</p>\n<p>"). # @todo
+      gsub('\s*<br>\s*<br>\s*', "</p>\n<p>").
       # Remove single <br>, which always appears to be accidental.
-      # gsub('\s*<br>\s*', ' '). # @todo
+      gsub('\s*<br>\s*', ' ').
       # Remove linked names from answers to questions. One resolution has a hyperlink to an external website.
       # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec15/
       gsub(%r{<a href="/index.php/en/people/members/\S+" class="hsd_mla" title="View Profile">([^<]+)</a>}, '\1').
@@ -663,7 +671,6 @@ private
 
   def create_speakers(doc)
     # Add role-based speakers.
-    # @todo [post-scrape] Check for differences in trailing slashes.
     @speaker_urls.merge!({
       # @see http://nslegislature.ca/index.php/proceedings/hansard/C90/house_13may10/
       'administrator' => 'http://en.wikipedia.org/wiki/Nova_Scotia_Court_of_Appeal',
@@ -714,9 +721,11 @@ private
           end
         end
       else
-        # If it is a past MLA whose URL we haven't seen yet.
-        if response.status == 301 && response.headers['Location'] == 'http://nslegislature.ca/index.php/people/members/' && !@speaker_urls.has_value?(url)
-          create_person(Pupa::Person.new(name: person_a.text.strip.squeeze(' ')), url)
+        unless @speaker_ids.key?(url)
+          # If it is a past MLA whose URL we haven't seen yet.
+          if response.status == 301 && response.headers['Location'] == 'http://nslegislature.ca/index.php/people/members/' && !@speaker_urls.has_value?(url)
+            create_person(Pupa::Person.new(name: person_a.text.strip.squeeze(' ')), url)
+          end
         end
         @speaker_urls[key] = url
       end

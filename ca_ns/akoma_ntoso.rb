@@ -70,6 +70,8 @@ class NovaScotia
             end
 
             xml.debateBody do
+              # @todo add top-level section
+
               section = nil
               speeches = []
 
@@ -111,7 +113,7 @@ private
     #   <num title="1227">RESOLUTION NO. 1227</num>
     # </resolutions>
     # `name` and `id` are required attributes, but we don't care.
-    # @todo Reflect more of the hierarchy from the table of contents.
+    # @todo Reflect more of the hierarchy from the table of contents using TOP_LEVEL_HEADINGS
     xml.debateSection do
       text = section.fetch('text')
       if section['num_title']
@@ -135,7 +137,7 @@ private
     if speech['from_id']
       attributes[:by] = "##{speech['from_id']}"
     end
-    if speech['to_id'] # @todo check if ever null
+    if speech['to_id'] # @todo [post-scrape] check if ever null
       attributes[:to] = "##{speech['to_id']}"
     end
 
@@ -153,7 +155,7 @@ private
       #   <p>Yes.</p>
       # </answer>
       xml.answer(attributes) do
-        if speech['from'] # @todo check if ever null
+        if speech['from'] # @todo [post-scrape] check if ever null
           xml.from speech.fetch('from')
         end
         xml << text
@@ -174,7 +176,7 @@ private
       #   <p>Baz?</p>
       # </question>
       xml.question(attributes) do
-        if speech['from'] # @todo check if ever null
+        if speech['from'] # @todo [post-scrape] check if ever null
           xml.from speech.fetch('from')
         end
         xml << text
@@ -189,6 +191,7 @@ private
     when 'speech'
       if speech['note'] == 'resolution'
         xml.speech(attributes) do
+          # Some resolutions are anonymous.
           if speech['from']
             xml.from speech.fetch('from')
           end

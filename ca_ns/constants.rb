@@ -99,7 +99,6 @@ HEADINGS = TOP_LEVEL_HEADINGS + [
   'PURSUANT TO RULE 30(1)',
   'RESPONSE:',
   'RESPONSES',
-
   # All-caps headings with no useful markers.
   'COLLABORATIVE EMERGENCY CENTRES',
   'ELIGIBILITY BREAKDOWN',
@@ -109,7 +108,7 @@ HEADINGS = TOP_LEVEL_HEADINGS + [
 ]
 
 HEADINGS_RE = [
-  /\ABill No\. \d+ - /,
+  /\ABill No\. \d+ [–-]/, # n-dash
   /\AQUESTION NO\. \d+\z/,
   /\ARESOLUTION NO\. \d+\z/,
   /\AGiven on \S+ \d{1,2}, 20\d\d\z/,
