@@ -277,7 +277,7 @@ private
               element: 'speech',
               from: from,
               html: p.to_s,
-              text: clean_paragraph(p).sub(/\A:\s*/, ''),
+              text: clean_paragraph(p).sub(/>:\s*/, ''),
               debate_id: debate._id,
             }
 
@@ -316,7 +316,7 @@ private
               element: 'speech',
               from: from,
               html: p.to_s,
-              text: clean_paragraph(p).sub(/\A#{Regexp.escape(match[0])}[.:;]?\s*/, ''),
+              text: clean_paragraph(p).sub(/>#{Regexp.escape(match[0])}[.:;]?\s*/, ''),
               fuzzy: true,
               debate_id: debate._id,
             }
