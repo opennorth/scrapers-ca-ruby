@@ -57,10 +57,14 @@ class Speech
   attr_accessor :time
   # @return [String] the label for the person speaking
   attr_accessor :from
+  # @return [String] the role of the person speaking
+  attr_accessor :from_as
   # @return [String] the ID of the person speaking
   attr_accessor :from_id
   # @return [String] the label for the person being spoken to
   attr_accessor :to
+  # @return [String] the role of the person being spoken to
+  attr_accessor :to_as
   # @return [String] the ID of the person being spoken to
   attr_accessor :to_id
   # @return [String] the HTML of the paragraph
@@ -74,7 +78,7 @@ class Speech
   # @return [String] the ID of the debate to which this speech belongs
   attr_accessor :debate_id
 
-  dump :index, :element, :num_title, :time, :from, :from_id, :to, :to_id, :html, :text, :note, :fuzzy, :debate_id
+  dump :index, :element, :num_title, :time, :from, :from_as, :from_id, :to, :to_as, :to_id, :html, :text, :note, :fuzzy, :debate_id
   foreign_key :debate_id, :from_id
 
   validates_numericality_of :index
