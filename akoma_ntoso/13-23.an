@@ -1,0 +1,987 @@
+<?xml version="1.0"?>
+<akomaNtoso>
+  <debate name="hansard">
+    <meta>
+      <references source="#source">
+        <TLCOrganization id="source" href="/ontology/organization/ca.open.north.inc" showAs="Open North Inc."/>
+        <TLCPerson id="75109949-5b99-4b9c-b9fd-d85a8ce227ab" href="/ontology/person/ca.speaker" showAs="MR. SPEAKER"/>
+        <TLCPerson id="adf62df0-6616-4824-87bd-59fd0bc41914" href="/ontology/person/ca.jamie.baillie" showAs="Hon. Jamie Baillie"/>
+        <TLCPerson id="044d7a53-b109-4393-8fbe-efad8b86a796" href="/ontology/person/ca.diana.whalen" showAs="MS. WHALEN"/>
+        <TLCPerson id="4c929028-e1d5-46a9-9075-8620e1ec2e77" href="/ontology/person/ca.frank.corbett" showAs="HON. FRANK CORBETT"/>
+        <TLCPerson id="1d8990f3-d97c-4f16-ade8-87812d62eba9" href="/ontology/person/ca.becky.kent" showAs="Ms. Becky Kent"/>
+        <TLCPerson id="8a8470fb-0e2f-4e9e-8810-4f20c748d898" href="/ontology/person/ca.karen.casey" showAs="HON. KAREN CASEY"/>
+        <TLCPerson id="2ed66148-16c1-48af-bf8f-cbfd33a74e36" href="/ontology/person/ca.sterling.belliveau" showAs="HON. STERLING BELLIVEAU"/>
+        <TLCPerson id="41fa6a70-397a-4597-900b-20b957bef948" href="/ontology/person/ca.leo.glavine" showAs="MR. LEO GLAVINE"/>
+        <TLCPerson id="6d07f2ae-9d4e-4ecf-8c75-26d9d9438690" href="/ontology/person/ca.kelly.regan" showAs="MS. KELLY REGAN"/>
+        <TLCPerson id="26046e64-64ec-438e-96e4-9634df5c8f8c" href="/ontology/person/ca.alfie.macleod" showAs="MR. ALFIE MACLEOD"/>
+        <TLCPerson id="2744aeca-0133-42aa-8ee9-a89fd44f8a14" href="/ontology/person/ca.allan.gerard.macmaster" showAs="MR. ALLAN MACMASTER"/>
+        <TLCPerson id="a17abcb6-45ac-4a02-a639-9e63df869d46" href="/ontology/person/ca.david.allan.wilson" showAs="HON. DAVID WILSON"/>
+        <TLCPerson id="b7960e86-75de-47f8-a0e8-0e3c9547e78e" href="/ontology/person/ca.howard.epstein" showAs="MR. HOWARD EPSTEIN"/>
+        <TLCPerson id="c4b08611-ea50-4069-9042-1634c77a855e" href="/ontology/person/ca.christopher.a.dentremont" showAs="Hon. Christopher D'Entremont"/>
+        <TLCPerson id="7577a3e3-867e-4d2e-a20f-cf0febdf9d97" href="/ontology/person/ca.michel.p.samson" showAs="HON. MICHEL SAMSON"/>
+        <TLCPerson id="5784d153-f546-400b-bc4f-2683f94dd642" href="/ontology/person/ca.eddie.orrell" showAs="MR. EDDIE ORRELL"/>
+        <TLCPerson id="02bd136f-0994-4efe-9d21-b145fba3ddf2" href="/ontology/person/ca.lenore.zann" showAs="MS. LENORE ZANN"/>
+        <TLCPerson id="dec41d7a-1f3f-40db-bdc4-d55134cb9a68" href="/ontology/person/ca.marilyn.more" showAs="HON. MARILYN MORE"/>
+        <TLCPerson id="bbf5376f-1a5e-4a10-ac71-5a195ac61a59" href="/ontology/person/ca.andrew.younger" showAs="Mr. Andrew Younger"/>
+        <TLCPerson id="40342c81-d15f-4412-9e39-be7ba9a478a9" href="/ontology/person/ca.maureen.macdonald" showAs="HON. MAUREEN MACDONALD"/>
+        <TLCPerson id="5b8a7557-4c80-47ad-8788-1a0a8a1e7e3d" href="/ontology/person/ca.jim.boudreau" showAs="MR. JIM BOUDREAU"/>
+        <TLCPerson id="4fe6044a-d86e-4a24-bc37-127add6fe273" href="/ontology/person/ca.ross.landry" showAs="HON. ROSS LANDRY"/>
+        <TLCPerson id="6fd8b406-a075-4718-b5e3-c33555ca4243" href="/ontology/person/ca.keith.bain" showAs="MR. KEITH BAIN"/>
+        <TLCPerson id="fd4808de-08fb-4763-bac0-eb01f698ec82" href="/ontology/person/ca.clarrie.mackinnon" showAs="MR. CLARRIE MACKINNON"/>
+        <TLCPerson id="1ba97dc9-c731-4cb3-ae68-515251dcee0b" href="/ontology/person/ca.ramona.jennex" showAs="HON. RAMONA JENNEX"/>
+        <TLCPerson id="65adae52-0677-4ff2-bc78-0801d6f6c1fa" href="/ontology/person/ca.john.macdonell" showAs="HON. JOHN MACDONELL"/>
+      </references>
+    </meta>
+    <preface>
+      <docTitle>Debates, 29 April 2013</docTitle>
+      <docNumber>13-23</docNumber>
+      <docDate date="2013-04-29">Monday, April 29, 2013</docDate>
+      <docProponent>Nova Scotia House of Assembly</docProponent>
+      <legislature value="61">61st General Assembly</legislature>
+      <session value="5">5th Session</session>
+    </preface>
+    <debateBody>
+      <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+        <from>MR. SPEAKER</from>
+        <p>MR. SPEAKER : Order, please. Before we start the daily routine, I'm going to give a Speaker's Ruling.</p>
+      </speech>
+      <debateSection>
+        <heading>PRESENTING REPORTS OF COMMITTEES</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Minister of Justice.</p>
+        </speech>
+        <speech by="#4fe6044a-d86e-4a24-bc37-127add6fe273">
+          <from>HON. ROSS LANDRY</from>
+          <p>HON. ROSS LANDRY : Mr. Speaker, as Chairman of the Committee on Law Amendments, I am directed to report that the committee has met and considered the following bills:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Ordered that these bills be referred to the Committee of the Whole House on Bills.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>TABLING REPORTS, REGULATIONS AND OTHER PAPERS</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Pursuant to Section 11(1)(f) of the House of Assembly Management Commission Act, I, as chairman, table the 2012 Annual Report of the House of Assembly Management Commission, which includes the audited financial statements for both the 2011 and 2012 fiscal years.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>GOVERNMENT NOTICES OF MOTION</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Minister of the Public Service Commission.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="956">RESOLUTION NO. 956</num>
+        <speech by="#dec41d7a-1f3f-40db-bdc4-d55134cb9a68">
+          <from>HON. MARILYN MORE</from>
+          <p>HON. MARILYN MORE : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="957">RESOLUTION NO. 957</num>
+        <speech by="#65adae52-0677-4ff2-bc78-0801d6f6c1fa">
+          <from>HON. JOHN MACDONELL</from>
+          <p>HON. JOHN MACDONELL : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+        <speech by="#2ed66148-16c1-48af-bf8f-cbfd33a74e36">
+          <from>HON. STERLING BELLIVEAU</from>
+          <p>HON. STERLING BELLIVEAU : Mr. Speaker, may I make an introduction?</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Most certainly.</p>
+        </speech>
+        <speech by="#2ed66148-16c1-48af-bf8f-cbfd33a74e36">
+          <from>MR. BELLIVEAU</from>
+          <p>MR. BELLIVEAU : Today in your gallery - I ask our guests to stand - we have Della Sears, the mother of Katlin Nickerson, the captain of the Miss Ally, and accompanying her is Adam Newell. I would ask my colleagues in the House to give them a warm welcome today. (Applause)</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : We welcome all our guests to the gallery and hope they enjoy this afternoon's proceedings.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>Bill No. 66 - Entitled an Act Respecting a Memorial Day for Mariners. (Hon. Sterling Belliveau)</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Ordered that this bill be read a second time on a future day.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>NOTICES OF MOTION</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Bedford-Birch Cove.</p>
+        </speech>
+        <speech by="#6d07f2ae-9d4e-4ecf-8c75-26d9d9438690">
+          <from>MS. KELLY REGAN</from>
+          <p>MS. KELLY REGAN : Mr. Speaker, I beg leave to make an introduction.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Most certainly.</p>
+        </speech>
+        <speech by="#6d07f2ae-9d4e-4ecf-8c75-26d9d9438690">
+          <from>MS. REGAN</from>
+          <p>MS. REGAN : I'd like to draw the members' attention to the west gallery, where we have two groups of very smart girls here today. First of all, with my first resolution, I would like to introduce the iMoe team - please stand as your name is called - Isabel Sarty, Emma Travers, Olivia Warrington, and Madison Presunka. The girls have just returned from St. Louis, where the iMoe team was the only Canadian team to win an award, but I'll speak about that in the resolution. Thank you for coming. (Applause)</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : We welcome all our guests to the gallery this afternoon.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="958">RESOLUTION NO. 958</num>
+        <speech by="#6d07f2ae-9d4e-4ecf-8c75-26d9d9438690">
+          <from>MS. KELLY REGAN</from>
+          <p>MS. KELLY REGAN : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="959">RESOLUTION NO. 959</num>
+        <speech by="#5784d153-f546-400b-bc4f-2683f94dd642">
+          <from>MR. EDDIE ORRELL</from>
+          <p>MR. EDDIE ORRELL : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="960">RESOLUTION NO. 960</num>
+        <speech by="#1ba97dc9-c731-4cb3-ae68-515251dcee0b">
+          <from>HON. RAMONA JENNEX</from>
+          <p>HON. RAMONA JENNEX : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+        <speech by="#6d07f2ae-9d4e-4ecf-8c75-26d9d9438690">
+          <from>MS. KELLY REGAN</from>
+          <p>MS. KELLY REGAN : Mr. Speaker, I beg leave to make an introduction.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Most certainly.</p>
+        </speech>
+        <speech by="#6d07f2ae-9d4e-4ecf-8c75-26d9d9438690">
+          <from>MS. REGAN</from>
+          <p>MS. REGAN : I would like to draw the attention of members to the west gallery once again where we have the grand prize winners of the Sci-Tech Expo: Terra Carling Lanteigne of Bedford Academy - if you'd like to stand up - Julia Sarty of Citadel High School, Nicole Poirier of Bedford Academy, Briana Ross of J.L. Ilsley High School, and Hannah Miles of Sir John A. Macdonald High School. (Applause)</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : We welcome all our guests to the gallery.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="961">RESOLUTION NO. 961</num>
+        <speech by="#6d07f2ae-9d4e-4ecf-8c75-26d9d9438690">
+          <from>MS. KELLY REGAN</from>
+          <p>MS. KELLY REGAN : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="962">RESOLUTION NO. 962</num>
+        <speech by="#2744aeca-0133-42aa-8ee9-a89fd44f8a14">
+          <from>MR. ALLAN MACMASTER</from>
+          <p>MR. ALLAN MACMASTER : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="963">RESOLUTION NO. 963</num>
+        <speech by="#02bd136f-0994-4efe-9d21-b145fba3ddf2">
+          <from>MS. LENORE ZANN</from>
+          <p>MS. LENORE ZANN : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="964">RESOLUTION NO. 964</num>
+        <speech by="#41fa6a70-397a-4597-900b-20b957bef948">
+          <from>MR. LEO GLAVINE</from>
+          <p>MR. LEO GLAVINE : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="965">RESOLUTION NO. 965</num>
+        <speech by="#6fd8b406-a075-4718-b5e3-c33555ca4243">
+          <from>MR. KEITH BAIN</from>
+          <p>MR. KEITH BAIN : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="966">RESOLUTION NO. 966</num>
+        <speech by="#5b8a7557-4c80-47ad-8788-1a0a8a1e7e3d">
+          <from>MR. JIM BOUDREAU</from>
+          <p>MR. JIM BOUDREAU : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="967">RESOLUTION NO. 967</num>
+        <speech by="#8a8470fb-0e2f-4e9e-8810-4f20c748d898">
+          <from>HON. KAREN CASEY</from>
+          <p>HON. KAREN CASEY : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="968">RESOLUTION NO. 968</num>
+        <speech by="#6fd8b406-a075-4718-b5e3-c33555ca4243">
+          <from>MR. KEITH BAIN</from>
+          <p>MR. KEITH BAIN : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="969">RESOLUTION NO. 969</num>
+        <speech by="#7577a3e3-867e-4d2e-a20f-cf0febdf9d97">
+          <from>HON. MICHEL SAMSON</from>
+          <p>HON. MICHEL SAMSON : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="970">RESOLUTION NO. 970</num>
+        <speech by="#26046e64-64ec-438e-96e4-9634df5c8f8c">
+          <from>MR. ALFIE MACLEOD</from>
+          <p>MR. ALFIE MACLEOD : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="971">RESOLUTION NO. 971</num>
+        <speech by="#044d7a53-b109-4393-8fbe-efad8b86a796">
+          <from>MS. DIANA WHALEN</from>
+          <p>MS. DIANA WHALEN : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="972">RESOLUTION NO. 972</num>
+        <speech by="#5784d153-f546-400b-bc4f-2683f94dd642">
+          <from>MR. EDDIE ORRELL</from>
+          <p>MR. EDDIE ORRELL : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="973">RESOLUTION NO. 973</num>
+        <speech by="#8a8470fb-0e2f-4e9e-8810-4f20c748d898">
+          <from>HON. KAREN CASEY</from>
+          <p>HON. KAREN CASEY : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="974">RESOLUTION NO. 974</num>
+        <speech by="#7577a3e3-867e-4d2e-a20f-cf0febdf9d97">
+          <from>HON. MICHEL SAMSON</from>
+          <p>HON. MICHEL SAMSON : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>GOVERNMENT BUSINESS</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Deputy Government House Leader.</p>
+        </speech>
+        <speech by="#fd4808de-08fb-4763-bac0-eb01f698ec82">
+          <from>MR. CLARRIE MACKINNON</from>
+          <p>MR. CLARRIE MACKINNON : Mr. Speaker, would you please call the order of business, Private and Local Bills for Second Reading.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>PRIVATE AND LOCAL BILLS FOR SECOND READING</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Deputy Government House Leader.</p>
+        </speech>
+        <speech by="#fd4808de-08fb-4763-bac0-eb01f698ec82">
+          <from>MR. CLARRIE MACKINNON</from>
+          <p>MR. CLARRIE MACKINNON : Mr. Speaker, would you please call Bill No. 43.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Colchester North.</p>
+        </speech>
+        <speech by="#8a8470fb-0e2f-4e9e-8810-4f20c748d898">
+          <from>HON. KAREN CASEY</from>
+          <p>HON. KAREN CASEY : Mr. Speaker, Bill No. 43 does speak to the Act of amending Chapter 197 of the Acts of 1901, an Act to Incorporate the Trustees of the Onslow Cemetery Company. In the explanatory note that goes with this bill, it's very clear that it's a change of language and it's a change of responsibility. The responsibility as the Act currently reads, the approval of bylaws rests with the Governor in Council, and the amendment being proposed here in this bill is to change that approval to the members . . .</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Order, please. I'm having a little trouble hearing the speaker this evening. There's way too much chatter in here for a Monday. I'd ask you if you'd all just keep the chatter down or take the conversations outside.</p>
+        </speech>
+        <speech by="#8a8470fb-0e2f-4e9e-8810-4f20c748d898">
+          <from>MS. CASEY</from>
+          <p>MS. CASEY : Thank you, Mr. Speaker. The bill as it currently exists has the approval for the bylaws resting with the Governor in Council and the change that's proposed in this amendment is to transfer that permission to approve bylaws to members of the company.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The motion is for second reading of Bill No. 43. Would all those in favour of the motion please say Aye. Contrary minded, Nay.</p>
+        </speech>
+        <speech by="#4c929028-e1d5-46a9-9075-8620e1ec2e77">
+          <from>HON. FRANK CORBETT</from>
+          <p>HON. FRANK CORBETT : Mr. Speaker, would you please call the order of business, Public Bills for Second Reading.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>PUBLIC BILLS FOR SECOND READING</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Government House Leader.</p>
+        </speech>
+        <speech by="#4c929028-e1d5-46a9-9075-8620e1ec2e77">
+          <from>HON. FRANK CORBETT</from>
+          <p>HON. FRANK CORBETT : Mr. Speaker, would you please call Bill No. 51.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Halifax Clayton Park.</p>
+        </speech>
+        <speech by="#044d7a53-b109-4393-8fbe-efad8b86a796">
+          <from>MS. DIANA WHALEN</from>
+          <p>MS. DIANA WHALEN : Mr. Speaker, it's a pleasure for me to get up today - I actually thought there might be a little bit more in the preamble to the bill coming from the government side, but I gather the minister had finished her opening statement on the bill. So for the context of the members of the House and those who are watching at home, we are looking at the Financial Measures (2013) Bill, which is always a bill that accompanies the budget, so it's very much part of the budget.</p>
+        </speech>
+        <speech>
+          <from>AN HON. MEMBER</from>
+          <p>You can't believe what you read.</p>
+        </speech>
+        <speech by="#044d7a53-b109-4393-8fbe-efad8b86a796">
+          <from>MS. WHALEN</from>
+          <p>MS. WHALEN : You can't believe what you read. Exactly, and you often cannot believe half of what you hear in government speeches, so it's a very selective amount of information that we're given from the government, really, when it comes to what is happening in this province.</p>
+        </speech>
+        <speech>
+          <from>AN HON. MEMBER</from>
+          <p>And spin doctors.</p>
+        </speech>
+        <speech by="#044d7a53-b109-4393-8fbe-efad8b86a796">
+          <from>MS. WHALEN</from>
+          <p>MS. WHALEN : And spin doctors, exactly, that's where the message is coming from, the large host of communications staff that the government relies on so heavily - I don't think there's been any reduction of 5.8 per cent in that group. That is one thing we asked a lot about in estimates - where the money is going in communications.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>Mr. Speaker</from>
+          <p>Look at this, Mr. Speaker : home care fees up, maintenance enforcement fees up. These are fees that we have to look at for people in our ridings, for people who are in need, again, vulnerable people.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Leader of the Progressive Conservative Party.</p>
+        </speech>
+        <speech by="#adf62df0-6616-4824-87bd-59fd0bc41914">
+          <from>HON. JAMIE BAILLIE</from>
+          <p>HON. JAMIE BAILLIE : The budget is not balanced; the budget is not balanced; the budget is not balanced. Mr. Speaker, I say that as the Leader of my Party, the Finance Critic for my Party, and as a chartered accountant - and I'll say it one more time as a dad who wants better things for our province, the budget is not balanced.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : If I recognize the minister it will be to close the debate.</p>
+        </speech>
+        <speech by="#40342c81-d15f-4412-9e39-be7ba9a478a9">
+          <from>HON. MAUREEN MACDONALD</from>
+          <p>HON. MAUREEN MACDONALD : Mr. Speaker, I would like to thank my colleagues on the other side of the House for their remarks, although I don't agree with a fair amount of what they had to say. Nevertheless I listened to it intently, as I know all my colleagues did, and now I move that we close second reading debate and move this bill forward to the Committee on Law Amendments.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The motion is for second reading of Bill No. 51. Would all those in favour of the motion please say Aye. Contrary minded, Nay.</p>
+        </speech>
+        <speech by="#4c929028-e1d5-46a9-9075-8620e1ec2e77">
+          <from>HON. FRANK CORBETT</from>
+          <p>HON. FRANK CORBETT : Mr. Speaker, would you please call Bill No. 62.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Minister of Health and Wellness.</p>
+        </speech>
+        <speech by="#a17abcb6-45ac-4a02-a639-9e63df869d46">
+          <from>HON. DAVID WILSON</from>
+          <p>HON. DAVID WILSON : Mr. Speaker, I rise to move second reading of Bill No. 62, an amendment for the Protection for Persons in Care Act.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Kings West.</p>
+        </speech>
+        <speech by="#41fa6a70-397a-4597-900b-20b957bef948">
+          <from>MR. LEO GLAVINE</from>
+          <p>MR. LEO GLAVINE : I'm pleased to stand in my place today and speak for a few minutes on the amendments to the Protection for Persons in Care Act. While the amendments presented are good and we support these changes, the majority of the clauses we are considering today are changes to ensure this Act adheres to other, more recent Acts. In other words, the majority of the clauses are housekeeping. There is intent as well from this piece of legislation to ensure there is clarification around the directives the minister can issue to the administrator of a health care facility following an investigation. While directives are important, follow-up to ensure adherence to directives is equally important. The amendments we are discussing today are, for the most part, housekeeping.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Cape Breton North.</p>
+        </speech>
+        <speech by="#5784d153-f546-400b-bc4f-2683f94dd642">
+          <from>MR. EDDIE ORRELL</from>
+          <p>MR. EDDIE ORRELL : Thank you, Mr. Speaker. We, as a Progressive Conservative caucus, are behind and support anything that will bring protection to anyone - to persons in care. Every one of us on this side of the House knows of someone who is in care or who is under the protection of the province and in the care of the Province of Nova Scotia. We look forward to this bill moving through Law Amendments Committee to see what the people of Nova Scotia have to say and to see what law amendments may come forth to support this Act. With that, Mr. Speaker, I'll take my seat.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : If I recognize the minister it will be to close the debate.</p>
+        </speech>
+        <speech by="#a17abcb6-45ac-4a02-a639-9e63df869d46">
+          <from>HON. DAVID WILSON</from>
+          <p>HON. DAVID WILSON : Thank you, Mr. Speaker, and I thank the members for their input. I, too, look forward to any representation at Law Amendments Committee as this bill moves forward through the process. I move second reading of Bill No. 62.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The motion is for second reading of Bill No. 62. Would all those in favour of the motion please say Aye. Contrary minded, Nay.</p>
+        </speech>
+        <speech by="#4c929028-e1d5-46a9-9075-8620e1ec2e77">
+          <from>HON. FRANK CORBETT</from>
+          <p>HON. FRANK CORBETT : Mr. Speaker, would you please call the order of business, Government Motions.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>GOVERNMENT MOTIONS</heading>
+        <speech by="#4c929028-e1d5-46a9-9075-8620e1ec2e77">
+          <from>HON. FRANK CORBETT</from>
+          <p>HON. FRANK CORBETT : Mr. Speaker, I move that the adjourned debate on the Address in Reply to the Speech from the Throne be now resumed.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Halifax Clayton Park.</p>
+        </speech>
+        <speech by="#044d7a53-b109-4393-8fbe-efad8b86a796">
+          <from>MS. DIANA WHALEN</from>
+          <p>MS. DIANA WHALEN : Mr. Speaker, it is my pleasure to continue my Address in Reply to the Speech from the Throne that was read again at the start of this session. As members know, if you're going to get up and speak on this address, it's an opportunity to talk about your riding or about issues that you think have not been addressed in the province, about, perhaps, your critic area that you think has some important points that need to be made about that. It is actually one of the few times that all members of the House can rise: backbenchers, Opposition members, ministers can rise on behalf of their own constituents and say a few words. For that reason, I am happy to resume my reply.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Halifax Chebucto.</p>
+        </speech>
+        <speech by="#b7960e86-75de-47f8-a0e8-0e3c9547e78e">
+          <from>MR. HOWARD EPSTEIN</from>
+          <p>MR. HOWARD EPSTEIN : One of the very many things that I do not know is whether this is the last time I will get the opportunity to address this House; I rather think it isn't. I know, for example, that I have a resolution that I'm going to bring forward and I suspect that there will be some bills that I might want to comment on. However, those are very focused opportunities, and as we know, the tradition, when it comes to Address in Reply to the Speech from the Throne, is that there is great flexibility and an opportunity, therefore, for members to talk on a variety of themes.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The motion is to adjourn debate. Would all those in favour of the motion please say Aye. Contrary minded, Nay.</p>
+        </speech>
+        <speech by="#4c929028-e1d5-46a9-9075-8620e1ec2e77">
+          <from>HON. FRANK CORBETT</from>
+          <p>HON. FRANK CORBETT : Mr. Speaker, with the indulgence of the House, could we revert to the order of business, Presenting Reports of Committees.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Is it agreed?</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>PRESENTING REPORTS OF COMMITTEES</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Attorney General.</p>
+        </speech>
+        <speech by="#4fe6044a-d86e-4a24-bc37-127add6fe273">
+          <from>HON. ROSS LANDRY</from>
+          <p>HON. ROSS LANDRY : Mr. Speaker, as Chairman of the Committee on Law Amendments, I am directed to report that the committee has met and considered the following bills:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The report is tabled.</p>
+        </speech>
+        <speech by="#4c929028-e1d5-46a9-9075-8620e1ec2e77">
+          <from>HON. FRANK CORBETT</from>
+          <p>HON. FRANK CORBETT : Mr. Speaker, that concludes the government's business for today. I move that the House do now rise to meet again tomorrow at the hour of 12:00 noon to 6:00 p.m. The order of business will be Public Bills for Second Reading, Bill No. 66, and after that Committee of the Whole House on Bills, Bill Nos. 54, 36, 37, 42, 57, 3, and 32. I move the House do now rise.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The motion is that the House now rise to meet again tomorrow at the hour of 12:00 noon.</p>
+        </speech>
+        <narrative>
+          <p>The House rose at 7:19 p.m.</p>
+        </narrative>
+      </debateSection>
+      <debateSection>
+        <num title="975">RESOLUTION NO. 975</num>
+        <speech by="#bbf5376f-1a5e-4a10-ac71-5a195ac61a59">
+          <from>Mr. Andrew Younger</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="976">RESOLUTION NO. 976</num>
+        <speech by="#bbf5376f-1a5e-4a10-ac71-5a195ac61a59">
+          <from>Mr. Andrew Younger</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="977">RESOLUTION NO. 977</num>
+        <speech by="#41fa6a70-397a-4597-900b-20b957bef948">
+          <from>Mr. Leo Glavine</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="978">RESOLUTION NO. 978</num>
+        <speech by="#2744aeca-0133-42aa-8ee9-a89fd44f8a14">
+          <from>Mr. Allan MacMaster</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="979">RESOLUTION NO. 979</num>
+        <speech by="#adf62df0-6616-4824-87bd-59fd0bc41914">
+          <from>Hon. Jamie Baillie</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="980">RESOLUTION NO. 980</num>
+        <speech by="#adf62df0-6616-4824-87bd-59fd0bc41914">
+          <from>Hon. Jamie Baillie</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="981">RESOLUTION NO. 981</num>
+        <speech by="#adf62df0-6616-4824-87bd-59fd0bc41914">
+          <from>Hon. Jamie Baillie</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="982">RESOLUTION NO. 982</num>
+        <speech by="#adf62df0-6616-4824-87bd-59fd0bc41914">
+          <from>Hon. Jamie Baillie</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="983">RESOLUTION NO. 983</num>
+        <speech by="#c4b08611-ea50-4069-9042-1634c77a855e">
+          <from>Hon. Christopher D'Entremont</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="984">RESOLUTION NO. 984</num>
+        <speech by="#c4b08611-ea50-4069-9042-1634c77a855e">
+          <from>Hon. Christopher D'Entremont</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="985">RESOLUTION NO. 985</num>
+        <speech by="#c4b08611-ea50-4069-9042-1634c77a855e">
+          <from>Hon. Christopher D'Entremont</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="986">RESOLUTION NO. 986</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="987">RESOLUTION NO. 987</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="988">RESOLUTION NO. 988</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="989">RESOLUTION NO. 989</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="990">RESOLUTION NO. 990</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="991">RESOLUTION NO. 991</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="992">RESOLUTION NO. 992</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="993">RESOLUTION NO. 993</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="994">RESOLUTION NO. 994</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="995">RESOLUTION NO. 995</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="996">RESOLUTION NO. 996</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="997">RESOLUTION NO. 997</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="998">RESOLUTION NO. 998</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="999">RESOLUTION NO. 999</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1000">RESOLUTION NO. 1000</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1001">RESOLUTION NO. 1001</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1002">RESOLUTION NO. 1002</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1003">RESOLUTION NO. 1003</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1004">RESOLUTION NO. 1004</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1005">RESOLUTION NO. 1005</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1006">RESOLUTION NO. 1006</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1007">RESOLUTION NO. 1007</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1008">RESOLUTION NO. 1008</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1009">RESOLUTION NO. 1009</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1010">RESOLUTION NO. 1010</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1011">RESOLUTION NO. 1011</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1012">RESOLUTION NO. 1012</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1013">RESOLUTION NO. 1013</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1014">RESOLUTION NO. 1014</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1015">RESOLUTION NO. 1015</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1016">RESOLUTION NO. 1016</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1017">RESOLUTION NO. 1017</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1018">RESOLUTION NO. 1018</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1019">RESOLUTION NO. 1019</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1020">RESOLUTION NO. 1020</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1021">RESOLUTION NO. 1021</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1022">RESOLUTION NO. 1022</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1023">RESOLUTION NO. 1023</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1024">RESOLUTION NO. 1024</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1025">RESOLUTION NO. 1025</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1026">RESOLUTION NO. 1026</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1027">RESOLUTION NO. 1027</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1028">RESOLUTION NO. 1028</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1029">RESOLUTION NO. 1029</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1030">RESOLUTION NO. 1030</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1031">RESOLUTION NO. 1031</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1032">RESOLUTION NO. 1032</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1033">RESOLUTION NO. 1033</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1034">RESOLUTION NO. 1034</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1035">RESOLUTION NO. 1035</num>
+        <speech by="#1d8990f3-d97c-4f16-ade8-87812d62eba9">
+          <from>Ms. Becky Kent</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+    </debateBody>
+  </debate>
+</akomaNtoso>

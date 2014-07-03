@@ -1,0 +1,342 @@
+<?xml version="1.0"?>
+<akomaNtoso>
+  <debate name="hansard">
+    <meta>
+      <references source="#source">
+        <TLCOrganization id="source" href="/ontology/organization/ca.open.north.inc" showAs="Open North Inc."/>
+        <TLCPerson id="75109949-5b99-4b9c-b9fd-d85a8ce227ab" href="/ontology/person/ca.speaker" showAs="MR. SPEAKER"/>
+        <TLCPerson id="40342c81-d15f-4412-9e39-be7ba9a478a9" href="/ontology/person/ca.maureen.macdonald" showAs="HON. MAUREEN MACDONALD"/>
+        <TLCPerson id="a17abcb6-45ac-4a02-a639-9e63df869d46" href="/ontology/person/ca.david.allan.wilson" showAs="HON. DAVID WILSON"/>
+        <TLCPerson id="3d2afb09-46bb-45b0-8cdb-90ba97b15ed0" href="/ontology/person/ca.stephen.mcneil" showAs="MR. MCNEIL"/>
+        <TLCPerson id="a2ecc3d6-a000-4b2d-9d06-fce8dba1caa9" href="/ontology/person/ca.leonard.preyra" showAs="MR. LEONARD PREYRA"/>
+        <TLCPerson id="01b4df24-b29e-415e-95e1-62159d70be43" href="/ontology/person/ca.keith.colwell" showAs="HON. KEITH COLWELL"/>
+        <TLCPerson id="4c929028-e1d5-46a9-9075-8620e1ec2e77" href="/ontology/person/ca.frank.corbett" showAs="HON. FRANK CORBETT"/>
+        <TLCPerson id="b7960e86-75de-47f8-a0e8-0e3c9547e78e" href="/ontology/person/ca.howard.epstein" showAs="MR. HOWARD EPSTEIN"/>
+        <TLCPerson id="0768c045-71ae-4890-b6be-c52eb783ee95" href="/ontology/person/ca.darrell.dexter" showAs="HON. DARRELL DEXTER"/>
+        <TLCPerson id="6d07f2ae-9d4e-4ecf-8c75-26d9d9438690" href="/ontology/person/ca.kelly.regan" showAs="MS. KELLY REGAN"/>
+        <TLCPerson id="9a01bbfe-81d8-4fc7-8810-687efeaed2cd" href="/ontology/person/ca.bill.estabrooks" showAs="HON. WILLIAM ESTABROOKS"/>
+        <TLCPerson id="adf62df0-6616-4824-87bd-59fd0bc41914" href="/ontology/person/ca.jamie.baillie" showAs="HON. JAMIE BAILLIE"/>
+        <TLCPerson id="ca9aa78a-99fe-43e6-b6a7-daae19a39ce9" href="/ontology/person/ca.graham.steele" showAs="HON. GRAHAM STEELE"/>
+        <TLCPerson id="41fa6a70-397a-4597-900b-20b957bef948" href="/ontology/person/ca.leo.glavine" showAs="MR. LEO GLAVINE"/>
+        <TLCPerson id="cfe00156-93a4-4308-806e-6fd454b5c37b" href="/ontology/person/ca.zach.churchill" showAs="Mr. Zach Churchill"/>
+        <TLCPerson id="fd4808de-08fb-4763-bac0-eb01f698ec82" href="/ontology/person/ca.clarrie.mackinnon" showAs="MR. CLARRIE MACKINNON"/>
+        <TLCPerson id="8a8470fb-0e2f-4e9e-8810-4f20c748d898" href="/ontology/person/ca.karen.casey" showAs="HON. KAREN CASEY"/>
+        <TLCPerson id="044d7a53-b109-4393-8fbe-efad8b86a796" href="/ontology/person/ca.diana.whalen" showAs="MS. DIANA WHALEN"/>
+      </references>
+    </meta>
+    <preface>
+      <docTitle>Debates, 30 March 2012</docTitle>
+      <docNumber>12-02</docNumber>
+      <docDate date="2012-03-30">Friday, March 30, 2012</docDate>
+      <docProponent>Nova Scotia House of Assembly</docProponent>
+      <legislature value="61">61st General Assembly</legislature>
+      <session value="4">4th Session</session>
+    </preface>
+    <debateBody>
+      <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+        <from>MR. SPEAKER</from>
+        <p>MR. SPEAKER : Order, please. We'll begin the daily routine.</p>
+      </speech>
+      <debateSection>
+        <heading>PRESENTING AND READING PETITIONS</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Pictou East.</p>
+        </speech>
+        <speech by="#fd4808de-08fb-4763-bac0-eb01f698ec82">
+          <from>MR. CLARRIE MACKINNON</from>
+          <p>MR. CLARRIE MACKINNON : Mr. Speaker, I beg leave to present a petition, the operative words being: ". . . to have the Mark Road in Riverton repaved." It has been signed by 55 residents on the road, and I too have affixed my name to the petition.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The petition is tabled.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>GOVERNMENT NOTICES OF MOTION</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Minister of Finance.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1">RESOLUTION NO. 1</num>
+        <speech by="#ca9aa78a-99fe-43e6-b6a7-daae19a39ce9">
+          <from>HON. GRAHAM STEELE</from>
+          <p>HON. GRAHAM STEELE : Mr. Speaker, I hereby give notice that on a future day I shall:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The notice is tabled.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="2">RESOLUTION NO. 2</num>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>HON. DARRELL DEXTER</from>
+          <p>HON. DARRELL DEXTER : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="3">RESOLUTION NO. 3</num>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="4">RESOLUTION NO. 4</num>
+        <speech by="#40342c81-d15f-4412-9e39-be7ba9a478a9">
+          <from>HON. MAUREEN MACDONALD</from>
+          <p>HON. MAUREEN MACDONALD : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+        <speech by="#a17abcb6-45ac-4a02-a639-9e63df869d46">
+          <from>HON. DAVID WILSON</from>
+          <p>HON. DAVID WILSON : Mr. Speaker, would I be permitted to make a few introductions?</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Most certainly.</p>
+        </speech>
+        <speech by="#a17abcb6-45ac-4a02-a639-9e63df869d46">
+          <from>MR. WILSON</from>
+          <p>MR. WILSON : Thank you. Mr. Speaker, many individuals in the province have contributed so much to arts and culture in the province, and especially to the bill that I'm going to introduce in a second, but some of those individuals are here today and I would like to take the opportunity to introduce them.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : We welcome all our guests to the Legislature and hope you enjoy this morning's proceedings.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>Bill No. 4 - Entitled an Act to Amend Chapter 160 of the Revised Statutes of 1989. The Maintenance and Custody Act. (Mr. Keith Bain)</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Ordered that these bills be read a second time on a future day.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>NOTICES OF MOTION</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Colchester North.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="5">RESOLUTION NO. 5</num>
+        <speech by="#8a8470fb-0e2f-4e9e-8810-4f20c748d898">
+          <from>HON. KAREN CASEY</from>
+          <p>HON. KAREN CASEY : Mr. Speaker, on behalf of the Leader of the Official Opposition, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="6">RESOLUTION NO. 6</num>
+        <speech by="#9a01bbfe-81d8-4fc7-8810-687efeaed2cd">
+          <from>HON. WILLIAM ESTABROOKS</from>
+          <p>HON. WILLIAM ESTABROOKS : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="7">RESOLUTION NO. 7</num>
+        <speech by="#044d7a53-b109-4393-8fbe-efad8b86a796">
+          <from>MS. DIANA WHALEN</from>
+          <p>MS. DIANA WHALEN : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="8">RESOLUTION NO. 8</num>
+        <speech by="#6d07f2ae-9d4e-4ecf-8c75-26d9d9438690">
+          <from>MS. KELLY REGAN</from>
+          <p>MS. KELLY REGAN : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="9">RESOLUTION NO. 9</num>
+        <speech by="#8a8470fb-0e2f-4e9e-8810-4f20c748d898">
+          <from>HON. KAREN CASEY</from>
+          <p>HON. KAREN CASEY : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The notice is tabled.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="10">RESOLUTION NO. 10</num>
+        <speech by="#01b4df24-b29e-415e-95e1-62159d70be43">
+          <from>HON. KEITH COLWELL</from>
+          <p>HON. KEITH COLWELL : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="11">RESOLUTION NO. 11</num>
+        <speech by="#41fa6a70-397a-4597-900b-20b957bef948">
+          <from>MR. LEO GLAVINE</from>
+          <p>MR. LEO GLAVINE : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The notice is tabled.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="12">RESOLUTION NO. 12</num>
+        <speech by="#01b4df24-b29e-415e-95e1-62159d70be43">
+          <from>HON. KEITH COLWELL</from>
+          <p>HON. KEITH COLWELL : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>GOVERNMENT BUSINESS</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Government House Leader.</p>
+        </speech>
+        <speech by="#4c929028-e1d5-46a9-9075-8620e1ec2e77">
+          <from>HON. FRANK CORBETT</from>
+          <p>HON. FRANK CORBETT : Mr. Speaker, would you please call the order of business, Government Motions.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>GOVERNMENT MOTIONS</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Government House Leader.</p>
+        </speech>
+        <speech by="#4c929028-e1d5-46a9-9075-8620e1ec2e77">
+          <from>HON. FRANK CORBETT</from>
+          <p>HON. FRANK CORBETT : Mr. Speaker, I move that the adjourned debate on the Address in Reply to the Speech from the Throne be now resumed.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Leader of the Official Opposition.</p>
+        </speech>
+        <speech by="#3d2afb09-46bb-45b0-8cdb-90ba97b15ed0">
+          <from>HON. STEPHEN MCNEIL</from>
+          <p>HON. STEPHEN MCNEIL : Mr. Speaker, I am pleased to rise and continue my remarks on the Speech from the Throne. I want to congratulate you - yesterday in the House, the government, and the warm reception received by Her Honour the Lieutenant Governor allowing an opportunity for her family and friends to celebrate her accomplishments here in the province by a reception that was held in her honour in the Red Room yesterday. It was really quite remarkable to watch, with great pride, how her family and friends and community were there to help usher in an end to her era as our Lieutenant Governor.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Would the honourable member take a short break while the honourable Minister of Health and Wellness makes a quick introduction?</p>
+        </speech>
+        <speech by="#3d2afb09-46bb-45b0-8cdb-90ba97b15ed0">
+          <from>MR. MCNEIL</from>
+          <p>MR. MCNEIL : Sure.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Minister of Health and Wellness.</p>
+        </speech>
+        <speech by="#40342c81-d15f-4412-9e39-be7ba9a478a9">
+          <from>HON. MAUREEN MACDONALD</from>
+          <p>HON. MAUREEN MACDONALD : Thank you very much, Mr. Speaker. I want to thank the Leader of the Official Opposition for allowing me to make this introduction. In our east gallery today we are joined by some very important guests from the Canadian Cancer Society. In particular, I would like to introduce to the members of the House three women, and I'll ask them to stand as I read their names: Margaret Taylor-Munro, Joyce Tanner, and Gwendolyn MacLean.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : We welcome all our guests to the Legislature and hope they enjoy this morning's proceedings.</p>
+        </speech>
+        <speech by="#3d2afb09-46bb-45b0-8cdb-90ba97b15ed0">
+          <from>MR. MCNEIL</from>
+          <p>MR. MCNEIL : Thank you Mr. Speaker, I too want to welcome our guests to the gallery. There are probably not very many people on the floor of this Legislature or across Nova Scotia who have not been touched by cancer. I want to thank them and congratulate them for giving all of us hope when it comes to making sure fewer and fewer Nova Scotians will be touched by this disease.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Order, please. The honourable Leader of the Official Opposition has the floor.</p>
+        </speech>
+        <speech by="#3d2afb09-46bb-45b0-8cdb-90ba97b15ed0">
+          <from>MR. MCNEIL</from>
+          <p>MR. MCNEIL : Mr. Speaker, I think for many families and many young Nova Scotians, a $75 million investment in public education would have been better than $75 million on land that Irving owned in southwestern Nova Scotia. I would suggest to you they would probably have said spending $8 million to buy paving equipment to compete against the private sector would have been better invested in young Nova Scotians and planning toward our future. This government doesn't have a revenue problem. They have a priority problem. It's as simple as it gets.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Leader of the Progressive Conservative Party.</p>
+        </speech>
+        <speech by="#adf62df0-6616-4824-87bd-59fd0bc41914">
+          <from>HON. JAMIE BAILLIE</from>
+          <p>HON. JAMIE BAILLIE : Mr. Speaker, it is my honour to rise in my place in this Chamber and provide an Address in Reply to yesterday's Speech from the Throne. Before I get into the details, I do want to say to my Cumberland County peer, the member for Cumberland North who was the mover of the Speech from the Throne yesterday, that I appreciated his remarks and it was good to see Cumberland County such a big part of the Chamber session yesterday and today, that although we are of different Parties, I know we share a great interest not only in Cumberland County and rural Nova Scotia but in all of Nova Scotia. I just want to acknowledge the job he did in moving the Speech from the Throne yesterday.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MADAM SPEAKER</from>
+          <p>MADAM SPEAKER : Order, please. With the indulgence of the member, the honourable member for Halifax Chebucto on an introduction.</p>
+        </speech>
+        <speech by="#b7960e86-75de-47f8-a0e8-0e3c9547e78e">
+          <from>MR. HOWARD EPSTEIN</from>
+          <p>MR. HOWARD EPSTEIN : Thank you, Madam Speaker, and my thanks to the honourable member for permitting the interruption of his Address in Reply.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MADAM SPEAKER</from>
+          <p>MADAM SPEAKER : We welcome all visitors to the gallery today. We hope you enjoy the proceedings.</p>
+        </speech>
+        <speech by="#adf62df0-6616-4824-87bd-59fd0bc41914">
+          <from>HON. JAMIE BAILLIE</from>
+          <p>HON. JAMIE BAILLIE : Thank you, Madam Speaker. The point I wish to make about rural Nova Scotia is that what is lost on this government but what is known on this side of the House - which is something that has been known for years by many - is that to this day a significant amount of the wealth generated for the Province of Nova Scotia is fished and farmed and harvested and manufactured in rural Nova Scotia. The very foundations of our economy rely on the ability of rural Nova Scotia to, in a responsible and profitable and prosperous and sustainable way, fish the oceans, farm the fields, harvest our forests, manufacture important durable goods for the use of Nova Scotians and to export, as top-quality product, around the world.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Halifax Citadel-Sable Island.</p>
+        </speech>
+        <speech by="#a2ecc3d6-a000-4b2d-9d06-fce8dba1caa9">
+          <from>MR. LEONARD PREYRA</from>
+          <p>MR. LEONARD PREYRA : Mr. Speaker, it gives me great pleasure to rise here today and to say a few words in the Address in Reply to the Speech from the Throne. It's a particular pleasure to follow the Leader of the Third Party because he is such a great storyteller, particularly when it comes to works of fiction. I'm sure that speech he just delivered is going to be listed in the fiction section in our Legislative Library. I want to thank him for adding to the wonderful stories he's been telling us about the year, particularly his reinvention of the Tory period in government.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The motion is to adjourn debate on the Address in Reply to the Speech from the Throne.</p>
+        </speech>
+        <speech by="#4c929028-e1d5-46a9-9075-8620e1ec2e77">
+          <from>HON. FRANK CORBETT</from>
+          <p>HON. FRANK CORBETT : Mr. Speaker, that concludes the government's business for the day. I move that the House do now rise to meet again on Monday at 7:00 p.m. Following the daily routine, we will be calling Bill No. 1 and also we will return to the Address in Reply to the Speech from the Throne. I move that the House do now rise.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The motion is that the House now rise to meet again on Monday at the hour of 7:00 p.m.</p>
+        </speech>
+        <narrative>
+          <p>The House rose at 11:14 a.m.</p>
+        </narrative>
+      </debateSection>
+      <debateSection>
+        <num title="13">RESOLUTION NO. 13</num>
+        <speech by="#cfe00156-93a4-4308-806e-6fd454b5c37b">
+          <from>Mr. Zach Churchill</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+    </debateBody>
+  </debate>
+</akomaNtoso>

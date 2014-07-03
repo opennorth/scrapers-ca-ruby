@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<akomaNtoso>
+  <debate name="hansard">
+    <meta>
+      <references source="#source">
+        <TLCOrganization id="source" href="/ontology/organization/ca.open.north.inc" showAs="Open North Inc."/>
+        <TLCPerson id="df5cd31f-e29e-4872-a6af-347b750f2f73" href="/ontology/person/ca.tim.houston" showAs="Mr. Tim Houston"/>
+        <TLCPerson id="75109949-5b99-4b9c-b9fd-d85a8ce227ab" href="/ontology/person/ca.speaker" showAs="MR. SPEAKER"/>
+        <TLCPerson id="d33a57a5-0342-486c-9b59-e68d5b4087a2" href="/ontology/person/ca.karla.macfarlane" showAs="Ms. Karla MacFarlane"/>
+        <TLCPerson id="a3ee05f2-1d53-41b0-9ea2-abe756a43bb6" href="/ontology/person/ca.clerk" showAs="THE CLERK"/>
+        <TLCPerson id="e756e2ae-edce-4b39-a6e2-2748328686d5" href="/ontology/person/ca.john.a.lohr" showAs="Mr. John Lohr"/>
+        <TLCPerson id="ee2a6a6d-e785-4711-a418-f6a4ea0fd691" href="/ontology/person/ca.labi.kousoulis" showAs="HON. LABI KOUSOULIS"/>
+        <TLCPerson id="270cd18b-3acf-4544-9138-f9089889d6aa" href="/ontology/person/ca.terry.farrell" showAs="MR. TERRY FARRELL"/>
+        <TLCPerson id="adf62df0-6616-4824-87bd-59fd0bc41914" href="/ontology/person/ca.jamie.baillie" showAs="Hon. Jamie Baillie"/>
+        <TLCPerson id="40342c81-d15f-4412-9e39-be7ba9a478a9" href="/ontology/person/ca.maureen.macdonald" showAs="HON. MAUREEN MACDONALD"/>
+        <TLCPerson id="7577a3e3-867e-4d2e-a20f-cf0febdf9d97" href="/ontology/person/ca.michel.p.samson" showAs="HON. MICHEL SAMSON"/>
+      </references>
+    </meta>
+    <preface>
+      <docTitle>Debates, 11 April 2014</docTitle>
+      <docNumber>14-26</docNumber>
+      <docDate date="2014-04-11">Friday, April 11, 2014</docDate>
+      <docProponent>Nova Scotia House of Assembly</docProponent>
+      <legislature value="62">62nd General Assembly</legislature>
+      <session value="1">1st Session</session>
+    </preface>
+    <debateBody>
+      <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+        <from>MR. SPEAKER</from>
+        <p>MR. SPEAKER : Order, please. Just prior to us starting the daily routine, as Speaker I do want to acknowledge the passing of former Sergeant-at-Arms Noel Knockwood, who passed away yesterday. Noel was our first Aboriginal Sergeant-at-Arms here at the House, serving the Legislature from 2000 to 2005.</p>
+      </speech>
+      <narrative>
+        <p>A moment of silence was observed.</p>
+      </narrative>
+      <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+        <from>MR. SPEAKER</from>
+        <p>MR. SPEAKER : We will begin the daily routine.</p>
+      </speech>
+      <debateSection>
+        <heading>Bill No. 50 - Entitled an Act to Amend and Consolidate the Acts Relating to St. Francis Xavier University. (Mr. Lloyd Hines)</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Ordered that these bills be read a second time on a future day.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>NOTICES OF MOTION</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Minister of the Public Service Commission.</p>
+        </speech>
+        <speech by="#ee2a6a6d-e785-4711-a418-f6a4ea0fd691">
+          <from>HON. LABI KOUSOULIS</from>
+          <p>HON. LABI KOUSOULIS : Mr. Speaker, on an introduction. I'd like to take everyone's attention to the east gallery. We have with us Fergus Dearden, who is a new graduate of Saint Mary's University and has just authored a book called The Coffee Shop Meditations. A round of applause for our new author. (Applause)</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Minister of the Public Service Commission.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1049">RESOLUTION NO. 1049</num>
+        <speech by="#ee2a6a6d-e785-4711-a418-f6a4ea0fd691">
+          <from>HON. LABI KOUSOULIS</from>
+          <p>HON. LABI KOUSOULIS : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1050">RESOLUTION NO. 1050</num>
+        <speech by="#7577a3e3-867e-4d2e-a20f-cf0febdf9d97">
+          <from>HON. MICHEL SAMSON</from>
+          <p>HON. MICHEL SAMSON : Mr. Speaker, on behalf of the Minister of Labour and Advanced Education, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1051">RESOLUTION NO. 1051</num>
+        <speech by="#40342c81-d15f-4412-9e39-be7ba9a478a9">
+          <from>HON. MAUREEN MACDONALD</from>
+          <p>HON. MAUREEN MACDONALD : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>GOVERNMENT BUSINESS</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Government House Leader.</p>
+        </speech>
+        <speech by="#7577a3e3-867e-4d2e-a20f-cf0febdf9d97">
+          <from>HON. MICHEL SAMSON</from>
+          <p>HON. MICHEL SAMSON : Mr. Speaker, would you please call the order of business, Government Motions.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>GOVERNMENT MOTIONS</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Government House Leader.</p>
+        </speech>
+        <speech by="#7577a3e3-867e-4d2e-a20f-cf0febdf9d97">
+          <from>HON. MICHEL SAMSON</from>
+          <p>HON. MICHEL SAMSON : Mr. Speaker, I move that you do now leave the Chair and the House resolve itself into a Committee of the Whole House on Supply unto Her Majesty.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The motion carried.</p>
+        </speech>
+        <narrative>
+          <p>9:20 a.m. The House resolved itself into a CWH on Supply with Deputy Speaker Ms. Margaret Miller in the Chair.</p>
+        </narrative>
+        <narrative>
+          <p>1:44 p.m. CWH on Supply rose and the House reconvened with Deputy Speaker Ms. Margaret Miller in the Chair.</p>
+        </narrative>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MADAM SPEAKER</from>
+          <p>MADAM SPEAKER : The Chairman of the Committee of the Whole House on Supply reports:</p>
+        </speech>
+        <speech by="#a3ee05f2-1d53-41b0-9ea2-abe756a43bb6">
+          <from>THE CLERK</from>
+          <p>THE CLERK : That the Committee of the Whole on Supply has met and made progress and begs leave to sit again.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MADAM SPEAKER</from>
+          <p>MADAM SPEAKER : Is it agreed?</p>
+        </speech>
+        <speech by="#270cd18b-3acf-4544-9138-f9089889d6aa">
+          <from>MR. TERRY FARRELL</from>
+          <p>MR. TERRY FARRELL : Madam Speaker, I move that the hours for Monday, April 14th, be 4:00 p.m. to 10:00 p.m. The order of business will be Government Business, Committee of the Whole House on Supply unto Her Majesty. If time permits we will call second reading of Bill Nos. 35, 40, 43, 44, and 45.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MADAM SPEAKER</from>
+          <p>MADAM SPEAKER : The motion is that the House rise to meet again on April 14th between the hours of 4:00 p.m. and 10:00 p.m.</p>
+        </speech>
+        <narrative>
+          <p>The House rose at 1:45 p.m.</p>
+        </narrative>
+      </debateSection>
+      <debateSection>
+        <num title="1052">RESOLUTION NO. 1052</num>
+        <speech by="#df5cd31f-e29e-4872-a6af-347b750f2f73">
+          <from>Mr. Tim Houston</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1053">RESOLUTION NO. 1053</num>
+        <speech by="#df5cd31f-e29e-4872-a6af-347b750f2f73">
+          <from>Mr. Tim Houston</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1054">RESOLUTION NO. 1054</num>
+        <speech by="#adf62df0-6616-4824-87bd-59fd0bc41914">
+          <from>Hon. Jamie Baillie</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1055">RESOLUTION NO. 1055</num>
+        <speech by="#e756e2ae-edce-4b39-a6e2-2748328686d5">
+          <from>Mr. John Lohr</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1056">RESOLUTION NO. 1056</num>
+        <speech by="#e756e2ae-edce-4b39-a6e2-2748328686d5">
+          <from>Mr. John Lohr</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1057">RESOLUTION NO. 1057</num>
+        <speech by="#d33a57a5-0342-486c-9b59-e68d5b4087a2">
+          <from>Ms. Karla MacFarlane</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="1058">RESOLUTION NO. 1058</num>
+        <speech by="#d33a57a5-0342-486c-9b59-e68d5b4087a2">
+          <from>Ms. Karla MacFarlane</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+    </debateBody>
+  </debate>
+</akomaNtoso>

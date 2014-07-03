@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<akomaNtoso>
+  <debate name="hansard">
+    <meta>
+      <references source="#source">
+        <TLCOrganization id="source" href="/ontology/organization/ca.open.north.inc" showAs="Open North Inc."/>
+        <TLCPerson id="dc0066f4-5c59-45ce-a072-5cb55c1d5c8c" href="/ontology/person/ca.sergeant.at.arms" showAs="SERGEANT-AT-ARMS"/>
+        <TLCPerson id="0768c045-71ae-4890-b6be-c52eb783ee95" href="/ontology/person/ca.darrell.dexter" showAs="HON. DARRELL DEXTER"/>
+        <TLCPerson id="75109949-5b99-4b9c-b9fd-d85a8ce227ab" href="/ontology/person/ca.speaker" showAs="MR. SPEAKER"/>
+        <TLCPerson id="604856c2-1d9d-44a6-a913-7c74382932dd" href="/ontology/person/ca.lt.gov" showAs="THE LIEUTENANT GOVERNOR"/>
+      </references>
+    </meta>
+    <preface>
+      <docTitle>Debates, 29 March 2012</docTitle>
+      <docNumber>12-68</docNumber>
+      <docDate date="2012-03-29">Thursday, March 29, 2012</docDate>
+      <docProponent>Nova Scotia House of Assembly</docProponent>
+      <legislature value="61">61st General Assembly</legislature>
+      <session value="3">3rd Session</session>
+    </preface>
+    <debateBody>
+      <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+        <from>MR. SPEAKER</from>
+        <p>MR. SPEAKER : Let Her Honour be admitted.</p>
+      </speech>
+      <narrative>
+        <p>The Speaker and the Clerks left the Chamber.</p>
+      </narrative>
+      <narrative>
+        <p>The Lieutenant Governor, the Honourable Mayann E. Francis, preceded by her Private Secretary, and by Mr. Ken Greenham, Sergeant-at-Arms, bearing the Mace, entered the House of Assembly Chamber. The Lieutenant Governor then took her seat on the Throne.</p>
+      </narrative>
+      <speech by="#dc0066f4-5c59-45ce-a072-5cb55c1d5c8c">
+        <from>SERGEANT-AT-ARMS</from>
+        <p>SERGEANT-AT-ARMS: Her Honour, the Lieutenant Governor.</p>
+      </speech>
+      <speech by="#604856c2-1d9d-44a6-a913-7c74382932dd">
+        <from>THE LIEUTENANT GOVERNOR</from>
+        <p>THE LIEUTENANT GOVERNOR: Mr. Speaker and members of the House of Assembly, in closing this, the Third Session of the Sixty-first General Assembly convened in the province, I thank you for the attention, consideration and care you have given to the legislation and measures that have come before you.</p>
+      </speech>
+      <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+        <from>HON. DARRELL DEXTER</from>
+        <p>HON. DARRELL DEXTER : Mr. Speaker and members of the House of Assembly, it is the will and pleasure of Her Honour, the Lieutenant Governor, that this, the Third Session of the Sixty-first General Assembly be prorogued and this session is accordingly prorogued and that the Fourth Session of the said General Assembly meet at two o'clock in the afternoon of this day for the dispatch of business.</p>
+      </speech>
+      <narrative>
+        <p>The House rose at 11:10 a.m.</p>
+      </narrative>
+    </debateBody>
+  </debate>
+</akomaNtoso>

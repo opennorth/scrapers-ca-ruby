@@ -1,0 +1,1095 @@
+<?xml version="1.0"?>
+<akomaNtoso>
+  <debate name="hansard">
+    <meta>
+      <references source="#source">
+        <TLCOrganization id="source" href="/ontology/organization/ca.open.north.inc" showAs="Open North Inc."/>
+        <TLCPerson id="adf62df0-6616-4824-87bd-59fd0bc41914" href="/ontology/person/ca.jamie.baillie" showAs="MR. BAILLIE"/>
+        <TLCPerson id="75109949-5b99-4b9c-b9fd-d85a8ce227ab" href="/ontology/person/ca.speaker" showAs="MR. SPEAKER"/>
+        <TLCPerson id="01b4df24-b29e-415e-95e1-62159d70be43" href="/ontology/person/ca.keith.colwell" showAs="HON. KEITH COLWELL"/>
+        <TLCPerson id="9a01bbfe-81d8-4fc7-8810-687efeaed2cd" href="/ontology/person/ca.bill.estabrooks" showAs="HON. WILLIAM ESTABROOKS"/>
+        <TLCPerson id="4c929028-e1d5-46a9-9075-8620e1ec2e77" href="/ontology/person/ca.frank.corbett" showAs="HON. FRANK CORBETT"/>
+        <TLCPerson id="c4b08611-ea50-4069-9042-1634c77a855e" href="/ontology/person/ca.christopher.a.dentremont" showAs="HON. CHRISTOPHER D'ENTREMONT"/>
+        <TLCPerson id="74752787-4fd0-4f03-8fc6-647c3a5e92ed" href="/ontology/person/ca.denise.peterson.rafuse" showAs="MS. PETERSON-RAFUSE"/>
+        <TLCPerson id="bbf5376f-1a5e-4a10-ac71-5a195ac61a59" href="/ontology/person/ca.andrew.younger" showAs="MR. ANDREW YOUNGER"/>
+        <TLCPerson id="0768c045-71ae-4890-b6be-c52eb783ee95" href="/ontology/person/ca.darrell.dexter" showAs="THE PREMIER"/>
+        <TLCPerson id="a3ee05f2-1d53-41b0-9ea2-abe756a43bb6" href="/ontology/person/ca.clerk" showAs="THE CLERK"/>
+        <TLCPerson id="cfe00156-93a4-4308-806e-6fd454b5c37b" href="/ontology/person/ca.zach.churchill" showAs="MR. CHURCHILL"/>
+        <TLCPerson id="6fd8b406-a075-4718-b5e3-c33555ca4243" href="/ontology/person/ca.keith.bain" showAs="MR. BAIN"/>
+        <TLCPerson id="3d2afb09-46bb-45b0-8cdb-90ba97b15ed0" href="/ontology/person/ca.stephen.mcneil" showAs="HON. STEPHEN MCNEIL"/>
+        <TLCPerson id="78be34c7-58e4-4a99-9766-fd5379123ce2" href="/ontology/person/ca.mat.whynott" showAs="MR. WHYNOTT"/>
+        <TLCPerson id="044d7a53-b109-4393-8fbe-efad8b86a796" href="/ontology/person/ca.diana.whalen" showAs="MS. DIANA WHALEN"/>
+        <TLCPerson id="61ebfba9-9dbe-4e30-8cdd-2e7642c315ca" href="/ontology/person/ca.wayne.j.gaudet" showAs="HON. WAYNE GAUDET"/>
+        <TLCPerson id="1ba97dc9-c731-4cb3-ae68-515251dcee0b" href="/ontology/person/ca.ramona.jennex" showAs="HON. RAMONA JENNEX"/>
+        <TLCPerson id="8a8470fb-0e2f-4e9e-8810-4f20c748d898" href="/ontology/person/ca.karen.casey" showAs="HON. KAREN CASEY"/>
+        <TLCPerson id="50073f98-101e-4a05-aef5-b6739b325fb8" href="/ontology/person/ca.charlie.parker" showAs="HON. CHARLIE PARKER"/>
+        <TLCPerson id="65adae52-0677-4ff2-bc78-0801d6f6c1fa" href="/ontology/person/ca.john.macdonell" showAs="MR. MACDONELL"/>
+        <TLCPerson id="40342c81-d15f-4412-9e39-be7ba9a478a9" href="/ontology/person/ca.maureen.macdonald" showAs="HON. MAUREEN MACDONALD"/>
+        <TLCPerson id="2744aeca-0133-42aa-8ee9-a89fd44f8a14" href="/ontology/person/ca.allan.gerard.macmaster" showAs="MR. ALLAN MACMASTER"/>
+        <TLCPerson id="3dc88fea-b098-4360-8284-83133daa16fa" href="/ontology/person/ca.chuck.porter" showAs="MR. PORTER"/>
+        <TLCPerson id="5784d153-f546-400b-bc4f-2683f94dd642" href="/ontology/person/ca.eddie.orrell" showAs="MR. EDDIE ORRELL"/>
+        <TLCPerson id="26046e64-64ec-438e-96e4-9634df5c8f8c" href="/ontology/person/ca.alfie.macleod" showAs="MR. ALFIE MACLEOD"/>
+        <TLCPerson id="41fa6a70-397a-4597-900b-20b957bef948" href="/ontology/person/ca.leo.glavine" showAs="MR. LEO GLAVINE"/>
+        <TLCPerson id="6d07f2ae-9d4e-4ecf-8c75-26d9d9438690" href="/ontology/person/ca.kelly.regan" showAs="MS. KELLY REGAN"/>
+        <TLCPerson id="dec41d7a-1f3f-40db-bdc4-d55134cb9a68" href="/ontology/person/ca.marilyn.more" showAs="MS. MORE"/>
+        <TLCPerson id="bff82474-c53c-44e7-8224-5a19fb8a8c4a" href="/ontology/person/ca.jim.morton" showAs="MR. JIM MORTON"/>
+        <TLCPerson id="2ed66148-16c1-48af-bf8f-cbfd33a74e36" href="/ontology/person/ca.sterling.belliveau" showAs="HON. STERLING BELLIVEAU"/>
+      </references>
+    </meta>
+    <preface>
+      <docTitle>Debates, 19 April 2012</docTitle>
+      <docNumber>12-14</docNumber>
+      <docDate date="2012-04-19">Thursday, April 19, 2012</docDate>
+      <docProponent>Nova Scotia House of Assembly</docProponent>
+      <legislature value="61">61st General Assembly</legislature>
+      <session value="4">4th Session</session>
+    </preface>
+    <debateBody>
+      <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+        <from>MR. SPEAKER</from>
+        <p>MR. SPEAKER : Order, please. Before we begin the daily routine, the subject matter for late debate has been submitted and I will read it:</p>
+      </speech>
+      <debateSection>
+        <heading>STATEMENTS BY MINISTERS</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Minister of Transportation and Infrastructure Renewal.</p>
+        </speech>
+        <speech by="#9a01bbfe-81d8-4fc7-8810-687efeaed2cd">
+          <from>HON. WILLIAM ESTABROOKS</from>
+          <p>HON. WILLIAM ESTABROOKS : Mr. Speaker, it gives me great pleasure to rise in the House today to officially release the third edition of our 5-Year Highway Improvement Plan. This plan represents our government's commitment to fix rural roads and to keep our community strong. It also represents an investment of more than $1 billion since 2010. This represents thousands of jobs and millions of dollars to our economy.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : We welcome all guests to the gallery and hope that they enjoy this afternoon's proceedings.</p>
+        </speech>
+        <speech by="#9a01bbfe-81d8-4fc7-8810-687efeaed2cd">
+          <from>MR. ESTABROOKS</from>
+          <p>MR. ESTABROOKS : Staff from our department worked with their many colleagues throughout the province to identify the roads and bridges projects for the next five years. I would like to thank them for the time and energy they've invested in this important project for our province, and I look forward to continuing to work with them as the minister.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Clare.</p>
+        </speech>
+        <speech by="#61ebfba9-9dbe-4e30-8cdd-2e7642c315ca">
+          <from>HON. WAYNE GAUDET</from>
+          <p>HON. WAYNE GAUDET : Mr. Speaker, it's my pleasure to rise today and respond to the minister's statement on the newest edition of the government's highway improvement plan. I also would like to thank the minister and his staff for providing me with an advance copy of the statement.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Inverness.</p>
+        </speech>
+        <speech by="#2744aeca-0133-42aa-8ee9-a89fd44f8a14">
+          <from>MR. ALLAN MACMASTER</from>
+          <p>MR. ALLAN MACMASTER : Mr. Speaker, I think all members appreciate hearing about roadwork - am I correct about that? (Applause) That's kind of a lukewarm support, minister, but I know they are. I know it is particularly important for members representing rural areas of the province.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Minister of Transportation and Infrastructure Renewal on an introduction.</p>
+        </speech>
+        <speech by="#9a01bbfe-81d8-4fc7-8810-687efeaed2cd">
+          <from>HON. WILLIAM ESTABROOKS</from>
+          <p>HON. WILLIAM ESTABROOKS : My first and only mistake of the day was that I neglected to stick to the text. I would also like to take this opportunity, besides Bruce and Carol, I would ask Judy Matheson and Laura Cunningham from the Department of Transportation and Infrastructure Renewal to stand and receive recognition. (Applause)</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Minister of Health and Wellness.</p>
+        </speech>
+        <speech by="#40342c81-d15f-4412-9e39-be7ba9a478a9">
+          <from>HON. MAUREEN MACDONALD</from>
+          <p>HON. MAUREEN MACDONALD : Mr. Speaker, I believe that all of my colleagues here in the Chamber would agree that making life better and life more affordable for Nova Scotian families is a top priority. We all want our children to grow up to be happy and healthy and to live long lives, and we know that today's lifestyle threatens that future.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Kings West.</p>
+        </speech>
+        <speech by="#41fa6a70-397a-4597-900b-20b957bef948">
+          <from>MR. LEO GLAVINE</from>
+          <p>MR. LEO GLAVINE : Mr. Speaker, I thank the minister for her comments and would like to thank her for a copy of her statement in advance.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Argyle.</p>
+        </speech>
+        <speech by="#c4b08611-ea50-4069-9042-1634c77a855e">
+          <from>HON. CHRISTOPHER D'ENTREMONT</from>
+          <p>HON. CHRISTOPHER D'ENTREMONT : Mr. Speaker, I thank the minister for her comments today and, of course, for the advanced copy that we received a few hours ago.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>GOVERNMENT NOTICES OF MOTION</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Premier.</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>HON. DARRELL DEXTER</from>
+          <p>HON. DARRELL DEXTER : Mr. Speaker, if I could be permitted to make an introduction before I read my resolution.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Certainly.</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Joining us in the gallery today, we have the family of the late Air Marshal Harold (Gus) Edwards and most notably his daughter, Sue Edwards of Clementsport. We also have with us Colonel (Retired) Ernest Cable, an historian at the Shearwater Aviation Museum, and Colonel Ian Lightbody, who is the wing commander at 12 Wing Shearwater. Our guests are with us here today to commemorate the upcoming induction of Air Marshal Edwards into the Canadian Aviation Hall of Fame. I would ask all the members to extend a warm welcome to them today. (Applause)</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : We welcome all our guests to the gallery and hope they enjoy this afternoon's proceedings.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="275">RESOLUTION NO. 275</num>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="276">RESOLUTION NO. 276</num>
+        <speech by="#40342c81-d15f-4412-9e39-be7ba9a478a9">
+          <from>HON. MAUREEN MACDONALD</from>
+          <p>HON. MAUREEN MACDONALD : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="277">RESOLUTION NO. 277</num>
+        <speech by="#2ed66148-16c1-48af-bf8f-cbfd33a74e36">
+          <from>HON. STERLING BELLIVEAU</from>
+          <p>HON. STERLING BELLIVEAU : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="278">RESOLUTION NO. 278</num>
+        <speech by="#dec41d7a-1f3f-40db-bdc4-d55134cb9a68">
+          <from>HON. MARILYN MORE</from>
+          <p>HON. MARILYN MORE : Mr. Speaker, on behalf of the Minister of Communities, Culture and Heritage, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="279">RESOLUTION NO. 279</num>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>Bill No. 33 - Entitled an Act to Support Diabetic Persons in Nova Scotia. (Mr. Leo Glavine)</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Ordered that these bills be read a second time on a future day.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>NOTICES OF MOTION</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Kings West.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="280">RESOLUTION NO. 280</num>
+        <speech by="#41fa6a70-397a-4597-900b-20b957bef948">
+          <from>MR. LEO GLAVINE</from>
+          <p>MR. LEO GLAVINE : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="281">RESOLUTION NO. 281</num>
+        <speech by="#adf62df0-6616-4824-87bd-59fd0bc41914">
+          <from>HON JAMIE BAILLIE</from>
+          <p>HON JAMIE BAILLIE: Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="282">RESOLUTION NO. 282</num>
+        <speech by="#61ebfba9-9dbe-4e30-8cdd-2e7642c315ca">
+          <from>HON. WAYNE GAUDET</from>
+          <p>HON. WAYNE GAUDET : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="283">RESOLUTION NO. 283</num>
+        <speech by="#2744aeca-0133-42aa-8ee9-a89fd44f8a14">
+          <from>MR. ALLAN MACMASTER</from>
+          <p>MR. ALLAN MACMASTER : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="284">RESOLUTION NO. 284</num>
+        <speech by="#bbf5376f-1a5e-4a10-ac71-5a195ac61a59">
+          <from>MR. ANDREW YOUNGER</from>
+          <p>MR. ANDREW YOUNGER : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="285">RESOLUTION NO. 285</num>
+        <speech by="#26046e64-64ec-438e-96e4-9634df5c8f8c">
+          <from>MR. ALFIE MACLEOD</from>
+          <p>MR. ALFIE MACLEOD : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="286">RESOLUTION NO. 286</num>
+        <speech by="#6d07f2ae-9d4e-4ecf-8c75-26d9d9438690">
+          <from>MS. KELLY REGAN</from>
+          <p>MS. KELLY REGAN : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="287">RESOLUTION NO. 287</num>
+        <speech by="#3dc88fea-b098-4360-8284-83133daa16fa">
+          <from>MR. CHUCK PORTER</from>
+          <p>MR. CHUCK PORTER : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="288">RESOLUTION NO. 288</num>
+        <speech by="#3d2afb09-46bb-45b0-8cdb-90ba97b15ed0">
+          <from>HON. STEPHEN MCNEIL</from>
+          <p>HON. STEPHEN MCNEIL : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="289">RESOLUTION NO. 289</num>
+        <speech by="#6fd8b406-a075-4718-b5e3-c33555ca4243">
+          <from>MR. KEITH BAIN</from>
+          <p>MR. KEITH BAIN : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="290">RESOLUTION NO. 290</num>
+        <speech by="#8a8470fb-0e2f-4e9e-8810-4f20c748d898">
+          <from>HON. KAREN CASEY</from>
+          <p>HON. KAREN CASEY : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="291">RESOLUTION NO. 291</num>
+        <speech by="#5784d153-f546-400b-bc4f-2683f94dd642">
+          <from>MR. EDDIE ORRELL</from>
+          <p>MR. EDDIE ORRELL : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="292">RESOLUTION NO. 292</num>
+        <speech by="#01b4df24-b29e-415e-95e1-62159d70be43">
+          <from>HON. KEITH COLWELL</from>
+          <p>HON. KEITH COLWELL : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="293">RESOLUTION NO. 293</num>
+        <speech by="#2744aeca-0133-42aa-8ee9-a89fd44f8a14">
+          <from>MR. ALLAN MACMASTER</from>
+          <p>MR. ALLAN MACMASTER : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="294">RESOLUTION NO. 294</num>
+        <speech by="#41fa6a70-397a-4597-900b-20b957bef948">
+          <from>MR. LEO GLAVINE</from>
+          <p>MR. LEO GLAVINE : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="295">RESOLUTION NO. 295</num>
+        <speech by="#26046e64-64ec-438e-96e4-9634df5c8f8c">
+          <from>MR. ALFIE MACLEOD</from>
+          <p>MR. ALFIE MACLEOD : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="296">RESOLUTION NO. 296</num>
+        <speech by="#044d7a53-b109-4393-8fbe-efad8b86a796">
+          <from>MS. DIANA WHALEN</from>
+          <p>MS. DIANA WHALEN : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="297">RESOLUTION NO. 297</num>
+        <speech by="#6fd8b406-a075-4718-b5e3-c33555ca4243">
+          <from>MR. KEITH BAIN</from>
+          <p>MR. KEITH BAIN : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="298">RESOLUTION NO. 298</num>
+        <speech by="#61ebfba9-9dbe-4e30-8cdd-2e7642c315ca">
+          <from>HON. WAYNE GAUDET</from>
+          <p>HON. WAYNE GAUDET : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="299">RESOLUTION NO. 299</num>
+        <speech by="#5784d153-f546-400b-bc4f-2683f94dd642">
+          <from>MR. EDDIE ORRELL</from>
+          <p>MR. EDDIE ORRELL : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="300">RESOLUTION NO. 300</num>
+        <speech by="#6d07f2ae-9d4e-4ecf-8c75-26d9d9438690">
+          <from>MS. KELLY REGAN</from>
+          <p>MS. KELLY REGAN : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="301">RESOLUTION NO. 301</num>
+        <speech by="#8a8470fb-0e2f-4e9e-8810-4f20c748d898">
+          <from>HON. KAREN CASEY</from>
+          <p>HON. KAREN CASEY : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="302">RESOLUTION NO. 302</num>
+        <speech by="#01b4df24-b29e-415e-95e1-62159d70be43">
+          <from>HON. KEITH COLWELL</from>
+          <p>HON. KEITH COLWELL : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="303">RESOLUTION NO. 303</num>
+        <speech by="#cfe00156-93a4-4308-806e-6fd454b5c37b">
+          <from>MR. ZACH CHURCHILL</from>
+          <p>MR. ZACH CHURCHILL : Mr. Speaker, I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : There has been a request for waiver.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>ORAL QUESTIONS PUT BY MEMBERS</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The time is now 1:16 p.m. We will finish at 2:16 p.m.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>PREM.: DENNY RELEASE - INVESTIGATE</heading>
+        <speech by="#3d2afb09-46bb-45b0-8cdb-90ba97b15ed0">
+          <from>MR. STEPHEN MCNEIL</from>
+          <p>MR. STEPHEN MCNEIL : Mr. Speaker, yesterday the government announced plans to have the Deputy Ministers of Health and Justice, as well as the CEO of Capital Health, head an inquiry into the release of Andre Noel Denny. It is worrying that the departments at the centre of this matter are the ones investigating it. If someone acted inappropriately, these departments would have to point the finger at themselves.</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Mr. Speaker, this is a review of the process and procedures that took place to determine whether or not they are adequate. Who better to do that than the departments themselves?</p>
+        </speech>
+        <speech by="#3d2afb09-46bb-45b0-8cdb-90ba97b15ed0">
+          <from>MR. MCNEIL</from>
+          <p>MR. MCNEIL : Well, Mr. Speaker, yesterday the departments didn't even know the location of a third person who did not return on time. The ministers didn't even seem to know that there was a third person missing.</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Well, first of all, the information that he just gave was wrong. The Minister of Health never said that there were media advisories with respect to previous non-compliance with return after passes. This is a procedural matter on which there is a federally-constituted board with respect to the discharge of a patient. It spans two departments and an outside agency. That procedural inquiry is best handled by those parties.</p>
+        </speech>
+        <speech by="#3d2afb09-46bb-45b0-8cdb-90ba97b15ed0">
+          <from>MR. MCNEIL</from>
+          <p>MR. MCNEIL : Mr. Speaker, this is a serious matter, and to have the Departments of Health and of Justice investigate themselves is not appropriate. Nova Scotians want to make sure that, whatever breakdown in protocol happened, we would get to the bottom of it. As the Premier so rightly pointed out, the federal government is also involved in this. We need an independent investigation to ensure that we get to the bottom of what broke down during this release.</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Mr. Speaker, at this time we will continue with the inquiry that we have announced, the purpose of which is to see if there is any reason for us to go any further. This is a circumstance that clearly is tragic, clearly is a difficult circumstance both for the family of Mr. Taavel but also, of course, for the family of the individual who now finds himself in custody. What we are all seeking to understand and to get answers to are the questions of whether or not the procedures that were in place were adequate, whether or not they were followed, and if not, are there improvements that can be made or is this a case where everything that happened, happened in accordance with the best practices, but still had a tragic result.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Leader of the Progressive Conservative Party.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>UNSUPERVISED LEAVES - NUMBER</heading>
+        <speech by="#adf62df0-6616-4824-87bd-59fd0bc41914">
+          <from>HON. JAMIE BAILLIE</from>
+          <p>HON. JAMIE BAILLIE : My question is for the Premier. Mr. Speaker, yesterday the government did not have information available about how many clients of the East Coast Forensic Hospital were out on unsupervised leave this past week, the week of the tragic murder. It seemed like an obvious question to ask of the government, but yesterday was a very sad day. Now that the government has had another 24 hours, I will ask the Premier, can he now tell the House how many people, who are clients of the East Coast Forensic unit, were out on unsupervised leave this past week?</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Mr. Speaker, first of all they are patients and they are right across the province. No, I don't know how many are out on day passes today, I don't.</p>
+        </speech>
+        <speech by="#adf62df0-6616-4824-87bd-59fd0bc41914">
+          <from>MR. BAILLIE</from>
+          <p>MR. BAILLIE : Well, Mr. Speaker, I think that Nova Scotians would like to know the answer to that question because it is, in fact, a matter of public safety and I certainly accept that the proper terminology is patients. I will ask this question then - of those patients of the East Coast Forensic unit who were out on unsupervised leave, how many were out beyond the allowable leave time?</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Mr. Speaker, my understanding is yesterday there were three from the East Coast Forensic unit. As I said they are patients, this is not an unusual occurrence. There is a protocol for advising the police when people do not return as they are expected to. I'm sure, like many other Nova Scotians, I heard the interview with the director of the facility, yesterday, who said that this is not unusual. In most cases all of them return. Some of them return within 15 or 20 minutes because they've missed a bus or there is some other reason for their delay, but that their record of coming back and participating in the appropriate discharge plan is actually very high.</p>
+        </speech>
+        <speech by="#adf62df0-6616-4824-87bd-59fd0bc41914">
+          <from>MR. BAILLIE</from>
+          <p>MR. BAILLIE : I appreciate we are now getting somewhere, the answer is three, I appreciate that. I will ask the Premier, of those three who were out on unsupervised leave beyond their allotted time, are all three accounted for now?</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Yes, Mr. Speaker, they are and they were all accounted for within, I think, 24 hours.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honorable Leader of the Official Opposition.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>PREM. - MENTAL HEALTH: PROGS.: CUTS - CONFIRM</heading>
+        <speech by="#3d2afb09-46bb-45b0-8cdb-90ba97b15ed0">
+          <from>HON. STEPHEN MCNEIL</from>
+          <p>HON. STEPHEN MCNEIL : Yesterday during Question Period the Premier showed the priority he places on mental health. In reference to program cuts for children and youth mental health services the Premier stated, "The changes that you talk about were designed to do just exactly that. It was designed to take existing resources and to apply them more effectively to ensure that more people got better access to care."</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : We have protected all of the mental health budgets but we have also been leaders in the establishment of programs in mental health such as the Mental Health Courts. We have created the Psychiatric Intensive Care Unit, which is six beds, and there are numerous other examples of where this government has taken a leadership role with respect to mental health.</p>
+        </speech>
+        <speech by="#3d2afb09-46bb-45b0-8cdb-90ba97b15ed0">
+          <from>MR. MCNEIL</from>
+          <p>MR. MCNEIL : Mr. Speaker, and they removed mental health workers at the IWK and transferred that to the Valley. Well, that's what we're talking about - because there's no additional funding, what they are doing is moving programs around.</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Mr. Speaker, for 20 years nothing happened on mental health services at all. Since this government has come to power we have shone a light on mental health services, we have made progress in terms of ensuring that this is a priority for government. The fact of the matter is, we have looked at programming and looked at the best way to ensure that the resources that we have actually provide services to the people who need it most. I cannot believe that the Leader of the Official Opposition would not agree with that.</p>
+        </speech>
+        <speech by="#3d2afb09-46bb-45b0-8cdb-90ba97b15ed0">
+          <from>MR. MCNEIL</from>
+          <p>MR. MCNEIL : Mr. Speaker, there's absolutely no question in this province that mental health services have not received attention for a very, very long time. But this government and this Premier have been in power for three years, they have increased the budget to mental health services by .09 per cent, less than $3 million, but they've added an additional $50 million to the Industrial Expansion slush fund &#x2013; and, for God's sake, they've spent a $.05 million to buy lunch bags to give the kids.</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Mr. Speaker, no such thing. In fact, we are providing services to people who need it most. I would note that when the Critic for the Liberal Party was the Minister of Education she had exactly the same kind of program - I think they used tote bags then to put the materials in. It was the same thing, because we're trying to get materials into the hands of young people so that they can compete and have a leg up on literacy - that is important. We are focused on ensuring that the money that we have, the limited resources we have - because we pay $1 billion a year in interest on debt run up by those Parties - is actually used. The money we have is used to provide good services.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Leader of the Official Opposition on a new question.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>PREM. - SPECIAL NEEDS FUNDING: PAC VOTE - EXPLAIN</heading>
+        <speech by="#3d2afb09-46bb-45b0-8cdb-90ba97b15ed0">
+          <from>HON. STEPHEN MCNEIL</from>
+          <p>HON. STEPHEN MCNEIL : Mr. Speaker, parents of children with special needs are particularly concerned. The Minister of Education stood in this House and said repeatedly she supports students with special needs despite slashing funding for student supports. On Wednesday at the Public Accounts Committee meeting, at an agenda-setting meeting, government members blocked a discussion on special needs funding.</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Mr. Speaker, special needs funding has of course been protected, and the important thing for parents of special needs children to know is that they have a champion for their children in the Minister of Education.</p>
+        </speech>
+        <speech by="#3d2afb09-46bb-45b0-8cdb-90ba97b15ed0">
+          <from>MR. MCNEIL</from>
+          <p>MR. MCNEIL : Mr. Speaker, what they're feeling is that they have a government that is blocking an open debate in a committee that would allow them to zero in on funding for children with special needs. They recognize it is this government that has cut $65 million from public education; they also recognize it is this government and that Minister of Education that has increased administrative costs in the Department of Education; they also know it is this government that is forcing boards to cut teachers and educational assistants; and they also know it is this government that does not support children with special needs.</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Mr. Speaker, there was just a full opportunity for members of this House in the estimates of the Minister of Education to examine fully any aspect of that budget with respect to special education. It's why we have the mechanisms that we have here in the House.</p>
+        </speech>
+        <speech by="#3d2afb09-46bb-45b0-8cdb-90ba97b15ed0">
+          <from>MR. MCNEIL</from>
+          <p>MR. MCNEIL : Mr. Speaker, it is that government that is blocking senior staff in the Department of Education from coming here to Public Accounts to, quite frankly, answer questions that the Minister of Education was unable to answer here during the estimates period that the Premier is talking about.</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Mr. Speaker, just in case anyone watching at home believes anything that is said by the Leader of the Opposition, they should know that the senior officials at the Department of Education were here in the House of Assembly during the Education estimates. They could have asked any question they wanted with respect to education. He's critical today of the government's advertising program, but I would like to table a press release from the Leader of the Official Opposition in which he was critical of the lack of promotion of programs. It says, "McNeil argues that the NDP is failing to promote the program because they are trying to find savings through decreased participation."</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Leader of the Progressive Conservative Party.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>PREM.: CAPITAL HEALTH STRIKE - DURATION</heading>
+        <speech by="#adf62df0-6616-4824-87bd-59fd0bc41914">
+          <from>HON. JAMIE BAILLIE</from>
+          <p>HON. JAMIE BAILLIE : Mr. Speaker, my question is for the Premier. The clock is now ticking down officially on a very serious strike at Capital Health involving 3,600 important health care workers. Capital Health is already closing beds. They are scaling back services like blood collection and surgeries are being cancelled in anticipation of a strike.</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : There is, as the member opposite knows, a collective bargaining process underway now. It is at a very sensitive point and we are hopeful that soon the parties will get back together and resume some bargaining. We hope there will be a resolution to this in a reasonable manner. I'm sure that the Leader of the Progressive Conservative Party would wish that as well.</p>
+        </speech>
+        <speech by="#adf62df0-6616-4824-87bd-59fd0bc41914">
+          <from>MR. BAILLIE</from>
+          <p>MR. BAILLIE : Well, Mr. Speaker, we could all hope, but the job of a Premier is actually to plan and be ready to ensure that patient services are open. I'd ask the Premier to consider the case of Lisa Moorehouse, a 39-year-old mother who was diagnosed, unfortunately and very sadly, with stage 3C uterine cancer. She has had her surgery and is on the list for fast-track radiation and chemotherapy at Capital Health two weeks from now. Now that procedure is at risk, so on top of dealing with this awful disease, she now has to worry about whether she is going to get the treatments she needs.</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Mr. Speaker, obviously I can't speak to individual cases. That would be an inappropriate thing for me to do. What I can say is that there is an emergency services agreement in place that is designed to provide access to those services throughout a strike, very much like the one that was described by the Leader of the Progressive Conservative Party.</p>
+        </speech>
+        <speech by="#adf62df0-6616-4824-87bd-59fd0bc41914">
+          <from>MR. BAILLIE</from>
+          <p>MR. BAILLIE : Mr. Speaker, I guess the answer is no, the Premier can't provide Lisa Moorehouse and the hundreds of others like her with that assurance. But certainly they deserve to know that their services and their treatments will be there for them when they need them and they will not be used as pawns in a negotiation between the government and its union. So my question to the Premier is, will he at least stand up and tell people who are on those lists for surgery, like Lisa Moorehouse, that he is ready to do everything necessary to keep those services going?</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Mr. Speaker, perhaps the Leader of the Progressive Conservative Party didn't hear my response but what I said is that there is a comprehensive emergency services agreement in place between the union and Capital Health designed to provide those kinds of emergency services like the one that he has talked about. Obviously, it would be inappropriate to speak to individual cases, especially when he has provided nothing in the way of a background document about it.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Colchester North.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>EDUC. - LUNCH BAGS: TENDER - TERMINOLOGY</heading>
+        <speech by="#8a8470fb-0e2f-4e9e-8810-4f20c748d898">
+          <from>HON. KAREN CASEY</from>
+          <p>HON. KAREN CASEY : Mr. Speaker, my question through you is to the Minister of Education. Yesterday in a response to a question, the minister took exception to the use of the word 'lunch bag' when speaking about her initiative for 4-year-olds. So my question to the minister is this, what are the bags called in the most recent tender?</p>
+        </speech>
+        <speech by="#1ba97dc9-c731-4cb3-ae68-515251dcee0b">
+          <from>HON. RAMONA JENNEX</from>
+          <p>HON. RAMONA JENNEX : The Play-Talk-Learn resources that are being distributed to all of our pre-school students as they come into Primary registration are housed in an insulated lunch bag. The resource is called Play-Talk-Learn.</p>
+        </speech>
+        <speech by="#8a8470fb-0e2f-4e9e-8810-4f20c748d898">
+          <from>MS. CASEY</from>
+          <p>MS. CASEY : Mr. Speaker, the language that's being used - lunch bags - comes directly from the tender document, which refers to them as a request for a standing offer for children's lunch bags. So the minister has no one to blame but herself for the term "lunch bag" but the decision is much more important than the name.</p>
+        </speech>
+        <speech by="#1ba97dc9-c731-4cb3-ae68-515251dcee0b">
+          <from>MS. JENNEX</from>
+          <p>MS. JENNEX : Mr. Speaker, we have a program so that we can make sure that our pre-school students have the resources that they need before they come to school. The Play-Talk-Learn resources include books. It has music. I could go on as to what's in it, but the organization of the resources that are in the bag came from the determination of our reading specialists to replace the Welcome to School bag that the member for Colchester North signed off on in 2006-07 which went into the school board of CCRSB, Tri-County, and CSAP. The next year in 2007-08, it did include Halifax.</p>
+        </speech>
+        <speech by="#8a8470fb-0e2f-4e9e-8810-4f20c748d898">
+          <from>MS. CASEY</from>
+          <p>MS. CASEY : Mr. Speaker, perhaps if the minister wanted to check, those years when those resources were purchased, there was no cut to funding to the classrooms. (Applause)</p>
+        </speech>
+        <speech by="#1ba97dc9-c731-4cb3-ae68-515251dcee0b">
+          <from>MS. JENNEX</from>
+          <p>MS. JENNEX : Mr. Speaker, one of the most important things we can do is to make sure our students are going to be successful in school. This has been identified by the reading specialists in every single one of our boards across this province.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Victoria-The Lakes.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>COM. SERV. - TALBOT HOUSE REVIEW: MIN. - READING CONFIRM</heading>
+        <speech by="#6fd8b406-a075-4718-b5e3-c33555ca4243">
+          <from>MR. KEITH BAIN</from>
+          <p>MR. KEITH BAIN : Mr. Speaker, yesterday during Question Period, the Minister of Community Services said, " . . . there were no specific individual accusations . . ." contained in the Talbot House organizational review. She also said, ". . . it was not an individual review whatsoever, without any accusations in there." I'll table that.</p>
+        </speech>
+        <speech by="#74752787-4fd0-4f03-8fc6-647c3a5e92ed">
+          <from>HON. DENISE PETERSON-RAFUSE</from>
+          <p>HON. DENISE PETERSON-RAFUSE : Mr. Speaker: Yes, definitely I've read it.</p>
+        </speech>
+        <speech by="#6fd8b406-a075-4718-b5e3-c33555ca4243">
+          <from>MR. BAIN</from>
+          <p>MR. BAIN : Mr. Speaker, I'll table the report for the minister just so that I can be sure the minister and I are talking about the same report.</p>
+        </speech>
+        <speech by="#74752787-4fd0-4f03-8fc6-647c3a5e92ed">
+          <from>MS. PETERSON-RAFUSE</from>
+          <p>MS. PETERSON-RAFUSE : Mr. Speaker, what we did is, we kept very good communications with the board of directors. We had public requests for that review through the media and because of the fact that we are a transparent government, we made the decision to put it on the Web site, and the board knew that.</p>
+        </speech>
+        <speech by="#6fd8b406-a075-4718-b5e3-c33555ca4243">
+          <from>MR. BAIN</from>
+          <p>MR. BAIN : Mr. Speaker, if the minister had read the report, she would have noticed there are direct references to Father Paul Abbass' character and behaviour. By my count there are nine such references, and the way these references are presented should be noted.</p>
+        </speech>
+        <speech by="#74752787-4fd0-4f03-8fc6-647c3a5e92ed">
+          <from>MS. PETERSON-RAFUSE</from>
+          <p>MS. PETERSON-RAFUSE : Mr. Speaker, let me be clear. Any reference in that review is with respect to the organizational workings of that board of directors and not what they're trying to imply. It was to look to see if they were meeting the standards of their service agreement.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Clare.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>EDUC.: FUNDING CUTS - CLASSROOM EFFECTS</heading>
+        <speech by="#61ebfba9-9dbe-4e30-8cdd-2e7642c315ca">
+          <from>HON. WAYNE GAUDET</from>
+          <p>HON. WAYNE GAUDET : Mr. Speaker, my question is for the Minister of Education. Last year on April 21, nearly a year ago today, the Minister of Education stood in this House and said the following about her funding cuts: " . . . I trust that the impact will not be felt by the students in the classroom."</p>
+        </speech>
+        <speech by="#1ba97dc9-c731-4cb3-ae68-515251dcee0b">
+          <from>HON. RAMONA JENNEX</from>
+          <p>HON. RAMONA JENNEX : I would like to remind everyone that we have increased the student funding. Per-child funding has increased in this province. As the school boards go through their budgets, they have been instructed to make sure that the classroom is protected.</p>
+        </speech>
+        <speech by="#61ebfba9-9dbe-4e30-8cdd-2e7642c315ca">
+          <from>MR. GAUDET</from>
+          <p>MR. GAUDET : Mr. Speaker, the minister forgot to inform the House that public education in Nova Scotia is the second lowest in all of our country. That's what she should say. (Applause)</p>
+        </speech>
+        <speech by="#1ba97dc9-c731-4cb3-ae68-515251dcee0b">
+          <from>MS. JENNEX</from>
+          <p>MS. JENNEX : Boards were given a mandate around their budgets. We are asking all boards to make sure that resources and the classroom are protected. They are to look at administration and consultants, in those areas, to make sure that the classroom is protected. We are making sure that the resources match the need of our students. We have declining enrolment. We have increased the per-student spending and our ratio is the lowest it's ever been in the province.</p>
+        </speech>
+        <speech by="#61ebfba9-9dbe-4e30-8cdd-2e7642c315ca">
+          <from>MR. GAUDET</from>
+          <p>MR. GAUDET : Mr. Speaker, the Tri-County Regional School Board is looking at cutting 11 teaching positions. I repeat for the minister to hear - they're looking at cutting 11 teaching positions as part of their budget-cutting process this year. Losing these teaching positions means larger class sizes, fewer class offerings, and fewer supports for our students, of course. The students that need the most support are the most vulnerable to this minister's callous cuts. Parents in the Tri-County area are looking to this minister to be an education leader, and instead she's gutting the supports and services students rely on. Again, will the minister stand up for students in the Tri-County Regional School Board and admit her cuts are affecting the classroom and restore funding to education?</p>
+        </speech>
+        <speech by="#1ba97dc9-c731-4cb3-ae68-515251dcee0b">
+          <from>MS. JENNEX</from>
+          <p>MS. JENNEX : Mr. Speaker, we definitely are making sure that students in the Tri-County are protected. Their decreased enrolment is 3.2 per cent and we made sure that their budget was capped in at 2. I just want to remind everybody that we are standing up for every child in this province and we have a plan, Kids and Learning First and we are making sure that the resources match the needs of our changing society. Thank you.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Cape Breton West.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>COM. SERV. - DEPT.: REVIEW - COMMITMENT</heading>
+        <speech by="#26046e64-64ec-438e-96e4-9634df5c8f8c">
+          <from>MR. ALFIE MACLEOD</from>
+          <p>MR. ALFIE MACLEOD : Mr. Speaker, my question through you will be to the Minister of Community Services. In the last few weeks we have had serious questions about the department's handling of the situation and risk at the East Preston Day Care and the safety of the children there. This week serious questions about the department's handling of Talbot House have emerged. My question to the Minister of Community Services is, will the minister commit to having a full, independent, operational review of her department?</p>
+        </speech>
+        <speech by="#74752787-4fd0-4f03-8fc6-647c3a5e92ed">
+          <from>MS. PETERSON-RAFUSE</from>
+          <p>MS. PETERSON-RAFUSE : Mr. Speaker, we followed absolutely every process that we have the authority to process, so the answer is no.</p>
+        </speech>
+        <speech by="#26046e64-64ec-438e-96e4-9634df5c8f8c">
+          <from>MR. MACLEOD</from>
+          <p>MR. MACLEOD : Mr. Speaker, I'm shocked and appalled at that answer. The minister stonewalled on the East Preston Day Care Centre, she talked about everything but the safety of the children. She's stonewalling on Talbot House and showing blatant disregard for the reputation of Father Paul Abbass. My question to the minister is, why is an operational review on Talbot House okay, but not for the minister's department?</p>
+        </speech>
+        <speech by="#74752787-4fd0-4f03-8fc6-647c3a5e92ed">
+          <from>MS. PETERSON-RAFUSE</from>
+          <p>MS. PETERSON-RAFUSE : Mr. Speaker, I was very clear in the safety of the children because we have the jurisdiction in these types of situations to investigate current allegations, which we did. There was no evidence so the RCMP has the right to investigate historical allegations; they just can't seem to get it. It's also very interesting that the only one who is bringing up the name in this House is that Party over there that's causing the trouble.</p>
+        </speech>
+        <speech by="#26046e64-64ec-438e-96e4-9634df5c8f8c">
+          <from>MR. MACLEOD</from>
+          <p>MR. MACLEOD : Mr. Speaker, I can say as a parent and grandparent that there's not a single Nova Scotian who would accept that answer from that minister with regard to children's safety. If this minister is not up to the job maybe it's time that the Premier put someone in there that can do the job. My question for the minister is - I'll ask it again - in light of two serious abuses of power by that department, why not put the department through the same kind of operational review that the minister imposed on Talbot House and all of those reputable people who are on the board of directors at that centre?</p>
+        </speech>
+        <speech by="#74752787-4fd0-4f03-8fc6-647c3a5e92ed">
+          <from>MS. PETERSON-RAFUSE</from>
+          <p>MS. PETERSON-RAFUSE : Mr. Speaker, the fact is the organizational review was not something that was just focused on Talbot House. We have done a number of organizational reviews and within the organizational reviews there will be things that will come out because of the fact that we want to improve services between that organization and ourselves.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Yarmouth.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>LBR. &amp; ADV. EDUC. - NSCC TUITION HIKE: SUPPORT EXPLAIN</heading>
+        <speech by="#cfe00156-93a4-4308-806e-6fd454b5c37b">
+          <from>MR. ZACH CHURCHILL</from>
+          <p>MR. ZACH CHURCHILL : Mr. Speaker, this government is overseeing tuition increases, student fee increases and massive cuts to post-secondary education funding. Under the NDP's watch $75 million was slashed from post-secondary education in the province. On April 12, 2004, the Transportation and Infrastructure Minister, in his role as the Opposition's Education Critic said, "Here it is again, they're trying to balance their books on the backs of students."</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : That's not within the minister's portfolio, so I would ask the honourable Minister of Labour and Advanced Education to answer that question, please.</p>
+        </speech>
+        <speech by="#dec41d7a-1f3f-40db-bdc4-d55134cb9a68">
+          <from>HON. MARILYN MORE</from>
+          <p>HON. MARILYN MORE : Mr. Speaker, as I have said on the floor of this Chamber before, we are attempting to provide for the sustainability of our post-secondary system in this province, particularly the universities. We have 11 excellent institutions, but certainly they need to be innovative. They need to make sure that they are meeting the needs of Nova Scotians as well as the fiscal capacity of Nova Scotians. That period of transition and transformation is currently underway. Thank you.</p>
+        </speech>
+        <speech by="#cfe00156-93a4-4308-806e-6fd454b5c37b">
+          <from>MR. CHURCHILL</from>
+          <p>MR. CHURCHILL : Mr. Speaker, the fact is that education is getting more expensive under this government. NSCC was forced to increase tuition and lay off staff. Dal was forced to increase tuition and student fees. I want to quote the Minister of Transportation and Infrastructure Renewal again. On April 12th, he said, "I challenge the Minister of Education to reassure the public that this government is not considering hiking tuition fees at NSCC in the upcoming budget."</p>
+        </speech>
+        <speech by="#dec41d7a-1f3f-40db-bdc4-d55134cb9a68">
+          <from>MS. MORE</from>
+          <p>MS. MORE : Mr. Speaker, it became very obvious when we became government in 2009 that the status quo was not sustainable in this province. We have carefully examined every sector. We are making strategic investments to improve our economy and also to invest in our human resources, including our students. I am very proud of our track record, in terms of our incredible improvements to student assistance and increasing opportunities for training and learning within this province. Thank you.</p>
+        </speech>
+        <speech by="#cfe00156-93a4-4308-806e-6fd454b5c37b">
+          <from>MR. CHURCHILL</from>
+          <p>MR. CHURCHILL : Mr. Speaker, I hope the minister gets used to improving the affordability measures, because we're going to need them if tuition keeps going up in the Province of Nova Scotia. The only thing that has become obvious is this government's disrespect for the education system in the Province of Nova Scotia.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Order, please. The word "guts" is unparliamentary. I would ask the honourable member to retract that word, please.</p>
+        </speech>
+        <speech by="#cfe00156-93a4-4308-806e-6fd454b5c37b">
+          <from>MR. CHURCHILL</from>
+          <p>MR. CHURCHILL : I retract that quote and will replace it with "intestinal fortitude," Mr. Speaker.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Thank you.</p>
+        </speech>
+        <speech by="#dec41d7a-1f3f-40db-bdc4-d55134cb9a68">
+          <from>MS. MORE</from>
+          <p>MS. MORE : Mr. Speaker, this government is actually investing $48 million new dollars into post-secondary education in terms (Interruption) I'm giving the answer. I know the facts. (Applause)</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Preston.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>SNSMR: HRM TAX RATES - MIN. CONFIRM</heading>
+        <speech by="#01b4df24-b29e-415e-95e1-62159d70be43">
+          <from>HON. KEITH COLWELL</from>
+          <p>HON. KEITH COLWELL : Mr. Speaker, last Thursday in response to a question, the Minister of Service Nova Scotia and Municipal Relations stated that there would be no tax increases as a result of the NDP's reversal on the MOU. In fact, he went so far as to say, ". . . tax rates have gone down in the HRM and basically across the province. We're quite pleased with the result." I'll table that comment from Hansard.</p>
+        </speech>
+        <speech by="#65adae52-0677-4ff2-bc78-0801d6f6c1fa">
+          <from>HON. JOHN MACDONELL</from>
+          <p>HON. JOHN MACDONELL : Mr. Speaker, the municipalities, depending on what project or extra service they may want to add on from one year to the other - but in terms of the assessment across the province, actually the cap is at 3.9 per cent. Assessment across the province is an average of 6 per cent, so actually above the cap - and the member may have noticed in today's paper, no tax increase in Kings County and actually HRM as well.</p>
+        </speech>
+        <speech by="#01b4df24-b29e-415e-95e1-62159d70be43">
+          <from>MR. COLWELL</from>
+          <p>MR. COLWELL : Mr. Speaker, we know that Queens has increased its commercial, residential and resource property tax rates by 3 per cent. We're hearing from other municipalities across the province that are struggling with the decision as a result of this minister tearing up the MOU. I have a document here from The Nova Scotia ChronicleHerald, dated April 18th, in which it states that the Municipality of Queens has raised taxes as a result of the MOU being destroyed.</p>
+        </speech>
+        <speech by="#65adae52-0677-4ff2-bc78-0801d6f6c1fa">
+          <from>MR. MACDONELL</from>
+          <p>MR. MACDONELL : Mr. Speaker, like I said, depending on what projects certain municipalities may take on - certainly in Queens, and at their request, they wanted to have a cut in the taxes for Bowater, so if they increased their rate for their citizens to make up for that, that's their business, not ours.</p>
+        </speech>
+        <speech by="#01b4df24-b29e-415e-95e1-62159d70be43">
+          <from>MR. COLWELL</from>
+          <p>MR. COLWELL : Well, evidently the minister did not read the article in the paper where the mayor of Queens clearly stated - clearly stated - that as a result of the MOU being torn up, taxes did increase by 3 per cent.</p>
+        </speech>
+        <speech by="#65adae52-0677-4ff2-bc78-0801d6f6c1fa">
+          <from>MR. MACDONELL</from>
+          <p>MR. MACDONELL : Mr. Speaker, look, I'm really pleased that the member opposite was a municipal councillor because maybe at some point he'll pick up on the message I'm trying to give him. The member doesn't seem to understand that the costs under the MOU are the same costs that those municipal units had been paying for some 15 years now; they're not additional costs. As a matter of fact, they are costs imposed by the previous Liberal Government that he was a member of.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Hants West.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>ENERGY: KWH COSTS - TABLE</heading>
+        <speech by="#3dc88fea-b098-4360-8284-83133daa16fa">
+          <from>MR. CHUCK PORTER</from>
+          <p>MR. CHUCK PORTER : Mr. Speaker, recently the Minister of Energy couldn't answer how much a kilowatt hour of electricity from Muskrat Falls will cost our ratepayers, or what the cost is of a kilowatt hour of wind. This is information the minister needs to know. I don't believe the minister increased their renewable targets and hasn't at least done some rough estimates of the cost of each renewable source.</p>
+        </speech>
+        <speech by="#50073f98-101e-4a05-aef5-b6739b325fb8">
+          <from>HON. CHARLIE PARKER</from>
+          <p>HON. CHARLIE PARKER : Mr. Speaker, thank you to the honourable member for his question. Certainly we're all interested in the least expensive cost of electricity in our province. We know it's important for our homeowners and small businesses and industry as well.</p>
+        </speech>
+        <speech by="#3dc88fea-b098-4360-8284-83133daa16fa">
+          <from>MR. PORTER</from>
+          <p>MR. PORTER : Mr. Speaker, we all want more renewable energy, but it has to be done at a pace families and business can afford. It's the minister's job to know how much each of these resources cost and to protect families and businesses from skyrocketing energy costs.</p>
+        </speech>
+        <speech by="#50073f98-101e-4a05-aef5-b6739b325fb8">
+          <from>MR. PARKER</from>
+          <p>MR. PARKER : Mr. Speaker, certainly the source of renewable electricity from Newfoundland and Labrador is an important part of our energy mix. The Newfoundland and Labrador Government is looking at the cost and the environmental assessment and the job benefits of that project, and when the time comes our URB here will determine, looking at the capital costs, the benefits to Nova Scotians and the rate of return - and as well as the renewable energy for the next 35 years, the URB will use all the expertise from Newfoundland and Labrador, as well as their own expertise, to come up with the right decision for Nova Scotians.</p>
+        </speech>
+        <speech by="#3dc88fea-b098-4360-8284-83133daa16fa">
+          <from>MR. PORTER</from>
+          <p>MR. PORTER : Mr. Speaker, the minister has nothing, obviously, no proof of anything. When he was asked recently about the research that was done to make the target decision the minister said he consulted Nova Scotians - opinion research is hardly enough for a decision of this magnitude, especially where no costs were secured. The minister is failing in his responsibility to protect our families and our businesses in this province.</p>
+        </speech>
+        <speech by="#50073f98-101e-4a05-aef5-b6739b325fb8">
+          <from>MR. PARKER</from>
+          <p>MR. PARKER : Mr. Speaker, the CEO of Emera has stated that the cost of renewable electricity from Newfoundland and Labrador on the Muskrat Falls project will be comparable in price to other renewables. That's a good, positive statement that it will be comparable to other renewables, and it's going to give us the best possible energy prices for the next 35 years at very stable prices.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Halifax Clayton Park.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>PREM. - OAS CHANGES: PM CONSULTATION - DETAILS</heading>
+        <speech by="#044d7a53-b109-4393-8fbe-efad8b86a796">
+          <from>MS. DIANA WHALEN</from>
+          <p>MS. DIANA WHALEN : Mr. Speaker, with the federal budget, the Harper Conservatives announced changes to Old Age Security which will see the age of eligibility rise from 65 to 67. This change will have a direct impact on seniors in our province. To quote from a recent report from the Canadian Centre on Policy Alternatives: "Raising the age of eligibility for OAS/GIS to age 67 would have a negative impact on the incomes of all seniors in the age- 65-to-67 age bracket, but by far the greatest impact would be on those who have little or no retirement savings and limited benefits from the Canada Pension Plan."</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Mr. Speaker, we're, of course, acutely aware of any change in the rules with respect to OAS and the manner in which they might impact on Nova Scotia. As the member opposite knows these changes, although they've been announced, are actually some years out in their implementation and in their effect. But let me assure you that this government does everything it can to protect our seniors from cost increases. It's one of the reasons why we undertook things like taking the HST off of home energy and a host of other things that are really designed just to make life a little bit easier for our seniors.</p>
+        </speech>
+        <speech by="#044d7a53-b109-4393-8fbe-efad8b86a796">
+          <from>MS. WHALEN</from>
+          <p>MS. WHALEN : Mr. Speaker, we're acutely aware of some of the increases that this government has put on electricity bills, gasoline, cost of food, extra taxes through HST so I'm glad that the government is thinking of affordability for once, they're not doing it.</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Well, Mr. Speaker, as the member opposite might know, the Council of the Federation will actually be meeting here in Nova Scotia in July. These issues and the approach to them are always part of the agenda. We made the point going in to the last budget that we were concerned about these types of initiatives, their impact on our citizens and therefore the impact, ultimately, on the budgets of the province. But I am pleased to say that in Ottawa the fight with respect to the Old Age Security and with respect to these issues is being ably taken forward by Thomas Mulcair, by Megan Leslie, by Peter Stoffer and by Robert Chisholm.</p>
+        </speech>
+        <speech by="#044d7a53-b109-4393-8fbe-efad8b86a796">
+          <from>MS. WHALEN</from>
+          <p>MS. WHALEN : I would hope that the government and the Premier of this province aren't sitting on their hands allowing others to speak for Nova Scotia's problems. It's their job, it's the Premier's job to go and represent seniors in this province.</p>
+        </speech>
+        <speech by="#0768c045-71ae-4890-b6be-c52eb783ee95">
+          <from>THE PREMIER</from>
+          <p>THE PREMIER : Mr. Speaker, to the contrary the federal government knows full well what our concerns are, but there are a number of things that we want to do. First of all we want to make sure that we move people out of low wage jobs into better paying jobs so they are not reliant on it. That's why we have projects on the horizon, like the Lower Churchill, like the ships contract, like the investment in the offshore. It's why we're investing in skills trade training for young people so that by the time they get to retirement age they're going to have good jobs with pensions, with incomes. Unfortunately 15 years ago when this work should have been done by a Liberal Government it wasn't.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Cape Breton North.</p>
+        </speech>
+        <speech by="#5784d153-f546-400b-bc4f-2683f94dd642">
+          <from>MR. EDDIE ORRELL</from>
+          <p>MR. EDDIE ORRELL : Mr. Speaker, Michelin will add 500 jobs in South Carolina, invest $750 million to expand its operation there because the state is seen as pro business. Mr. LeBlanc of Michelin said that Nova Scotia's new labour law doesn't help him build a case for Nova Scotia in the future</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Order please. The time allotted for Oral Question Period has expired. I'm sorry I got carried away, it was that good today.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>GOVERNMENT BUSINESS</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Government House Leader.</p>
+        </speech>
+        <speech by="#4c929028-e1d5-46a9-9075-8620e1ec2e77">
+          <from>HON. FRANK CORBETT</from>
+          <p>HON. FRANK CORBETT : Mr. Speaker, would you please call the order of business, Government Motions.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>GOVERNMENT MOTIONS</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable Government House Leader.</p>
+        </speech>
+        <speech by="#4c929028-e1d5-46a9-9075-8620e1ec2e77">
+          <from>HON. FRANK CORBETT</from>
+          <p>HON. FRANK CORBETT : Mr. Speaker, I move that you do now leave the Chair and that the House resolve itself into a Committee of the Whole House on Supply unto Her Majesty.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Before we go, the honourable member for Kings North on an introduction.</p>
+        </speech>
+        <speech by="#bff82474-c53c-44e7-8224-5a19fb8a8c4a">
+          <from>MR. JIM MORTON</from>
+          <p>MR. JIM MORTON : Mr. Speaker, I'd like to call the attention of the House to the east gallery. I noticed that my former boss, Dr. John Campbell, is in the gallery and I am pleased to welcome him here. Dr. Campbell is the director of Mental Health and Addictions Services for Annapolis Valley Health and does an awful lot to make the Annapolis Valley community a better place. Thank you for visiting. I'm sure all of us will give him a warm welcome, as we usually would. (Applause)</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Dartmouth East on an introduction.</p>
+        </speech>
+        <speech by="#bbf5376f-1a5e-4a10-ac71-5a195ac61a59">
+          <from>MR. ANDREW YOUNGER</from>
+          <p>MR. ANDREW YOUNGER : Mr. Speaker, in the west gallery I'd like to draw the members' attention to Mr. Allan Billard, who is here with the Shubenacadie Canal Commission today. (Applause)</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : We welcome all our guests to the gallery and hope they enjoy today's proceedings.</p>
+        </speech>
+        <speech by="#01b4df24-b29e-415e-95e1-62159d70be43">
+          <from>HON. KEITH COLWELL</from>
+          <p>HON. KEITH COLWELL : Mr. Speaker, it's with pleasure that I stand today to talk on the motion to go into Supply. I've spoken in this Chamber many times about the financial crisis that the Better Deal for Today's Families that this NDP Government is imposing on Nova Scotians. The further it goes - and I've been called by the members across there, "the member of Gloom and Doom", probably gloom and doom for their Party's next election when people realize exactly why they don't have the money they used to have to spend on things because their income tax has increased and bracket creep that the government said they wouldn't do. They said they wouldn't put the GST up. They put the GST up, costing Nova Scotians $1 million a day - $1 million a day.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MADAM SPEAKER</from>
+          <p>MADAM SPEAKER : The honourable member for Halifax Clayton Park.</p>
+        </speech>
+        <speech by="#044d7a53-b109-4393-8fbe-efad8b86a796">
+          <from>MS. DIANA WHALEN</from>
+          <p>MS. DIANA WHALEN : Madam Speaker, I really appreciate the opportunity of speaking on Supply today before we begin the estimate process. I wanted to speak on a couple of issues around modernizing our Legislature, one of them being on-line petitions.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MADAM SPEAKER</from>
+          <p>MADAM SPEAKER : The honourable member for Kings West.</p>
+        </speech>
+        <speech by="#41fa6a70-397a-4597-900b-20b957bef948">
+          <from>MR. LEO GLAVINE</from>
+          <p>MR. LEO GLAVINE : Madam Speaker, I'm pleased today to rise in my place to speak about the IWK adolescent mental health issue and in many regards speak about mental health issues generally for youth and adolescents around our province. When we speak about programs, changes in programs, developments at the IWK, in every respect we're talking about a provincial issue and, of course, more so on the medical side, it's an Atlantic Canada issue, less so in terms of mental health programs, and that in good measure is because other jurisdictions in the Maritimes do have their own programs for treatment.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MADAM SPEAKER</from>
+          <p>MADAM SPEAKER : Order, please.</p>
+        </speech>
+        <narrative>
+          <p>3:00 p.m. The House resolved itself into a CWH on Supply with Deputy Speaker Ms. Becky Kent in the Chair.</p>
+        </narrative>
+        <narrative>
+          <p>5:59 p.m. CWH on Supply rose and the House reconvened. Mr. Speaker, Hon. Gordon Gosse, resumed the Chair.</p>
+        </narrative>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The Chairman of the Committee of the Whole House on Supply reports:</p>
+        </speech>
+        <speech by="#a3ee05f2-1d53-41b0-9ea2-abe756a43bb6">
+          <from>THE CLERK</from>
+          <p>THE CLERK : That the Committee of the Whole House on Supply has met, has made some progress, and begs leave to sit again.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : Is it agreed?</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>MOTION UNDER RULE 5(5)</heading>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Colchester North.</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <heading>EDUC.: FUNDING - RESTORE</heading>
+        <speech by="#8a8470fb-0e2f-4e9e-8810-4f20c748d898">
+          <from>HON. KAREN CASEY</from>
+          <p>HON. KAREN CASEY : Mr. Speaker, I am pleased to rise in my place tonight and speak to the resolution:</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Hammonds Plains-Upper Sackville.</p>
+        </speech>
+        <speech by="#78be34c7-58e4-4a99-9766-fd5379123ce2">
+          <from>MR. MAT WHYNOTT</from>
+          <p>MR. MAT WHYNOTT : Mr. Speaker, I thank everybody for sticking around tonight for the late show. I appreciate the opportunity to talk about this important subject that we all know is near and dear to each and every one of our hearts when it comes to the education of our young people.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The honourable member for Cape Breton North.</p>
+        </speech>
+        <speech by="#5784d153-f546-400b-bc4f-2683f94dd642">
+          <from>MR. EDDIE ORRELL</from>
+          <p>MR. EDDIE ORRELL : Mr. Speaker, I am pleased to rise this evening to speak to this resolution: "Therefore be it resolved that the NDP Government's education funding cuts are being felt in classrooms across the province and we call on the government to invest in our students, and restore funding to public education."</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : I would like to thank all the honourable members who took part in the late debate tonight for an excellent debate.</p>
+        </speech>
+        <speech by="#4c929028-e1d5-46a9-9075-8620e1ec2e77">
+          <from>HON. FRANK CORBETT</from>
+          <p>HON. FRANK CORBETT : Mr. Speaker, I move that you do now leave the Chair and that the House resolve itself into a Committee of the Whole House on Supply unto Her Majesty.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MR. SPEAKER</from>
+          <p>MR. SPEAKER : The motion is carried.</p>
+        </speech>
+        <narrative>
+          <p>6:33 p.m. The House resolved itself into a CWH on Supply with Deputy Speaker Ms. Becky Kent in the Chair.</p>
+        </narrative>
+        <narrative>
+          <p>7:48 p.m. CWH on Supply rose and the House reconvened with Deputy Speaker Ms. Becky Kent in the Chair.</p>
+        </narrative>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MADAM SPEAKER</from>
+          <p>MADAM SPEAKER : The Chairman of the Committee of the Whole House on Supply reports:</p>
+        </speech>
+        <speech by="#a3ee05f2-1d53-41b0-9ea2-abe756a43bb6">
+          <from>THE CLERK</from>
+          <p>THE CLERK : That the Committee of the Whole House on Supply has met, has made some considerable progress, and begs leave to sit again.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MADAM SPEAKER</from>
+          <p>MADAM SPEAKER : Is it agreed?</p>
+        </speech>
+        <speech by="#78be34c7-58e4-4a99-9766-fd5379123ce2">
+          <from>MR. MAT WHYNOTT</from>
+          <p>MR. MAT WHYNOTT : Madam Speaker, that concludes the government's business for today. We will sit tomorrow, April 20th, from the hours of 9:00 a.m. to 3:00 p.m. After the daily routine we will go into estimates and, if time permits, we will call Public Bills for Second Reading, Bill Nos. 5, 9, 11, 13, 17, 20, 22, 24, 30, and 32.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MADAM SPEAKER</from>
+          <p>MADAM SPEAKER : Would the member mind repeating the hours for me?</p>
+        </speech>
+        <speech by="#78be34c7-58e4-4a99-9766-fd5379123ce2">
+          <from>MR. WHYNOTT</from>
+          <p>MR. WHYNOTT : Tomorrow, April 20th, 9:00 a.m. to 3:00 p.m.</p>
+        </speech>
+        <speech by="#75109949-5b99-4b9c-b9fd-d85a8ce227ab">
+          <from>MADAM SPEAKER</from>
+          <p>MADAM SPEAKER : The motion is that the House do now rise, to meet tomorrow from the hours of 9:00 a.m. to 3:00 p.m.</p>
+        </speech>
+        <narrative>
+          <p>The House rose at 7:49 p.m.</p>
+        </narrative>
+      </debateSection>
+      <debateSection>
+        <num title="304">RESOLUTION NO. 304</num>
+        <speech by="#adf62df0-6616-4824-87bd-59fd0bc41914">
+          <from>Hon. Jamie Baillie</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="305">RESOLUTION NO. 305</num>
+        <speech by="#bbf5376f-1a5e-4a10-ac71-5a195ac61a59">
+          <from>Mr. Andrew Younger</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+      <debateSection>
+        <num title="306">RESOLUTION NO. 306</num>
+        <speech by="#3dc88fea-b098-4360-8284-83133daa16fa">
+          <from>Mr. Chuck Porter</from>
+          <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        </speech>
+      </debateSection>
+    </debateBody>
+  </debate>
+</akomaNtoso>
