@@ -1,3 +1,13 @@
+ROLES = [
+  'administrator',
+  'chairman',
+  'clerk',
+  'lieutenant governor',
+  'sergeant-at-arms',
+  'speaker',
+  'premier',
+]
+
 # Names are not linked if there are errors in the given name or family name, if
 # the honorary prefix is missing, unabbreviated or missing a period, or if the
 # name is of a role.
@@ -27,10 +37,6 @@ TYPOS = {
   'the lieutenant governor' => 'http://nslegislature.ca/index.php/people/lt-gov/', # role-based
   'vickie conrad' => 'http://nslegislature.ca/index.php/people/members/Vicki_Conrad', # given name
   'william estabooks' => 'http://nslegislature.ca/index.php/people/members/Bill_Estabrooks', # both names
-  # Role-based
-  'chairman' => 'http://nslegislature.ca/index.php/people/speaker', # Chairman always seems to refer to the Speaker
-  'the administrator' => 'http://nslegislature.ca/index.php/people/lt-gov/',
-  'sergeant-at-arms' => 'http://nslegislature.ca/index.php/people/offices/sergeant-at-arms',
 }
 
 HEADING_TYPOS = {
@@ -56,28 +62,24 @@ HEADING_TYPOS = {
   /\ARESOLUTON\b/ => 'RESOLUTION',
 }
 
-HEADINGS = [
+TOP_LEVEL_HEADINGS = [
   'ADJOURNMENT',
   'ANSWERS TO WRITTEN QUESTIONS',
-  'COLLABORATIVE EMERGENCY CENTRES',
-  'ELIGIBILITY BREAKDOWN',
   'GOVERNMENT BUSINESS',
-  'GOVERNMENT MOTIONS',
+  'GOVERNMENT MOTIONS', # frequent child of "GOVERNMENT BUSINESS"
   'GOVERNMENT NOTICES OF MOTION',
-  'INQUIRY TERMS OF REF.',
-  'INTL. DAY FOR ELIMINATION OF VIOLENCE AGAINST WOMEN',
   'INTRODUCTION OF BILLS',
-  'MOTION UNDER RULE 43',
-  'MOTION UNDER RULE 5(5)',
-  'MOTIONS OTHER THAN GOVERNMENT MOTIONS',
+  'MOTION UNDER RULE 43', # frequent child of "ADJOURNMENT"
+  'MOTION UNDER RULE 5(5)', # frequent child of "ADJOURNMENT"
+  'MOTIONS OTHER THAN GOVERNMENT MOTIONS', # frequent child of "OPPOSITION MEMBERS' BUSINESS"
   'NOTICE OF QUESTIONS FOR WRITTEN ANSWERS',
   'NOTICES OF MOTION',
   'NOTICES OF MOTION UNDER RULE 32(3)',
-  'ON MOTION FOR SUPPLY',
+  'ON MOTION FOR SUPPLY', # frequent child of "GOVERNMENT MOTIONS"
   "OPPOSITION MEMBERS' BUSINESS",
+  'ORDERS OF THE DAY', # frequently precedes "GOVERNMENT BUSINESS"
   'ORAL QUESTIONS PUT BY MEMBERS',
   'ORAL QUESTIONS PUT BY MEMBERS TO MINISTERS',
-  'ORDERS OF THE DAY',
   'PRESENTING AND READING PETITIONS',
   'PRESENTING REPORTS OF COMMITTEES',
   'PRIVATE AND LOCAL BILLS FOR SECOND READING',
@@ -86,13 +88,23 @@ HEADINGS = [
   "PRIVATE MEMBERS' PUBLIC BILLS FOR THIRD READING",
   'PUBLIC BILLS FOR SECOND READING',
   'PUBLIC BILLS FOR THIRD READING',
+  'STATEMENTS BY MINISTERS',
+  'TABLING REPORTS, REGULATIONS AND OTHER PAPERS',
+]
+
+HEADINGS = TOP_LEVEL_HEADINGS + [
+  # Subheadings of "NOTICE OF QUESTIONS FOR WRITTEN ANSWERS"
   'PURSUANT TO RULE 30',
   'PURSUANT TO RULE 30(1)',
   'RESPONSE:',
   'RESPONSES',
+
+  # All-caps headings with no useful markers.
+  'COLLABORATIVE EMERGENCY CENTRES',
+  'ELIGIBILITY BREAKDOWN',
+  'INQUIRY TERMS OF REF.',
+  'INTL. DAY FOR ELIMINATION OF VIOLENCE AGAINST WOMEN',
   'RESPONSIBILITY ASSUME',
-  'STATEMENTS BY MINISTERS',
-  'TABLING REPORTS, REGULATIONS AND OTHER PAPERS',
 ]
 
 HEADINGS_RE = [

@@ -23,11 +23,6 @@ class NovaScotia
     })
     dispatch(legislature)
 
-    create_person(Pupa::Person.new(name: 'Lieutenant Governor'), 'http://nslegislature.ca/index.php/people/lt-gov/')
-    create_person(Pupa::Person.new(name: 'Speaker'), 'http://nslegislature.ca/index.php/people/speaker')
-    create_person(Pupa::Person.new(name: 'Clerk'), 'http://nslegislature.ca/index.php/people/offices/clerk')
-    create_person(Pupa::Person.new(name: 'Sergeant-at-Arms'), 'http://nslegislature.ca/index.php/people/offices/sergeant-at-arms')
-
     # Darrell Dexter first appears in the debates as the Premier. However, we
     # don't want to create a person's whose name is "THE PREMIER".
     # @see http://nslegislature.ca/index.php/proceedings/hansard/C90/house_13may10/

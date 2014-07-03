@@ -66,13 +66,26 @@ private
         debate.add_source(@a[:href])
         dispatch(debate)
 
+        # Add role-based speakers.
+        # @todo Check for differences in trailing slashes.
+        @speaker_urls.merge!({
+          # @see http://nslegislature.ca/index.php/proceedings/hansard/C90/house_13may10/
+          'administrator' => 'http://en.wikipedia.org/wiki/Nova_Scotia_Court_of_Appeal',
+          'chairman' => 'http://nslegislature.ca/index.php/people/deputy-speaker/',
+          'clerk' => 'http://nslegislature.ca/index.php/people/offices/clerk',
+          'lieutenant governor' => 'http://nslegislature.ca/index.php/people/lt-gov/',
+          'sergeant-at-arms' => 'http://nslegislature.ca/index.php/people/offices/sergeant-at-arms',
+          'speaker' => 'http://nslegislature.ca/index.php/people/speaker',
+          'premier' => 'http://premier.novascotia.ca/',
+        })
+
         # Generate the list of speakers, in case an unlinked name occurs before
         # its matching linked name.
         doc.css('.hsd_body p a[title="View Profile"]').each do |person_a|
           key = to_key(person_a.text)
 
           # The premier changes over time and will not have a stable URL.
-          next if key == 'the premier'
+          next if key == 'premier'
 
           original_url = to_url(person_a[:href])
 
@@ -126,7 +139,9 @@ private
         answer_from_id = nil
 
         # Parse the hansard.
-        doc.xpath('//div[@class="hsd_body"]/p|//div[@class="hsd_body"]/blockquote').each_with_index do |p,index|
+        doc.xpath('//div[@class="hsd_body"]/*').each_with_index do |p,index|
+          raise "Unexpected node #{p.node_name}" unless %w(blockquote p).include?(p.node_name)
+
           # Mr. Premier is linked within a blockquote.
           # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec09/
           person_a = p.node_name == 'p' && p.at_css('a[title="View Profile"]')
@@ -160,13 +175,9 @@ private
             person = person_a && person_a.text.strip.squeeze(' ') || text.match(/\A(?:BY|By|TO|To): ([A-Z].+?)(?:,| \(|\z)/)[1]
             key = to_key(person.sub(/(?<=\S )[A-Z]\. (?=\S)/, ''))
 
-            if key == 'the premier' && !person_a
-              url = 'http://premier.novascotia.ca/'
-              unless @speaker_ids.key?(url)
-                create_person(Pupa::Person.new(name: 'Premier'), url)
-              end
+            # In the same hansard, The Premier is asked a question.
             # @see http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12may17/
-            elsif person != 'Deputy Premier and Minister responsible for Communications Nova Scotia'
+            if person != 'Deputy Premier and Minister responsible for Communications Nova Scotia'
               url = @speaker_urls.fetch(key){TYPOS.fetch(key)}
             end
 
@@ -181,7 +192,11 @@ private
             field = text[/\A(?:BY|By): /] ? :from : :to
 
             @speech[field] = person
-            @speech["#{field}_id".to_sym] = @speaker_ids.fetch(url) if url
+            if ROLES.include?(key)
+              @speech["#{field}_as".to_sym] = key
+            elsif url
+              @speech["#{field}_id".to_sym] = @speaker_ids.fetch(url)
+            end
 
             if @state == :question_line1
               transition_to(:question_line2)
@@ -203,10 +218,12 @@ private
             if from
               key = to_key(from.sub(/(?<=\S )[A-Z]\. (?=\S)/, ''))
 
-              @speech.merge!({
-                from: from,
-                from_id: @speaker_ids.fetch(@speaker_urls.fetch(key){TYPOS.fetch(key)}),
-              })
+              @speech[:from] = from
+              if ROLES.include?(key)
+                @speech[:from_as] = key
+              else
+                @speech[:from_id] = @speaker_ids.fetch(@speaker_urls.fetch(key){TYPOS.fetch(key)})
+              end
             # Explicit exceptions are made for unattributed resolutions.
             elsif @a[:href] != 'http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14apr02/'
               error("Speaker not found #{text} | #{index} #{@a[:href]}")
@@ -260,10 +277,12 @@ private
               to = person_a.text.strip.squeeze(' ')
               key = to_key(to.sub(/(?<=\S )[A-Z]\. (?=\S)/, ''))
 
-              @speech.merge!({
-                to: to,
-                to_id: @speaker_ids.fetch(@speaker_urls.fetch(key){TYPOS.fetch(key)}),
-              })
+              @speech[:to] = to
+              if ROLES.include?(key)
+                @speech[:to_as] = key
+              else
+                @speech[:to_id] = @speaker_ids.fetch(@speaker_urls.fetch(key){TYPOS.fetch(key)})
+              end
             end
 
             @speech[:html] += "\n#{p.to_s}"
@@ -278,7 +297,7 @@ private
             key = to_key(from)
 
             # The premier changes over time and will not have a stable URL.
-            url = if key == 'the premier'
+            url = if key == 'premier'
               to_url(person_a[:href])
             else
               @speaker_urls.fetch(key)
@@ -291,11 +310,16 @@ private
               index: index,
               element: 'speech',
               from: from,
-              from_id: @speaker_ids.fetch(url),
               html: p.to_s,
               text: clean_paragraph(p).sub(/\A:\s*/, ''),
               debate_id: debate._id,
             }
+
+            if ROLES.include?(key)
+              @speech[:from_as] = key
+            else
+              @speech[:from_id] = @speaker_ids.fetch(url)
+            end
 
             transition_to(:speech_continue)
 
@@ -328,13 +352,15 @@ private
             if @speaker_urls.key?(key) || TYPOS.key?(key)
               url = @speaker_urls.fetch(key){TYPOS.fetch(key)}
 
-              # If the first occurrence of a person's name is unlinked, that
-              # person will not have been created yet.
-              unless @speaker_ids.key?(url)
-                create_person(Pupa::Person.new(name: from), url)
+              if ROLES.include?(key)
+                @speech[:from_as] = key
+              else
+                # If the first occurrence of a person's name is unlinked, that person will not have been created yet.
+                unless @speaker_ids.key?(url)
+                  create_person(Pupa::Person.new(name: from), url)
+                end
+                @speech[:from_id] = @speaker_ids.fetch(url)
               end
-
-              @speech[:from_id] = @speaker_ids.fetch(url)
             else
               error("Unrecognized speaker #{key} | #{index} #{@a[:href]}")
             end
@@ -486,7 +512,7 @@ private
               dispatch(Speech.new({
                 index: index,
                 element: 'speech',
-                from_id: @speaker_ids.fetch('http://nslegislature.ca/index.php/people/speaker'),
+                from_as: 'speaker',
                 html: p.to_s,
                 text: clean_paragraph(p.inner_html),
                 debate_id: debate._id,
@@ -531,7 +557,7 @@ private
 
   def to_key(string)
     # Mr. and Ms. can disambiguate Maureen MacDonald from Manning MacDonald.
-    string.sub(/\A(?:#{string[/\bMacDonald\b/i] ? /Hon/i : /(?:Hon|Mr|Ms)/i}\b\.?|Honourable\b|Madam\b)/i, '').strip.squeeze(' ').downcase
+    string.sub(/\A(?:#{string[/\bMacDonald\b/i] ? /Hon/i : /(?:Hon|Mr|Ms|The)/i}\b\.?|Honourable\b|Madam\b)/i, '').strip.squeeze(' ').downcase
   end
 
   def to_url(path)
