@@ -16,6 +16,8 @@ class NovaScotia < GovernmentProcessor
       speech: [
         # Multi-line speech
         :speech_continue,
+        # Anticipated heading
+        :heading_begin,
         # One-line speech
         :heading,
         :speech,
@@ -41,6 +43,7 @@ class NovaScotia < GovernmentProcessor
         :speech,
       ],
 
+      heading_begin: [:heading],
       heading: [
         # Predicted
         :answer,

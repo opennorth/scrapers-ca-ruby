@@ -66,66 +66,7 @@ private
         debate.add_source(@a[:href])
         dispatch(debate)
 
-        # Add role-based speakers.
-        # @todo Check for differences in trailing slashes.
-        @speaker_urls.merge!({
-          # @see http://nslegislature.ca/index.php/proceedings/hansard/C90/house_13may10/
-          'administrator' => 'http://en.wikipedia.org/wiki/Nova_Scotia_Court_of_Appeal',
-          'chairman' => 'http://nslegislature.ca/index.php/people/deputy-speaker/',
-          'clerk' => 'http://nslegislature.ca/index.php/people/offices/clerk',
-          'lieutenant governor' => 'http://nslegislature.ca/index.php/people/lt-gov/',
-          'sergeant-at-arms' => 'http://nslegislature.ca/index.php/people/offices/sergeant-at-arms',
-          'speaker' => 'http://nslegislature.ca/index.php/people/speaker',
-          'premier' => 'http://premier.novascotia.ca/',
-        })
-
-        # Generate the list of speakers, in case an unlinked name occurs before
-        # its matching linked name.
-        doc.css('.hsd_body p a[title="View Profile"]').each do |person_a|
-          key = to_key(person_a.text)
-
-          # The premier changes over time and will not have a stable URL.
-          next if key == 'premier'
-
-          original_url = to_url(person_a[:href])
-
-          response = client.head(original_url)
-          case response.status
-          when 200
-            # If it is a present MLA with a good URL.
-            url = original_url
-          when 301
-            # If it is a past MLA.
-            if response.headers['Location'] == 'http://nslegislature.ca/index.php/people/members/'
-              url = original_url
-            # If it is a present MLA with a bad URL.
-            else
-              url = response.headers['Location']
-            end
-          else
-            raise "Unexpected status #{response.status} for #{url} | #{@a[:href]} #{key}"
-          end
-
-          # It is also conceivable to have different URLs for the same person
-          # using different names. This does not seem to occur:
-          # db.people.find().map(function (e) {return e.sources[0].url.toLowerCase() + ' ' + e.name}).sort()
-          if @speaker_urls.key?(key)
-            if @speaker_urls[key] != url
-              unless response.status == 301 && response.headers['Location'] == 'http://nslegislature.ca/index.php/people/members/' &&
-                # FIXME 2014-05-23 publications@gov.ns.ca
-                key == 'maureen macdonald' && url == 'http://nslegislature.ca/index.php/people/members/Manning_MacDonald'
-                raise "Expected #{@speaker_urls[key]} but was #{url} | #{@a[:href]} #{key}"
-              end
-            end
-          else
-            # If it is a past MLA whose URL we haven't seen yet.
-            if response.status == 301 && response.headers['Location'] == 'http://nslegislature.ca/index.php/people/members/' && !@speaker_urls.has_value?(url)
-              create_person(Pupa::Person.new(name: person_a.text.strip.squeeze(' ')), url)
-            end
-            @speaker_urls[key] = url
-          end
-        end
-
+        create_speakers(doc)
         clean_document(doc)
 
         # Initialize the state machine.
@@ -140,7 +81,15 @@ private
 
         # Parse the hansard.
         doc.xpath('//div[@class="hsd_body"]/*').each_with_index do |p,index|
-          raise "Unexpected node #{p.node_name}" unless %w(blockquote p).include?(p.node_name)
+          text = p.text.gsub(/[[:space:]]+/, ' ').strip.sub(/\A�/, '').gsub('&amp;', '&')
+
+          unless %w(blockquote p ul table).include?(p.node_name)
+            if text.empty?
+              next
+            else
+              raise "Unexpected node #{p.to_s.inspect} | #{@a[:href]}"
+            end
+          end
 
           # Mr. Premier is linked within a blockquote.
           # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec09/
@@ -158,8 +107,6 @@ private
           # This debate contains a lot of cruft in the footer.
           break if @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C94/house_13dec12/' && p.to_s.strip == '<p class="hsd_center"><b>Province of Nova Scotia</b></p>'
 
-          text = p.text.gsub(/[[:space:]]+/, ' ').strip.sub(/\A�/, '').gsub('&amp;', '&')
-
           # An empty paragraph follows the end of a division. We don't want a
           # division collecting more than necessary. If an empty paragraph
           # appears within a division, warnings will be issued for the rest
@@ -168,6 +115,25 @@ private
             if @state == :division
               create_speech
               transition_to(:speech_begin)
+            end
+
+          # A division.
+          elsif p.node_name == 'table'
+            if text['YEAS']
+              transition_to(:division)
+              create_speech
+
+              @speech = {
+                index: index,
+                html: p.to_s,
+                note: 'division',
+                debate_id: debate._id,
+              }
+
+              transition_to(:division_continue)
+            else
+              transition_to(:division_continue)
+              @speech[:html] += "\n#{p.to_s}"
             end
 
           # A question.
@@ -321,7 +287,13 @@ private
               @speech[:from_id] = @speaker_ids.fetch(url)
             end
 
-            transition_to(:speech_continue)
+            if text[/\b(?:[Ww]ill|[WwCc]ould) (?:you )?please call (?:Bill|Resolution)\b/]
+              # This text is always followed by a heading.
+              transition_to(:heading_begin)
+              create_speech
+            else
+              transition_to(:speech_continue)
+            end
 
           # A speech by an unlinked person, which may have many paragraphs.
           # No space after honorific prefix: HON.JAMIE  BAILLIE:
@@ -344,7 +316,7 @@ private
               element: 'speech',
               from: from,
               html: p.to_s,
-              text: clean_paragraph(p).sub(/\A#{Regexp.escape(match[0])}\s*/, ''),
+              text: clean_paragraph(p).sub(/\A#{Regexp.escape(match[0])}[.:;]?\s*/, ''),
               fuzzy: true,
               debate_id: debate._id,
             }
@@ -505,6 +477,7 @@ private
               if @state == :narrative_continue
                 @speech[:text].sub!(']', '')
               end
+
             # An unattributed speech by the speaker.
             elsif text[/\AThe honourable (?:member |[A-Z]).+\.\]?\z/] || text[/\ASPEAKER'S RULING: /]
               transition_to(:speech)
@@ -517,6 +490,7 @@ private
                 text: clean_paragraph(p.inner_html),
                 debate_id: debate._id,
               }))
+
             # An unknown paragraph.
             elsif !text[/\A\d+\z/] # unlinked page numbers
               warn("Unsaved paragraph #{p.to_s.inspect} #{text} | #{index} #{@a[:href]}")
@@ -587,22 +561,27 @@ private
   end
 
   def clean_paragraph(p)
-    # Text may contain <a>, <br>, <i>, <sup>, <u> tags.
+    # Text may contain <a>, <br>, <i>, <li>, <sup>, <u>, <ul> tags.
     p.to_s.strip.squeeze(' ').
       # Use proper characters.
-      gsub('. . .', '…').gsub('...', '…').gsub('&amp;', '&').
+      gsub('. . .', '…').
+      gsub('...', '…').
+      gsub('&amp;', '&').
       # Remove formatting.
-      sub(' class="hsd_general"', '').sub(' style="font-size: .7em"', '').
+      sub(' class="hsd_general"', '').
+      sub(' style="font-size: .7em"', '').
       # Remove leading and trailing whitespace inside paragraphs.
-      sub(/(<p>(?:<[^>]+>)*)\s+/, '\1').sub(/\s+((?:<\/[^>]+>)*<\/p>)/, '\1').
+      sub(/(<p>(?:<[^>]+>)*)\s+/, '\1').
+      sub(/\s+((?:<\/[^>]+>)*<\/p>)/, '\1').
       # Remove leading and trailing <br> tags inside paragraphs.
-      sub(/(<p>(?:<[^>]+>)*?)(?:<br>\s*)+/, '\1').sub(/(?:\s*<br>)+((?:<\/[^>]+>)*<\/p>)/, '\1').
+      sub(/(<p>(?:<[^>]+>)*?)(?:<br>\s*)+/, '\1').
+      sub(/(?:\s*<br>)+((?:<\/[^>]+>)*<\/p>)/, '\1').
       # Remove spaces between list items.
       gsub(/<\/li>\s+<li>/, "</li>\n<li>").
       # Replace double <br> with paragraphs.
-      # gsub('\s*<br>\s*<br>\s*', "</p>\n<p>").
+      # gsub('\s*<br>\s*<br>\s*', "</p>\n<p>"). # @todo
       # Remove single <br>, which always appears to be accidental.
-      # gsub('\s*<br>\s*', ' ').
+      # gsub('\s*<br>\s*', ' '). # @todo
       # Remove linked names from answers to questions. One resolution has a hyperlink to an external website.
       # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec15/
       gsub(%r{<a href="/index.php/en/people/members/\S+" class="hsd_mla" title="View Profile">([^<]+)</a>}, '\1').
@@ -611,22 +590,35 @@ private
   end
 
   def clean_document(doc)
+    # Replace <em> tags with <i> tags.
+    doc.xpath('//em').each do |e|
+      e.name = 'i'
+    end
+    # Replace <strong> tags with <b> tags.
+    doc.xpath('//strong').each do |e|
+      e.name = 'b'
+    end
+
+    # Remove nested identical inline tags.
+    doc.xpath('//b/b').each do |e|
+      e.replace(doc.create_text_node(e.text))
+    end
+    # Merge consecutive identical inline tags.
+    doc.xpath('//b/following-sibling::b').each do |e|
+      e.previous.inner_html += e.text
+      e.remove
+    end
+
     # Remove empty <b> and <i> tags (which may nonetheless break up words).
     doc.xpath('//b[not(normalize-space(text()))]|//i[not(normalize-space(text()))]').each do |e|
       e.replace(doc.create_text_node(e.text))
     end
-    # Fix crazy formatting of Hydro-Québec.
-    # <strong>Hydro</strong><b>-</b><strong>Québec</strong>
-    doc.xpath('//strong[text()="Hydro"]|//strong[text()="Québec"]').each do |e|
+    # Remove accidental <sup> tags.
+    doc.xpath('//sup[string-length(normalize-space(text()))=1]').each do |e|
       e.replace(doc.create_text_node(e.text))
     end
     # Remove accidental <b> tags.
-    # <strong>Hydro</strong><b>-<strong>Québec</strong></b>
-    doc.xpath('//b[string-length(normalize-space(text()))=1]|//b[text()="-Québec"]').each do |e|
-      e.replace(doc.create_text_node(e.text))
-    end
-    # Remove accidental <sup> tags.
-    doc.xpath('//sup[string-length(normalize-space(text()))=1]').each do |e|
+    doc.xpath('//b[string-length(normalize-space(text()))=1]').each do |e|
       e.replace(doc.create_text_node(e.text))
     end
 
@@ -667,5 +659,67 @@ private
     # Remove links and anchors appearing after a speaker's name.
     doc.css('a[title="Previous"],a[title="Next"]').remove
     doc.xpath('//a[@name][not(node())]').remove
+  end
+
+  def create_speakers(doc)
+    # Add role-based speakers.
+    # @todo [post-scrape] Check for differences in trailing slashes.
+    @speaker_urls.merge!({
+      # @see http://nslegislature.ca/index.php/proceedings/hansard/C90/house_13may10/
+      'administrator' => 'http://en.wikipedia.org/wiki/Nova_Scotia_Court_of_Appeal',
+      'chairman' => 'http://nslegislature.ca/index.php/people/deputy-speaker/',
+      'clerk' => 'http://nslegislature.ca/index.php/people/offices/clerk',
+      'lieutenant governor' => 'http://nslegislature.ca/index.php/people/lt-gov/',
+      'sergeant-at-arms' => 'http://nslegislature.ca/index.php/people/offices/sergeant-at-arms',
+      'speaker' => 'http://nslegislature.ca/index.php/people/speaker',
+      'premier' => 'http://premier.novascotia.ca/',
+    })
+
+    # Generate the list of speakers, in case an unlinked name occurs before
+    # its matching linked name.
+    doc.css('.hsd_body p a[title="View Profile"]').each do |person_a|
+      key = to_key(person_a.text)
+
+      # The premier changes over time and will not have a stable URL.
+      next if key == 'premier'
+
+      original_url = to_url(person_a[:href])
+
+      response = client.head(original_url)
+      case response.status
+      when 200
+        # If it is a present MLA with a good URL.
+        url = original_url
+      when 301
+        # If it is a past MLA.
+        if response.headers['Location'] == 'http://nslegislature.ca/index.php/people/members/'
+          url = original_url
+        # If it is a present MLA with a bad URL.
+        else
+          url = response.headers['Location']
+        end
+      else
+        raise "Unexpected status #{response.status} for #{url} | #{@a[:href]} #{key}"
+      end
+
+      # It is also conceivable to have different URLs for the same person
+      # using different names. This does not seem to occur:
+      # db.people.find().map(function (e) {return e.sources[0].url.toLowerCase() + ' ' + e.name}).sort()
+      if @speaker_urls.key?(key)
+        if @speaker_urls[key] != url
+          unless response.status == 301 && response.headers['Location'] == 'http://nslegislature.ca/index.php/people/members/' &&
+            # FIXME 2014-05-23 publications@gov.ns.ca
+            key == 'maureen macdonald' && url == 'http://nslegislature.ca/index.php/people/members/Manning_MacDonald'
+            raise "Expected #{@speaker_urls[key]} but was #{url} | #{@a[:href]} #{key}"
+          end
+        end
+      else
+        # If it is a past MLA whose URL we haven't seen yet.
+        if response.status == 301 && response.headers['Location'] == 'http://nslegislature.ca/index.php/people/members/' && !@speaker_urls.has_value?(url)
+          create_person(Pupa::Person.new(name: person_a.text.strip.squeeze(' ')), url)
+        end
+        @speaker_urls[key] = url
+      end
+    end
   end
 end
