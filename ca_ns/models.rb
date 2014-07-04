@@ -18,30 +18,6 @@ class Debate
   end
 end
 
-class Section
-  include Pupa::Model
-  include Pupa::Concerns::Timestamps
-  include ActiveModel::Validations
-
-  attr_accessor :identifier, :heading, :section_id
-  attr_reader :section
-
-  dump :identifier, :heading, :section_id, :section
-
-  foreign_key :section_id
-  foreign_object :section
-
-  validates_presence_of :heading
-
-  def fingerprint
-    to_h.slice(:identifier, :section_id)
-  end
-
-  def to_s
-    heading
-  end
-end
-
 class Speech
   include Pupa::Model
   include Pupa::Concerns::Timestamps
