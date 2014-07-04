@@ -73,6 +73,7 @@ private
         @state = @initial_state
         # The current speech.
         @speech = nil
+        @previous_speech = nil
         # Whether "NOTICES OF MOTION UNDER RULE 32(3)" has been seen.
         rule_32 = false
         # The person being asked a question.
@@ -82,11 +83,6 @@ private
         # Parse the hansard.
         doc.xpath('//div[@class="hsd_body"]/*').each_with_index do |p,index|
           text = p.text.gsub(/[[:space:]]+/, ' ').strip.sub(/\A�/, '').gsub('&amp;', '&')
-
-          if text == 'QUESTION'
-            warn(@speech.inspect)
-            warn(@state.to_s)
-          end
 
           unless %w(blockquote p ul table).include?(p.node_name)
             if text.empty?
@@ -282,7 +278,9 @@ private
               element: 'speech',
               from: from,
               html: p.to_s,
-              text: clean_paragraph(p).sub(/>:\s*/, ''),
+              # In one case, a speech by the speaker is bracketed. FIXME
+              # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec12/
+              text: clean_paragraph(p).sub(/>(?:\[\s*)?:\s*/, '>'),
               debate_id: debate._id,
             }
 
@@ -308,7 +306,7 @@ private
           # Period after name: MR. KEITH BAIN.
           # Space after name: MR. LEO GLAVINE
           # Role-based speeches.
-          elsif match = text.match(/\A((?:HON|M[RS])\b\.? ?[A-Z]+ [A-Z'-]+)[.:; ]|\A(MR\. (?:CHAIRMAN|SPEAKER)|MADAM CHAIRMAN|SERGEANT-AT-ARMS|THE (?:ADMINISTRATOR|LIEUTENANT GOVERNOR)):/)
+          elsif match = text.match(/\A((?:HON|M[RS])\b\.? ?[A-Z]+ [A-Z'-]+)[.:; ]|\A((?:MR\.|MADAM) (?:SPEAKER|CHAIRMAN)|SERGEANT-AT-ARMS|THE (?:ADMINISTRATOR|LIEUTENANT GOVERNOR)):/)
             transition_to(:speech)
             create_speech
 
@@ -321,7 +319,7 @@ private
               element: 'speech',
               from: from,
               html: p.to_s,
-              text: clean_paragraph(p).sub(/>#{Regexp.escape(match[0])}[.:;]?\s*/, ''),
+              text: clean_paragraph(p).sub(/>#{Regexp.escape(match[0])}[.:;]?\s*/, '>'),
               fuzzy: true,
               debate_id: debate._id,
             }
@@ -430,7 +428,19 @@ private
               debate_id: debate._id,
             }))
 
-            if text == 'NOTICES OF MOTION UNDER RULE 32(3)'
+            # Resolution without a speaker, although there is one in the table of contents. FIXME
+            if @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov14/' && text == 'RESOLUTION NO. 2212' ||
+               @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec05/' && text == 'RESOLUTION NO. 2773'
+              transition_to(:speech)
+              @speech = {
+                index: index,
+                element: 'speech',
+                html: '',
+                text: '',
+                debate_id: debate._id,
+              }
+              transition_to(:speech_continue)
+            elsif text == 'NOTICES OF MOTION UNDER RULE 32(3)'
               rule_32 = true
             elsif rule_32 && text[/\ARESOLUTION NO\. \d+\z/]
               transition_to(:resolution_by)
@@ -454,7 +464,9 @@ private
             }))
 
           # A narrative that has many paragraphs.
-          elsif text[/\A\[/]
+          # Brackets appear in the middle of the speaker's speech. FIXME
+          # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec05/
+          elsif text[/\A\[/] && text != '[Would all those in favour of the motion please say Aye. Contrary minded Nay.'
             transition_to(:narrative)
             create_speech
 
@@ -475,7 +487,7 @@ private
               if @state.to_s[/_continue\z/]
                 transition_to(@state)
               else
-                error("Illegal transition from #{@state} to a continuation")
+                error("Illegal transition from #{@state} to a continuation: #{@a[:href]}\n#{JSON.pretty_generate(@speech)}")
               end
 
               @speech[:html] += "\n#{p.to_s}"
@@ -484,8 +496,9 @@ private
                 @speech[:text].sub!(']', '')
               end
 
-            # An unattributed speech by the speaker.
-            elsif text[/\AThe honourable (?:member |[A-Z]).+\.\]?\z/] || text[/\ASPEAKER'S RULING: /]
+            # An unattributed one-line speech by the speaker.
+            # @see http://nslegislature.ca/index.php/proceedings/hansard/C94/house_13dec12/
+            elsif text[/\AThe honourable (?:member |[A-Z]).+\.\]?\z/] || text[/\ASPEAKER'S RULING: /] || text == 'Ordered that this bill be read a second time on a future day.'
               transition_to(:speech)
               create_speech
 
@@ -498,18 +511,33 @@ private
                 debate_id: debate._id,
               }))
 
+            # An unattributed multi-line speech by the speaker.
+            # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov24/
+            elsif text == 'As Speaker, I am tabling the Annual Report of the Office of the Ombudsman for 2010-2011.'
+              transition_to(:speech)
+              create_speech
+
+              @speech = {
+                index: index,
+                element: 'speech',
+                from_as: 'speaker',
+                html: p.to_s,
+                text: clean_paragraph(p),
+                debate_id: debate._id,
+              }
+
+              transition_to(:speech_continue)
+
             # An unknown paragraph.
             elsif !text[/\A\d+\z/] # unlinked page numbers
               warn("Unsaved paragraph #{p.to_s.inspect} #{text} | #{index} #{@a[:href]}")
             end
 
-            if text[/\]\z/]
-              if @previous_state == :narrative_continue
-                transition_to(:speech_begin)
-                create_speech
-              else
-                warn("Unmatched ] #{p.to_s.inspect} | #{index} #{@a[:href]}")
-              end
+            # In one case, a speech by the speaker is bracketed. FIXME
+            # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec12/
+            if @previous_state == :narrative_continue && text[/\]\z/]
+              transition_to(:speech_begin)
+              create_speech
             end
           end
         end
@@ -527,12 +555,10 @@ private
 private
 
   def create_speech
-    if @state == :narrative_continue
-      warn("Unclosed narrative #{@a[:href]}\n#{JSON.pretty_generate(@speech)}")
-    end
     if @speech
       dispatch(Speech.new(@speech))
     end
+    @previous_speech = @speech
     @speech = nil
   end
 
@@ -618,7 +644,7 @@ private
     end
 
     # Remove empty <b> and <i> tags (which may nonetheless break up words).
-    doc.xpath('//b[not(normalize-space(text()))]|//i[not(normalize-space(text()))]').each do |e|
+    doc.xpath('//b[not(normalize-space(.//text()))]|//i[not(normalize-space(.//text()))]').each do |e|
       e.replace(doc.create_text_node(e.text))
     end
     # Remove accidental <sup> tags.
@@ -715,8 +741,8 @@ private
       if @speaker_urls.key?(key)
         if @speaker_urls[key] != url
           unless response.status == 301 && response.headers['Location'] == 'http://nslegislature.ca/index.php/people/members/' &&
-            # FIXME 2014-05-23 publications@gov.ns.ca
-            key == 'maureen macdonald' && url == 'http://nslegislature.ca/index.php/people/members/Manning_MacDonald'
+                 # FIXME 2014-05-23 publications@gov.ns.ca
+                 key == 'maureen macdonald' && url == 'http://nslegislature.ca/index.php/people/members/Manning_MacDonald'
             raise "Expected #{@speaker_urls[key]} but was #{url} | #{@a[:href]} #{key}"
           end
         end

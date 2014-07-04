@@ -112,7 +112,12 @@ class NovaScotia < GovernmentProcessor
   def transition_to(to)
     unless can_transition_to?(to)
       error("Illegal transition from #{@state} to #{to} (previously #{@previous_state}) #{@a[:href]}")
-      error(JSON.pretty_generate(@speech)) if @speech
+      if @speech
+        error("speech:\n#{JSON.pretty_generate(@speech)}")
+      end
+      if @previous_speech
+        error("previous speech:\n#{JSON.pretty_generate(@previous_speech)}")
+      end
     end
     @previous_state = @state
     @state = to
