@@ -583,9 +583,9 @@ private
 
   def create_speech
     if @speech
-      if speech.key?(:text)
+      if @speech.key?(:text)
         # The clerk and the lieutenant governor occasionally have empty first lines.
-        speech[:text].gsub!("<p></p>\n", '')
+        @speech[:text].gsub!("<p></p>\n", '')
       end
       dispatch(Speech.new(@speech))
     end
