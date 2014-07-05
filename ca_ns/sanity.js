@@ -87,15 +87,15 @@ if (count) {
 });
 
 // Find b tags, which may indicate a heading within a non-heading.
-[ {element: 'question'},
+[ {element: 'heading'},
   {element: 'answer'},
+  {element: 'narrative'},
+  {element: 'question'},
+  {element: 'recordedTime'},
   {note: 'resolution'},
   {element: 'speech', note: {$ne: 'resolution'}, fuzzy: {$ne: true}},
   {element: 'speech', note: {$ne: 'resolution'}, fuzzy: true},
   {note: 'division'},
-  {element: 'recordedTime'},
-  {element: 'heading'},
-  {element: 'narrative'}
 ].forEach(function (selector) {
   selector.text = /<b\b/
   var count = db.speeches.count(selector)
@@ -118,15 +118,15 @@ sorted('$text', [{
 
 // If you need to take a close look at specific kinds of speeches:
 
-// {element: 'question'}
+// {element: 'heading'}
 // {element: 'answer'}
+// {element: 'narrative'}
+// {element: 'question'}
+// {element: 'recordedTime'}
 // {note: 'resolution'}
 // {element: 'speech', note: {$ne: 'resolution'}, fuzzy: {$ne: true}}
 // {element: 'speech', note: {$ne: 'resolution'}, fuzzy: true}
 // {note: 'division'}
-// {element: 'recordedTime'}
-// {element: 'heading'}
-// {element: 'narrative'}
 
 // {from_id: null, from_as: null, from: {$ne: null}} // AN HON. MEMBER:, ANOTHER HON. MEMBER:
 // {from_id: null, from: null, from_as: {$ne: null}} // The honourable, SPEAKER'S RULING:

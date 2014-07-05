@@ -76,9 +76,11 @@ private
         @previous_speech = nil
         # Whether "NOTICES OF MOTION UNDER RULE 32(3)" has been seen.
         rule_32 = false
-        # The person being asked a question.
+        # Answer speakers match question speakers.
         answer_from = nil
         answer_from_id = nil
+        answer_to = nil
+        answer_to_id = nil
 
         # Parse the hansard.
         doc.xpath('//div[@class="hsd_body"]/*').each_with_index do |p,index|
@@ -174,6 +176,7 @@ private
           # A resolution.
           elsif @state == :resolution_by
             from = person_a && person_a.text.strip.squeeze(' ') || text[/\A(?:By|Proposé par): ([A-Z].+?) ?[,(]/, 1]
+            key = to_key(from.sub(/(?<=\S )[A-Z]\. (?=\S)/, ''))
 
             @speech = {
               index: index,
@@ -182,18 +185,11 @@ private
               debate_id: debate._id,
             }
 
-            if from
-              key = to_key(from.sub(/(?<=\S )[A-Z]\. (?=\S)/, ''))
-
-              @speech[:from] = from
-              if ROLES.include?(key)
-                @speech[:from_as] = key
-              else
-                @speech[:from_id] = @speaker_ids.fetch(@speaker_urls.fetch(key){TYPOS.fetch(key)})
-              end
-            # Explicit exceptions are made for unattributed resolutions.
-            elsif @a[:href] != 'http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14apr02/'
-              error("Speaker not found #{text} | #{index} #{@a[:href]}")
+            @speech[:from] = from
+            if ROLES.include?(key)
+              @speech[:from_as] = key
+            else
+              @speech[:from_id] = @speaker_ids.fetch(@speaker_urls.fetch(key){TYPOS.fetch(key)})
             end
 
             transition_to(:resolution)
@@ -235,6 +231,15 @@ private
               })
               answer_from = nil
               answer_from_id = nil
+            end
+
+            if answer_to && answer_to_id
+              @speech.merge!({
+                to: answer_to,
+                to_id: answer_to_id,
+              })
+              answer_to = nil
+              answer_to_id = nil
             end
 
             transition_to(:answer_continue)
@@ -357,6 +362,7 @@ private
               index: index,
               element: 'speech',
               from: from,
+              from_as: '#member',
               html: p.to_s,
               text: clean_paragraph(p.inner_html).sub(/\AAN(?:OTHER)? HON\. MEMBER: /, ''),
               debate_id: debate._id,
@@ -414,6 +420,8 @@ private
             if text == 'RESPONSE:' && @state == :question_continue
               answer_from = @speech[:to]
               answer_from_id = @speech[:to_id]
+              answer_to = @speech[:from]
+              answer_to_id = @speech[:from_id]
             end
 
             transition_to(:heading)
@@ -435,7 +443,7 @@ private
               debate_id: debate._id,
             }))
 
-            # Resolution without a speaker, although there is one in the table of contents. FIXME
+            # Non-rule 32 resolution without a speaker, although there is one in the table of contents. FIXME
             if @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov14/' && text == 'RESOLUTION NO. 2212' ||
                @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec05/' && text == 'RESOLUTION NO. 2773'
               transition_to(:speech)
@@ -450,7 +458,19 @@ private
             elsif text == 'NOTICES OF MOTION UNDER RULE 32(3)'
               rule_32 = true
             elsif rule_32 && text[/\ARESOLUTION NO\. \d+\z/]
-              transition_to(:resolution_by)
+              # Explicit exceptions are made for unattributed resolutions. FIXME
+              if @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14apr02/'
+                transition_to(:resolution_by)
+                @speech = {
+                  index: index,
+                  element: 'speech',
+                  note: 'resolution',
+                  debate_id: debate._id,
+                }
+                transition_to(:resolution)
+              else
+                transition_to(:resolution_by)
+              end
             elsif text[/\AQUESTION NO\. \d+\z/]
               transition_to(:question_line1)
             elsif text == 'RESPONSE:'
