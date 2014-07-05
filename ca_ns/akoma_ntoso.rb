@@ -137,7 +137,8 @@ private
     if speech['from_id']
       attributes[:by] = "##{speech['from_id']}"
     end
-    if speech['to_id'] # @todo [post-scrape] check if ever null
+    # Question to the Premier or a post will not set `to_id`.
+    if speech['to_id']
       attributes[:to] = "##{speech['to_id']}"
     end
 
@@ -155,9 +156,7 @@ private
       #   <p>Yes.</p>
       # </answer>
       xml.answer(attributes) do
-        if speech['from'] # @todo [post-scrape] check if ever null
-          xml.from speech.fetch('from')
-        end
+        xml.from speech.fetch('from')
         xml << text
       end
 
@@ -176,9 +175,7 @@ private
       #   <p>Baz?</p>
       # </question>
       xml.question(attributes) do
-        if speech['from'] # @todo [post-scrape] check if ever null
-          xml.from speech.fetch('from')
-        end
+        xml.from speech.fetch('from')
         xml << text
       end
 

@@ -290,7 +290,7 @@ private
               @speech[:from_id] = @speaker_ids.fetch(url)
             end
 
-            if text[/\b(?:[Ww]ill|[WwCc]ould) (?:you )?please call (?:Bill|Resolution)\b/]
+            if text[/\b(?:please|you) call (?:Bill|Resolution)\b/]
               # This text is always followed by a heading.
               transition_to(:heading_begin)
               create_speech
@@ -340,7 +340,13 @@ private
               error("Unrecognized speaker #{key} | #{index} #{@a[:href]}")
             end
 
-            transition_to(:speech_continue)
+            if text[/\bplease call (?:Bill|Resolution)\b/]
+              # This text is always followed by a heading.
+              transition_to(:heading_begin)
+              create_speech
+            else
+              transition_to(:speech_continue)
+            end
 
           # A short, anonymous speech.
           elsif from = text[/\A(AN(?:OTHER)? HON\. MEMBER): /, 1]
@@ -398,7 +404,8 @@ private
             # Resolutions headers are hard to find.
             @speech.nil? && @state == :heading_begin && text[/\ARes\. (?:No\. ?)?\d+/] ||
             # All-bold lines may appear within a speech. Punctuation may not be inside the b tags.
-            # @todo This is causing headings to be captured in non-headings.
+            # @note This causes some bill headings to be captured in non-
+            # headings; in some cases, this is the correct result.
             @speech.nil? && p.at_css('b') && text.gsub(/[().\[\]]/, '') == p.css('b').text.strip.squeeze(' ').gsub(/[().\[\]]/, '')
           )
             text = clean_heading(text)
@@ -556,6 +563,10 @@ private
 
   def create_speech
     if @speech
+      if speech.key?(:text)
+        # The clerk and the lieutenant governor occasionally have empty first lines.
+        speech[:text].gsub!("<p></p>\n", '')
+      end
       dispatch(Speech.new(@speech))
     end
     @previous_speech = @speech
@@ -613,9 +624,9 @@ private
       # Remove spaces between list items.
       gsub(/<\/li>\s+<li>/, "</li>\n<li>").
       # Replace double <br> with paragraphs.
-      gsub('\s*<br>\s*<br>\s*', "</p>\n<p>").
+      gsub(/\s*<br>\s*<br>\s*/, "</p>\n<p>").
       # Remove single <br>, which always appears to be accidental.
-      gsub('\s*<br>\s*', ' ').
+      gsub(/\s*<br>\s*/, ' ').
       # Remove linked names from answers to questions. One resolution has a hyperlink to an external website.
       # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec15/
       gsub(%r{<a href="/index.php/en/people/members/\S+" class="hsd_mla" title="View Profile">([^<]+)</a>}, '\1').
