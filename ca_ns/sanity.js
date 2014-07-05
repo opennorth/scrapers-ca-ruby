@@ -50,6 +50,12 @@ count = db.speeches.count(selector)
 if (count) {
   print(count + " attributes on non-a tags: db.speeches.distinct('html', {text: " + selector.text + "})")
 }
+// Find non-hret attributes on a tags. (Should be empty.)
+selector = {$or: [{text: /<a [^h]/}, {text: /<a href="\S+" /}]}
+count = db.speeches.count(selector)
+if (count) {
+  print(count + " attributes on non-a tags: db.speeches.distinct('html', {text: " + selector.text + "})")
+}
 
 // Find unexpected tags. (Should be empty.)
 //
@@ -72,6 +78,7 @@ if (count) {
   {text: /<p\B/}, // p
   {text: /<s[^u]/},
   {text: /<su[^p]/}, // sup
+  {text: /<t[^adr]/}, // table, td, tr (track)
   {text: /<u[^>l]/} // u, ul
 ].forEach(function (selector) {
   if (db.speeches.count(selector)) {
