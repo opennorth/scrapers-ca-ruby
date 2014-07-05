@@ -7,15 +7,25 @@ class NovaScotia
     connection.raw_connection[:debates].find.sort(docDate_date: 1).each do |debate|
       name = "#{debate.fetch('docNumber')}.an"
 
+      # Create a list of people for the <meta> block.
       people = {}
-      connection.raw_connection[:speeches].find(debate_id: debate.fetch('_id'), element: 'speech', from_id: {'$ne' => nil}).each do |speech|
+      connection.raw_connection[:speeches].find(debate_id: debate.fetch('_id'), from_id: {'$ne' => nil}).each do |speech|
         id = speech.fetch('from_id')
         unless people.key?(id)
           url = connection.raw_connection[:people].find(_id: id).first.fetch('sources')[0].fetch('url')
           # @see https://code.google.com/p/akomantoso/wiki/Using_Akoma_Ntoso_URIs#TLC_Person
-          part = url.match(%r{/([^/]+)/?\z})[1].downcase.gsub(/[._-]+/, '.').gsub(/[^a-z.]/, '')
-          # `from` is only null for the speaker in the middle of a debate.
-          people[id] = {'href' => "/ontology/person/ca.#{part}", 'showAs' => speech['from']}
+          part = url.match(%r{([^/]+)\z})[1].downcase.gsub(/[._-]+/, '.').gsub(/[^a-z.]/, '')
+          # @see https://groups.google.com/d/topic/akomantoso-xml/I8vsYM3srv0/discussion
+          people[id] = {'href' => "/ontology/person/ca-ns.#{part}", 'showAs' => speech.fetch('from')}
+        end
+      end
+
+      roles = {}
+      connection.raw_connection[:speeches].find(debate_id: debate.fetch('_id'), from_as: {'$ne' => nil}, from: {'$ne' => nil}).each do |speech|
+        id = speech.fetch('from_as')
+        unless roles.key?(id)
+          # @see https://code.google.com/p/akomantoso/wiki/Using_Akoma_Ntoso_URIs#TLC_Role
+          roles[id] = {'href' => "/ontology/role/nslegislature.ca-ns.#{id}", 'showAs' => speech.fetch('from')}
         end
       end
 
@@ -45,8 +55,11 @@ class NovaScotia
               xml.references(source: '#source') do
                 # @see https://code.google.com/p/akomantoso/wiki/Using_Akoma_Ntoso_URIs#TLC_Organization
                 xml.TLCOrganization(id: 'source', href: '/ontology/organization/ca.open.north.inc', showAs: "Open North Inc.")
-                people.each do |id,speaker|
-                  xml.TLCPerson(id: id, href: speaker.fetch('href'), showAs: speaker.fetch('showAs'))
+                people.each do |id,person|
+                  xml.TLCPerson(id: id, href: person.fetch('href'), showAs: person.fetch('showAs'))
+                end
+                roles.each do |id,role|
+                  xml.TLCRole(id: id, href: role.fetch('href'), showAs: role.fetch('showAs'))
                 end
               end
             end
@@ -70,40 +83,59 @@ class NovaScotia
             end
 
             xml.debateBody do
-              # @todo add top-level section
-
-              section = nil
-              speeches = []
+              heading_level_1 = nil
+              heading_level_2 = nil
+              speeches_level_1 = []
+              speeches_level_2 = []
 
               connection.raw_connection[:speeches].find(debate_id: debate.fetch('_id')).sort(index: 1).each do |speech|
                 if speech['element'] == 'heading'
-                  unless speeches.empty?
-                    output_section(xml, section, speeches)
-                    speeches = []
+                  if TOP_LEVEL_HEADINGS.include?(speech.fetch('text'))
+                    unless heading_level_2.nil?
+                      speeches_level_1 << [heading_level_2, speeches_level_2]
+                      speeches_level_2 = []
+                    end
+                    unless heading_level_1.nil?
+                      output_section(xml, heading_level_1, speeches_level_1)
+                      speeches_level_1 = []
+                    end
+                    heading_level_1 = speech
+                    heading_level_2 = nil
+                  elsif heading_level_1.nil?
+                    error('Level 2 heading occurs without a level 1 heading')
+                    warn("speech:\n#{JSON.pretty_generate(speech)}")
+                  else
+                    unless heading_level_2.nil?
+                      speeches_level_1 << [heading_level_2, speeches_level_2]
+                      speeches_level_2 = []
+                    end
+                    heading_level_2 = speech
                   end
-                  section = speech
-                elsif section
-                  speeches << speech
+                elsif heading_level_2
+                  speeches_level_2 << speech
+                elsif heading_level_1
+                  speeches_level_1 << speech
                 else # first few speeches
                   output_speech(xml, speech)
                 end
               end
 
-              unless speeches.empty?
-                output_section(xml, section, speeches)
+              unless heading_level_1.nil?
+                output_section(xml, heading_level_1, speeches_level_1)
               end
             end
           end
         end
       end
 
+      info("Writing #{name}")
       store.write(name, builder.to_xml)
     end
   end
 
 private
 
-  def output_section(xml, section, speeches)
+  def output_section(xml, heading, speeches)
     # <questions id="">
     #   <heading>ORAL QUESTIONS PUT BY MEMBERS</heading>
     #   <subheading>WAIT TIMES - EFFECTS</subheading>
@@ -113,11 +145,10 @@ private
     #   <num title="1227">RESOLUTION NO. 1227</num>
     # </resolutions>
     # `name` and `id` are required attributes, but we don't care.
-    # @todo Reflect more of the hierarchy from the table of contents using TOP_LEVEL_HEADINGS
-    xml.debateSection do
-      text = section.fetch('text')
-      if section['num_title']
-        xml.num(title: section.fetch('num_title')) do
+    xml.debateSection do |section|
+      text = heading.fetch('text')
+      if heading['num_title']
+        xml.num(title: heading.fetch('num_title')) do
           xml << text
         end
       else
@@ -125,25 +156,20 @@ private
         xml.heading text
       end
       speeches.each do |speech|
-        output_speech(xml, speech)
+        if Array === speech
+          output_section(section, speech[0], speech[1])
+        else
+          output_speech(xml, speech)
+        end
       end
     end
   end
 
-  # @todo Use from_as, to_as
   def output_speech(xml, speech)
-    attributes = {}
-    # Anonymous speeches will not set `from_id`.
-    if speech['from_id']
-      attributes[:by] = "##{speech['from_id']}"
-    end
-    # Question to the Premier or a post will not set `to_id`.
-    if speech['to_id']
-      attributes[:to] = "##{speech['to_id']}"
-    end
-
-    unless speech['note'] == 'division'
+    # Tabular divisions have no text.
+    if speech['text'] || speech['note'] != 'division'
       text = speech.fetch('text')
+      # Wrap a one-line speech in a paragraph.
       unless text['</p>']
         text = "<p>#{text}</p>"
       end
@@ -155,7 +181,7 @@ private
       #   <from>MS. BAR</from>
       #   <p>Yes.</p>
       # </answer>
-      xml.answer(attributes) do
+      xml.answer(by: speech.fetch('from_id'), to: speech.fetch('to_id')) do
         xml.from speech.fetch('from')
         xml << text
       end
@@ -170,11 +196,18 @@ private
       end
 
     when 'question'
+      attributes = {}
+
+      # Question to a post, like the Premier, will not set `to_id`.
+      if speech['to_id']
+        attributes[:to] = speech['to_id']
+      end
+
       # <question by="#foo" to="#bar">
       #   <from>MR. FOO</from>
       #   <p>Baz?</p>
       # </question>
-      xml.question(attributes) do
+      xml.question(attributes.merge(by: speech.fetch('from_id'))) do
         xml.from speech.fetch('from')
         xml << text
       end
@@ -187,17 +220,32 @@ private
 
     when 'speech'
       if speech['note'] == 'resolution'
-        xml.speech(attributes) do
-          # Some resolutions are anonymous.
-          if speech['from']
-            xml.from speech.fetch('from')
-          end
+        xml.speech(by: speech.fetch('from_id')) do
+          xml.from speech.fetch('from')
           xml << text
         end
+
       else
+        attributes = {}
+
+        # A single speech defines neither. FIXME
+        # @see http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14apr02/
+        if speech['from_id']
+          attributes[:by] = "##{speech['from_id']}"
+        elsif speech['from_as']
+          # @see https://github.com/mysociety/sayit/issues/297
+          attributes[:by] = ''
+          attributes[:as] = "##{speech['from_as']}"
+          attributes[:status] = 'undefined'
+        end
+
         xml.speech(attributes) do
-          # The only unattributed speeches are by the speaker.
-          xml.from speech.fetch('from', 'MR. SPEAKER')
+          # Insert a <from> tag for the speaker, even if the source omits it.
+          if speech['from']
+            xml.from speech['from']
+          elsif speech['from_as'] == 'speaker'
+            xml.from 'MR. SPEAKER'
+          end
           xml << text
         end
       end
@@ -205,7 +253,21 @@ private
     else
       # @see http://examples.akomantoso.org/categorical.html#voteAttsAG
       if speech['note'] == 'division'
-        # @todo
+        if speech['html']['<table']
+          doc = Nokogiri::XML(speech['html'], &:noblanks)
+          doc.xpath('//td[string-length(text())=1]').each do |td|
+            td.inner_html = ''
+          end
+          doc.xpath('//table/@class').remove
+
+          xml.other do
+            xml << doc.to_xhtml(indent: 0)
+          end
+        else
+          xml.other do
+            xml << text
+          end
+        end
       else
         error("Unexpected element #{speech['element']}\n#{JSON.pretty_generate(speech)}")
       end
