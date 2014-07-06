@@ -5,7 +5,7 @@ class NovaScotia
     store = DownloadStore.new(File.expand_path('akoma_ntoso', Dir.pwd))
 
     connection.raw_connection[:debates].find.sort(docDate_date: 1).each do |debate|
-      name = "#{debate.fetch('docNumber')}.an"
+      name = "#{debate.fetch('docNumber')}.xml"
 
       # Create a list of people for the <meta> block.
       people = {}
@@ -145,6 +145,8 @@ private
     #   <num title="1227">RESOLUTION NO. 1227</num>
     # </resolutions>
     # `name` and `id` are required attributes, but we don't care.
+    # @note Can use a more specific tag than `debateSection` depending on the
+    #   top-level heading's text.
     xml.debateSection do |section|
       text = heading.fetch('text')
       if heading['num_title']
@@ -181,7 +183,7 @@ private
       #   <from>MS. BAR</from>
       #   <p>Yes.</p>
       # </answer>
-      xml.answer(by: speech.fetch('from_id'), to: speech.fetch('to_id')) do
+      xml.answer(by: "##{speech.fetch('from_id')}", to: "##{speech.fetch('to_id')}") do
         xml.from speech.fetch('from')
         xml << text
       end
@@ -200,14 +202,14 @@ private
 
       # Question to a post, like the Premier, will not set `to_id`.
       if speech['to_id']
-        attributes[:to] = speech['to_id']
+        attributes[:to] = "##{speech['to_id']}"
       end
 
       # <question by="#foo" to="#bar">
       #   <from>MR. FOO</from>
       #   <p>Baz?</p>
       # </question>
-      xml.question(attributes.merge(by: speech.fetch('from_id'))) do
+      xml.question(attributes.merge(by: "##{speech.fetch('from_id')}")) do
         xml.from speech.fetch('from')
         xml << text
       end
@@ -220,7 +222,7 @@ private
 
     when 'speech'
       if speech['note'] == 'resolution'
-        xml.speech(by: speech.fetch('from_id')) do
+        xml.speech(by: "##{speech.fetch('from_id')}") do
           xml.from speech.fetch('from')
           xml << text
         end
@@ -251,6 +253,7 @@ private
       end
 
     else
+      # 
       # @see http://examples.akomantoso.org/categorical.html#voteAttsAG
       if speech['note'] == 'division'
         if speech['html']['<table']

@@ -399,8 +399,9 @@ private
             }))
 
           # A heading, which will have a single paragraph.
-          # @note This block must run before the narrative block, as some
-          #   headings begin and end with square brackets.
+          #
+          # This block must run before the narrative block, as some headings
+          # begin and end with square brackets.
           elsif (
             # Avoids capturing "<p>.</p>".
             # Allow some lowercase letters, e.g. "CBC  - ANNIV. (75th)" and "PREM.: DHAs -  AMALGAMATION/SAVINGS".
@@ -411,7 +412,7 @@ private
             @speech.nil? && @state == :heading_begin && text[/\ARes\. (?:No\. ?)?\d+/] ||
             # All-bold lines may appear within a speech. Punctuation may not be inside the b tags.
             # @note This causes some bill headings to be captured in non-
-            # headings; in some cases, this is the correct result.
+            #   headings; in some cases, this is the correct result.
             @speech.nil? && p.at_css('b') && text.gsub(/[().\[\]]/, '') == p.css('b').text.strip.squeeze(' ').gsub(/[().\[\]]/, '')
           )
             text = clean_heading(text)
