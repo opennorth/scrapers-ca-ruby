@@ -408,6 +408,8 @@ private
             text[/\A[A-ZÉths\d"&'(),.:\/\[\][:space:]–-]{2,}\z|\A(?:Tabled|Given on) \S+ \d{1,2}, 20\d\d\z|\A\(?Pursuant to Rule 30(?:\(1\))?\)?\z/] &&
             # Ignore non-heading paragraphs.
             !["SPEAKER'S RULING:", "THEREFORE BE IT RESOLVED AS FOLLOWS:"].include?(text) ||
+            # Exceptions not requiring regular expressions.
+            ['Private and Local Bills For Third Reading'].include?(p.at_css('b') && p.css('b').text.strip.squeeze(' '))
             # Resolutions headers are hard to find.
             @speech.nil? && @state == :heading_begin && text[/\ARes\. (?:No\. ?)?\d+/] ||
             # All-bold lines may appear within a speech. Punctuation may not be inside the b tags.

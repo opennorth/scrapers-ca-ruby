@@ -20,6 +20,7 @@ class NovaScotia
         end
       end
 
+      # Create a list of roles for the <meta> block.
       roles = {}
       connection.raw_connection[:speeches].find(debate_id: debate.fetch('_id'), from_as: {'$ne' => nil}, from: {'$ne' => nil}).each do |speech|
         id = speech.fetch('from_as')
@@ -136,25 +137,26 @@ class NovaScotia
 private
 
   def output_section(xml, heading, speeches)
+    text = heading.fetch('text')
+    tag = HEADING_TO_TAG[heading.fetch('text')] || :debateSection
+
     # <questions id="">
-    #   <heading>ORAL QUESTIONS PUT BY MEMBERS</heading>
+    #   <heading id="">ORAL QUESTIONS PUT BY MEMBERS</heading>
     #   <subheading>WAIT TIMES - EFFECTS</subheading>
     # </questions>
     # <resolutions id="">
-    #   <heading>NOTICES OF MOTION UNDER RULE 32(3)</heading>
+    #   <heading id="">NOTICES OF MOTION UNDER RULE 32(3)</heading>
     #   <num title="1227">RESOLUTION NO. 1227</num>
     # </resolutions>
-    # `name` and `id` are required attributes, but we don't care.
-    # @note Can use a more specific tag than `debateSection` depending on the
-    #   top-level heading's text.
-    xml.debateSection do |section|
-      text = heading.fetch('text')
+    # @note `id` is a required attribute on debate sections. `name` is an
+    # additional required attributes on `debateSection`.
+    xml.send(tag) do |section|
       if heading['num_title']
         xml.num(title: heading.fetch('num_title')) do
           xml << text
         end
       else
-        # `id` is a required attribute, but we don't care.
+        # @note `id` is a required attribute.
         xml.heading text
       end
       speeches.each do |speech|
@@ -226,7 +228,6 @@ private
           xml.from speech.fetch('from')
           xml << text
         end
-
       else
         attributes = {}
 
@@ -235,7 +236,7 @@ private
         if speech['from_id']
           attributes[:by] = "##{speech['from_id']}"
         elsif speech['from_as']
-          # @see https://github.com/mysociety/sayit/issues/297
+          # @see https://groups.google.com/forum/#!topic/akomantoso-xml/3R7EZRNp4No/discussion
           attributes[:by] = ''
           attributes[:as] = "##{speech['from_as']}"
           attributes[:status] = 'undefined'
@@ -253,7 +254,7 @@ private
       end
 
     else
-      # 
+      # @note `id` is a required attribute on `other`.
       # @see http://examples.akomantoso.org/categorical.html#voteAttsAG
       if speech['note'] == 'division'
         if speech['html']['<table']
