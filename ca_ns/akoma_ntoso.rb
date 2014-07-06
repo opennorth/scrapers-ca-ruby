@@ -5,7 +5,9 @@ class NovaScotia
     store = DownloadStore.new(File.expand_path('akoma_ntoso', Dir.pwd))
 
     connection.raw_connection[:debates].find.sort(docDate_date: 1).each do |debate|
-      name = "#{debate.fetch('docNumber')}.xml"
+      # docNumber is unique, and docDate is not. However, SayIt requires
+      # filenames to be date-based.
+      name = "#{debate.fetch('docDate_date')}_#{debate.fetch('docNumber')}.xml"
 
       # Create a list of people for the <meta> block.
       people = {}
