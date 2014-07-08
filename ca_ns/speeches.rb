@@ -370,10 +370,13 @@ private
             #
             # Time.zone.local(docDate_date.year, docDate_date.month, docDate_date.day, $1, $2)
 
-          # A line of text, seen in:
-          # * INTRODUCTION OF BILLS
-          # * NOTICES OF MOTION UNDER RULE 32(3)
-          elsif text[/\ABill No\. \d+ [–-] Entitled\b|\ATabled \S+ \d{1,2}, 20\d\d\z/]
+          # Procedural text, seen in "NOTICES OF MOTION UNDER RULE 32(3)"
+          elsif text[/\ATabled \S+ \d{1,2}, 20\d\d\z/]
+            transition_to(:other)
+            create_speech
+            # We choose not to import this.
+          # A line of text, seen in "INTRODUCTION OF BILLS".
+          elsif text[/\ABill No\. \d+ [–-] Entitled\b/]
             transition_to(:other)
             create_speech
 
@@ -385,12 +388,15 @@ private
               debate_id: debate._id,
             }))
 
-          # A subheading, seen in "NOTICE OF QUESTIONS FOR WRITTEN ANSWERS".
-          elsif text[/\A\(RESPONSES\)\z|\AGiven on \S+ \d{1,2}, 20\d\d\z|\A\(?Pursuant to Rule 30(?:\(1\))?\)?\z|\APURSUANT TO RULE 30\z/]
+          # Procedural text, seen in "NOTICE OF QUESTIONS FOR WRITTEN ANSWERS".
+          elsif text[/\AGiven on \S+ \d{1,2}, 20\d\d\z|\A\(?Pursuant to Rule 30(?:\(1\))?\)?\z|\APURSUANT TO RULE 30\z/]
             transition_to(:subheading)
             create_speech
-
-            text = text.sub(/\A\((.+)\)\z/, '\1').sub('Pursuant to Rule 30(1)', 'Pursuant to Rule 30').sub('PURSUANT TO RULE 30', 'Pursuant to Rule 30')
+            # We choose not to import these.
+          # A subheading, seen in "NOTICE OF QUESTIONS FOR WRITTEN ANSWERS".
+          elsif text[/\A\(RESPONSES\)\z/]
+            transition_to(:subheading)
+            create_speech
 
             dispatch(Speech.new({
               index: index,
