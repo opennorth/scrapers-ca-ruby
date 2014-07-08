@@ -51,9 +51,13 @@ class NovaScotia < GovernmentProcessor
       heading_begin: [:heading],
       heading: [
         # Predicted
-        :answer,
         :other_begin,
+        :subheading_begin,
+        # Answer
+        :answer,
+        # Question
         :question_line1,
+        # Resolution
         :resolution_by,
         :speech_by,
         # Unpredicted
@@ -62,14 +66,20 @@ class NovaScotia < GovernmentProcessor
         :speech,
       ],
 
+      subheading_begin: [:subheading],
+      subheading: [
+        :heading, # "Pursuant to Rule 30" transitions to "QUESTION NO. 1"
+        :subheading, # "Given on May 16, 2011" transitions to "(Pursuant to Rule 30)"
+      ],
+
       other_begin: [
-        :heading, # If no bills in "INTRODUCTION OF BILLS"
         :other,
+        :heading, # If no bills in "INTRODUCTION OF BILLS"
         :speech, # If a speaker interjects at the start of "INTRODUCTION OF BILLS"
       ],
       other: [
         :heading, # "Tabled May 1, 2014" transitions to "NOTICES OF MOTION UNDER RULE 32(3)"
-        :other, # "Given on May 16, 2011" transitions to "(Pursuant to Rule 30)"
+        :other, # The bills in "INTRODUCTION OF BILLS"
         :speech, # The bills in "INTRODUCTION OF BILLS" transition to a speech
       ],
 

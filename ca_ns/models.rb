@@ -10,7 +10,7 @@ class Debate
     :docProponent, :legislature, :legislature_value, :session, :session_value
 
   def fingerprint
-    to_h.slice(:docNumber)
+    to_h.slice(:docDate_date, :docNumber)
   end
 
   def to_s
@@ -27,6 +27,8 @@ class Speech
   attr_accessor :index
   # @return [String] the Akoma Ntoso element for the paragraph
   attr_accessor :element
+  # @return [Integer] the label for the speech
+  attr_accessor :heading
   # @return [Integer] the label for the number of the heading or speech
   attr_accessor :num
   # @return [Integer] the number of the heading or speech
@@ -56,7 +58,7 @@ class Speech
   # @return [String] the ID of the debate to which this speech belongs
   attr_accessor :debate_id
 
-  dump :index, :element, :num, :num_title, :time, :from, :from_as, :from_id, :to, :to_as, :to_id, :html, :text, :division, :fuzzy, :debate_id
+  dump :index, :element, :heading, :num, :num_title, :time, :from, :from_as, :from_id, :to, :to_as, :to_id, :html, :text, :division, :fuzzy, :debate_id
   foreign_key :debate_id, :from_id
 
   validates_numericality_of :index

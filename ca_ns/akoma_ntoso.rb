@@ -131,7 +131,11 @@ class NovaScotia
         end
       end
 
-      info("Writing #{name}")
+      if store.exist?(name)
+        warn("Overwriting #{name}")
+      else
+        info("Writing #{name}")
+      end
       store.write(name, builder.to_xml)
     end
   end
@@ -153,7 +157,6 @@ private
 
       # <questions id="">
       #   <heading id="">ORAL QUESTIONS PUT BY MEMBERS</heading>
-      #   <subheading>WAIT TIMES - EFFECTS</subheading>
       # </questions>
       # @note `id` is a required attribute on debate sections. `name` is an
       # additional required attributes on `debateSection`.
@@ -171,9 +174,9 @@ private
         speeches.each do |speech|
           if text_to_merge
             if Array === speech
-              subheading = speech[0]
-              subheading['text'] = "#{text_to_merge} #{subheading.fetch('text')}"
-              output_section(section, subheading, speech[1])
+              object = speech[0]
+              object['text'] = "#{text_to_merge} #{object.fetch('text')}"
+              output_section(section, object, speech[1])
             else
               error("Expected a continuation of the heading: #{text_to_merge}")
             end
@@ -206,6 +209,10 @@ private
       #   <p>Yes.</p>
       # </answer>
       xml.answer(by: "##{speech.fetch('from_id')}", to: "##{speech.fetch('to_id')}") do
+        if speech['heading']
+          xml.heading speech.fetch('heading')
+        end
+
         xml.from speech.fetch('from')
         xml << text
       end
@@ -240,6 +247,12 @@ private
       #   <p>Baz?</p>
       # </question>
       xml.question(attributes.merge(by: "##{speech.fetch('from_id')}")) do
+        if speech['num_title']
+          xml.num(title: speech.fetch('num_title')) do
+            xml << speech.fetch('num')
+          end
+        end
+
         xml.from speech.fetch('from')
         xml << text
       end
@@ -282,14 +295,20 @@ private
             xml << speech.fetch('num')
           end
         end
+
         # Insert a <from> tag for the speaker, even if the source omits it.
         if speech['from']
           xml.from speech['from']
         elsif speech['from_as'] == 'speaker'
           xml.from 'MR. SPEAKER'
         end
+
         xml << text
       end
+
+    when 'subheading'
+      # <subheading>Pursuant to Rule 30</subheading>
+      xml.subheading speech.fetch('text')
 
     else
       # @note `id` is a required attribute on `other`.

@@ -75,11 +75,6 @@ private
         @previous_speech = nil
         # Whether "NOTICES OF MOTION UNDER RULE 32(3)" has been seen.
         rule_32 = false
-        # Answer speakers match question speakers.
-        answer_from = nil
-        answer_from_id = nil
-        answer_to = nil
-        answer_to_id = nil
 
         # Parse the hansard.
         doc.xpath('//div[@class="hsd_body"]/*').each_with_index do |p,index|
@@ -138,7 +133,7 @@ private
               @speech[:html] += "\n#{p.to_s}"
             end
 
-          # A question.
+          # A question attribution.
           elsif [:question_line1, :question_line2].include?(@state)
             person = person_a && person_a.text.strip.squeeze(' ') || text.match(/\A(?:BY|By|TO|To): ([A-Z].+?)(?:,| \(|\z)/)[1]
             key = to_key(person.sub(/(?<=\S )[A-Z]\. (?=\S)/, ''))
@@ -147,14 +142,6 @@ private
             # @see http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12may17/
             if person != 'Deputy Premier and Minister responsible for Communications Nova Scotia'
               url = @speaker_urls.fetch(key){TYPOS.fetch(key)}
-            end
-
-            if @state == :question_line1
-              @speech = {
-                index: index,
-                element: 'question',
-                debate_id: debate._id,
-              }
             end
 
             field = text[/\A(?:BY|By): /] ? :from : :to
@@ -204,38 +191,16 @@ private
             })
             transition_to(:question_continue)
 
-          # An answer.
+          # An answer text.
           elsif @state == :answer
             unless p.at_css('i')
               error("Expected i tag in answer #{p.to_s.inspect} | #{index} #{a[:href]}")
             end
 
-            @speech = {
-              index: index,
-              element: 'answer',
+            @speech.merge!({
               html: p.to_s,
               text: clean_paragraph(p),
-              debate_id: debate._id,
-            }
-
-            if answer_from && answer_from_id
-              @speech.merge!({
-                from: answer_from,
-                from_id: answer_from_id,
-              })
-              answer_from = nil
-              answer_from_id = nil
-            end
-
-            if answer_to && answer_to_id
-              @speech.merge!({
-                to: answer_to,
-                to_id: answer_to_id,
-              })
-              answer_to = nil
-              answer_to_id = nil
-            end
-
+            })
             transition_to(:answer_continue)
 
           elsif @state == :answer_continue && p.at_css('i')
@@ -407,13 +372,10 @@ private
               debate_id: debate._id,
             }))
 
-          # A description.
-          #
-          # The following are immediate children of the top-level headings:
+          # A line of text, seen in:
           # * INTRODUCTION OF BILLS
-          # * NOTICE OF QUESTIONS FOR WRITTEN ANSWERS
           # * NOTICES OF MOTION UNDER RULE 32(3)
-          elsif text[/\ABill No\. \d+ [–-] Entitled\b|\A(?:Given on|Tabled) \S+ \d{1,2}, 20\d\d\z|\A\(?Pursuant to Rule 30(?:\(1\))?\)?\z|\APURSUANT TO RULE 30\z/]
+          elsif text[/\ABill No\. \d+ [–-] Entitled\b|\ATabled \S+ \d{1,2}, 20\d\d\z/]
             transition_to(:other)
             create_speech
 
@@ -425,9 +387,23 @@ private
               debate_id: debate._id,
             }))
 
+          # A subheading, seen in "NOTICE OF QUESTIONS FOR WRITTEN ANSWERS".
+          elsif text[/\A\(RESPONSES\)\z|\AGiven on \S+ \d{1,2}, 20\d\d\z|\A\(?Pursuant to Rule 30(?:\(1\))?\)?\z|\APURSUANT TO RULE 30\z/]
+            transition_to(:subheading)
+            create_speech
+
+            text = text.sub(/\A\((.+)\)\z/, '\1').sub('Pursuant to Rule 30(1)', 'Pursuant to Rule 30').sub('PURSUANT TO RULE 30', 'Pursuant to Rule 30')
+
+            dispatch(Speech.new({
+              index: index,
+              element: 'subheading',
+              html: p.to_s,
+              text: clean_paragraph(p.inner_html),
+              debate_id: debate._id,
+            }))
+
           # A resolution.
           elsif text[/\A\[?RESOL[IUT]+ONS? ?(?:NO\. ?)?\d+\]?\z/]
-            # It's syntactically a heading, but we treat it as a speech title.
             transition_to(:heading)
             create_speech
 
@@ -463,6 +439,43 @@ private
               end
             end
 
+          # A question.
+          elsif text[/\AQUESTION N[Oo]\. \d+\z/]
+            transition_to(:heading)
+            create_speech
+
+            text.sub!(/\AQUESTION No\b/, 'QUESTION NO')
+
+            @speech = {
+              index: index,
+              element: 'question',
+              num: text,
+              num_title: text.match(/\AQUESTION NO\. (\d+)\z/)[1],
+              debate_id: debate._id,
+            }
+
+            transition_to(:question_line1)
+
+          # An answer.
+          elsif text == 'RESPONSE:'
+            transition_to(:heading)
+            create_speech
+
+            @speech = {
+              index: index,
+              element: 'answer',
+              heading: text,
+              from: @previous_speech[:to],
+              from_id: @previous_speech[:to_id],
+              to: @previous_speech[:from],
+              to_id: @previous_speech[:from_id],
+              html: '',
+              text: '',
+              debate_id: debate._id,
+            }
+
+            transition_to(:answer)
+
           # A heading, which will have a single paragraph.
           #
           # This block must run before the narrative block, as some headings
@@ -485,14 +498,6 @@ private
             original_text = text.dup
             text = clean_heading(text)
 
-            # The person answering a question is hard to parse.
-            if text == 'RESPONSE:' && @state == :question_continue
-              answer_from = @speech[:to]
-              answer_from_id = @speech[:to_id]
-              answer_to = @speech[:from]
-              answer_to_id = @speech[:from_id]
-            end
-
             transition_to(:heading)
             create_speech
 
@@ -506,7 +511,6 @@ private
             dispatch(Speech.new({
               index: index,
               element: 'heading',
-              num_title: text[/\AQUESTION NO\. (\d+)\z/, 1],
               html: p.to_s,
               text: text,
               debate_id: debate._id,
@@ -514,12 +518,10 @@ private
 
             if text == 'NOTICES OF MOTION UNDER RULE 32(3)'
               rule_32 = true
-            elsif ['INTRODUCTION OF BILLS', 'NOTICE OF QUESTIONS FOR WRITTEN ANSWERS'].include?(text)
+            elsif text == 'INTRODUCTION OF BILLS'
               transition_to(:other_begin)
-            elsif text == 'RESPONSE:'
-              transition_to(:answer)
-            elsif text[/\AQUESTION NO\. \d+\z/]
-              transition_to(:question_line1)
+            elsif text == 'NOTICE OF QUESTIONS FOR WRITTEN ANSWERS'
+              transition_to(:subheading_begin)
             end
 
           # A narrative that has a single paragraph.
