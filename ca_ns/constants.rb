@@ -21,6 +21,7 @@ TYPOS = {
   'gordon gosse' => 'http://nslegislature.ca/index.php/people/members/gordie_gosse1', # given name
   'harold therault' => 'http://nslegislature.ca/index.php/people/members/Harold_Theriault', # family name
   'jaimie baillie' => 'http://nslegislature.ca/index.php/people/members/jamie_baillie', # given name
+  'john macdonnell' => 'http://nslegislature.ca/index.php/people/members/john_macdonnell', # no link
   'mailyn more' => 'http://nslegislature.ca/index.php/people/members/Marilyn_More', # given name
   'mariyln more' => 'http://nslegislature.ca/index.php/people/members/Marilyn_More', # given name
   'maureen macdonld' => 'http://nslegislature.ca/index.php/people/members/Maureen_MacDonald', # family name
@@ -46,8 +47,8 @@ HEADING_TYPOS = {
   'NOTICES OF MOTION UNDER RULE (32)(3)' => 'NOTICES OF MOTION UNDER RULE 32(3)',
   "OPPOSTION MEMBERS' BUSINESS" => "OPPOSITION MEMBERS' BUSINESS",
   'ORAL QUESTION PUT BY MEMBERS' => 'ORAL QUESTIONS PUT BY MEMBERS',
-  'Pursuant to Rule 30' => 'PURSUANT TO RULE 30',
-  'Pursuant to Rule 30(1)' => 'PURSUANT TO RULE 30(1)',
+  'PURSUANT TO RULE 30' => 'Pursuant to Rule 30',
+  'Pursuant to Rule 30(1)' => 'Pursuant to Rule 30',
   'PRESENTING REPORT OF COMMITTEES' => 'PRESENTING REPORTS OF COMMITTEES',
   'PRESENTING REPORTS OF COMMIITTEES' => 'PRESENTING REPORTS OF COMMITTEES',
   'PRESENTING REPORTS OF COMMITEES' => 'PRESENTING REPORTS OF COMMITTEES',
@@ -124,8 +125,7 @@ HEADING_TO_TAG = {
 
 HEADINGS = TOP_LEVEL_HEADINGS + [
   # Subheadings of "NOTICE OF QUESTIONS FOR WRITTEN ANSWERS"
-  'PURSUANT TO RULE 30',
-  'PURSUANT TO RULE 30(1)',
+  'Pursuant to Rule 30',
   'RESPONSE:',
   'RESPONSES',
   # All-caps headings with no useful markers.
@@ -141,7 +141,9 @@ HEADINGS_RE = [
   /\ABill No\. \d+ [–-]/, # n-dash
   /\AQUESTION NO\. \d+\z/,
   /\ARESOLUTION NO\. \d+\z/,
+  # Subheading of "NOTICE OF QUESTIONS FOR WRITTEN ANSWERS"
   /\AGiven on \S+ \d{1,2}, 20\d\d\z/,
+  # Subheading of "NOTICES OF MOTION UNDER RULE 32(3)"
   /\ATabled \S+ \d{1,2}, 20\d\d\z/,
   # Issue-based headings that have no useful markers.
   # EMO: ASPY BAY/ST. MARGARETS VILLAGE/BAY ST. LAWRENCE

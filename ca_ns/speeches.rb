@@ -32,10 +32,9 @@ private
 
       list.xpath('//tr[position()>1]').reject do |tr|
         # Ignore rows with colspans and hansards where names are not linked.
-        # @note 2011-11-02 "John MacDonnell" is unlinked. Only 2011-11-01 and
-        #   2011-10-31 have links earlier than this date.
-        # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov02/
-        tr.at_css('td').text == ' ' || Date.parse(tr.at_css('a[href]')) <= Date.new(2011, 11, 2) # non-breaking space
+        # @note 2011-10-31 has links but many more Microsoft Word artifacts.
+        # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11oct31/
+        tr.at_css('td').text == ' ' || Date.parse(tr.at_css('a[href]')) < Date.new(2011, 11, 1) # non-breaking space
       end.each do |tr|
         @a = tr.at_css('a[href]') # XXX
         docDate_date = Date.parse(@a.text)
@@ -129,7 +128,7 @@ private
               @speech = {
                 index: index,
                 html: p.to_s,
-                note: 'division',
+                division: true,
                 debate_id: debate._id,
               }
 
@@ -164,7 +163,7 @@ private
             if ROLES.include?(key)
               @speech["#{field}_as".to_sym] = key
             elsif url
-              @speech["#{field}_id".to_sym] = @speaker_ids.fetch(url)
+              @speech["#{field}_id".to_sym] = @speaker_ids.fetch(url){TYPOS.fetch(key)}
             end
 
             if @state == :question_line1
@@ -173,17 +172,12 @@ private
               transition_to(:question)
             end
 
-          # A resolution.
+          # Rule 32(3) resolution attribution.
+          #
+          # @note Some data is lost about the person's role or constituency.
           elsif @state == :resolution_by
             from = person_a && person_a.text.strip.squeeze(' ') || text[/\A(?:By|Proposé par): ([A-Z].+?) ?[,(]/, 1]
             key = to_key(from.sub(/(?<=\S )[A-Z]\. (?=\S)/, ''))
-
-            @speech = {
-              index: index,
-              element: 'speech',
-              note: 'resolution',
-              debate_id: debate._id,
-            }
 
             @speech[:from] = from
             if ROLES.include?(key)
@@ -194,6 +188,14 @@ private
 
             transition_to(:resolution)
 
+          # Rule 32(3) resolution text.
+          elsif @state == :resolution
+            @speech.merge!({
+              html: p.to_s,
+              text: clean_paragraph(p),
+            })
+            transition_to(:resolution_continue)
+
           # Question text.
           elsif @state == :question
             @speech.merge!({
@@ -201,14 +203,6 @@ private
               text: clean_paragraph(p),
             })
             transition_to(:question_continue)
-
-          # Resolution text.
-          elsif @state == :resolution
-            @speech.merge!({
-              html: p.to_s,
-              text: clean_paragraph(p),
-            })
-            transition_to(:resolution_continue)
 
           # An answer.
           elsif @state == :answer
@@ -262,8 +256,10 @@ private
 
           # A speech, which may have many paragraphs.
           elsif person_a
-            transition_to(:speech)
-            create_speech
+            unless @state == :speech_by
+              transition_to(:speech)
+              create_speech
+            end
 
             from = person_a.text.strip.squeeze(' ')
             key = to_key(from)
@@ -278,16 +274,21 @@ private
             # Remove the name from the text of the speech.
             person_a.remove
 
-            @speech = {
-              index: index,
-              element: 'speech',
+            unless @state == :speech_by
+              @speech = {
+                index: index,
+                element: 'speech',
+                debate_id: debate._id,
+              }
+            end
+
+            @speech.merge!({
               from: from,
               html: p.to_s,
-              # In one case, a speech by the speaker is bracketed. FIXME
+              # In one case, a speech by the speaker is bracketed: "[MADAM SPEAKER" FIXME
               # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec12/
               text: clean_paragraph(p).sub(/>(?:\[\s*)?:\s*/, '>'),
-              debate_id: debate._id,
-            }
+            })
 
             if ROLES.include?(key)
               @speech[:from_as] = key
@@ -297,37 +298,45 @@ private
 
             if text[/\b(?:please|you) call (?:Bill|Resolution)\b/]
               # This text is always followed by a heading.
-              transition_to(:heading_begin)
               create_speech
+              transition_to(:heading_begin)
             else
               transition_to(:speech_continue)
             end
 
           # A speech by an unlinked person, which may have many paragraphs.
-          # No space after honorific prefix: HON.JAMIE  BAILLIE:
-          # No period after abbreviation: MR DAVID WILSON:
-          # Family name with apostrophe: Hon. Christopher d'Entremont
-          # Family name with hyphen: MS. PETERSON-RAFUSE
-          # Period after name: MR. KEITH BAIN.
-          # Space after name: MR. LEO GLAVINE
-          # Role-based speeches.
+          #
+          # * No space after honorific prefix: "HON.JAMIE  BAILLIE:"
+          # * No period after abbreviation: "MR DAVID WILSON:"
+          # * Family name with apostrophe: "Hon. Christopher d'Entremont"
+          # * Family name with hyphen: "MS. PETERSON-RAFUSE"
+          # * Period after name: "MR. KEITH BAIN."
+          # * Space after name: "MR. LEO GLAVINE"
+          # * Roles instead of names.
           elsif match = text.match(/\A((?:HON|M[RS])\b\.? ?[A-Z]+ [A-Z'-]+)[.:; ]|\A((?:MR\.|MADAM) (?:SPEAKER|CHAIRMAN)|SERGEANT-AT-ARMS|THE (?:ADMINISTRATOR|LIEUTENANT GOVERNOR)):/)
-            transition_to(:speech)
-            create_speech
+            unless @state == :speech_by
+              transition_to(:speech)
+              create_speech
+            end
 
             # A person may be unlinked due to a middle initial.
             from = match[1] || match[2]
             key = to_key(from.sub(/(?<=\S )[A-Z]\. (?=\S)/, ''))
 
-            @speech = {
-              index: index,
-              element: 'speech',
+            unless @state == :speech_by
+              @speech = {
+                index: index,
+                element: 'speech',
+                debate_id: debate._id,
+              }
+            end
+
+            @speech.merge!({
               from: from,
               html: p.to_s,
               text: clean_paragraph(p).sub(/>#{Regexp.escape(match[0])}[.:;]?\s*/, '>'),
               fuzzy: true,
-              debate_id: debate._id,
-            }
+            })
 
             if @speaker_urls.key?(key) || TYPOS.key?(key)
               url = @speaker_urls.fetch(key){TYPOS.fetch(key)}
@@ -345,10 +354,10 @@ private
               error("Unrecognized speaker #{key} | #{index} #{@a[:href]}")
             end
 
-            if text[/\bplease call (?:Bill|Resolution)\b/]
+            if text[/\b(?:please|you) call (?:Bill|Resolution)\b/]
               # This text is always followed by a heading.
-              transition_to(:heading_begin)
               create_speech
+              transition_to(:heading_begin)
             else
               transition_to(:speech_continue)
             end
@@ -377,7 +386,7 @@ private
               index: index,
               html: '',
               text: '',
-              note: 'division',
+              division: true,
               debate_id: debate._id,
             }
 
@@ -398,20 +407,88 @@ private
               debate_id: debate._id,
             }))
 
+          # A description.
+          #
+          # The following are immediate children of the top-level headings:
+          # * INTRODUCTION OF BILLS
+          # * NOTICE OF QUESTIONS FOR WRITTEN ANSWERS
+          # * NOTICES OF MOTION UNDER RULE 32(3)
+          elsif text[/\ABill No\. \d+ [–-] Entitled\b|\A(?:Given on|Tabled) \S+ \d{1,2}, 20\d\d\z|\A\(?Pursuant to Rule 30(?:\(1\))?\)?\z/]
+            transition_to(:other)
+            create_speech
+
+            dispatch(Speech.new({
+              index: index,
+              element: 'other',
+              html: p.to_s,
+              text: clean_paragraph(p.inner_html),
+              debate_id: debate._id,
+            }))
+
+          # A resolution.
+          #
+          # The "NO." can be missing.
+          # @see http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14mar27/
+          # The "I" in "RESOLUTION" can be missing. FIXME
+          # @see http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12apr26/
+          elsif text[/\ARESOLUTI?ON (?:NO\. )?\d+\z/]
+            # It's syntactically a heading, but we treat it as a speech title.
+            transition_to(:heading)
+            if rule_32
+              transition_to(:resolution_by)
+              create_speech
+
+              @speech = {
+                index: index,
+                element: 'speech',
+                num: text,
+                num_title: text[/\ARESOLUTION (?:NO\. )?(\d+)\z/, 1],
+                debate_id: debate._id,
+              }
+
+              # If a resolution is unattributed, skip the attribution. FIXME
+              if @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14apr02/'
+                transition_to(:resolution)
+              end
+            else
+              transition_to(:speech)
+              create_speech
+
+              @speech = {
+                index: index,
+                element: 'speech',
+                num: text,
+                num_title: text[/\ARESOLUTION NO\. (\d+)\z/, 1],
+                debate_id: debate._id,
+              }
+
+              # Non-Rule 32 resolution without a speaker, although there is one in the table of contents. FIXME
+              if @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov14/' && text == 'RESOLUTION NO. 2212' ||
+                 @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec05/' && text == 'RESOLUTION NO. 2773'
+                @speech.merge!({
+                  html: '',
+                  text: '',
+                })
+                transition_to(:speech_continue)
+              else
+                transition_to(:speech_by)
+              end
+            end
+
           # A heading, which will have a single paragraph.
           #
           # This block must run before the narrative block, as some headings
           # begin and end with square brackets.
           elsif (
-            # Avoids capturing "<p>.</p>".
-            # Allow some lowercase letters, e.g. "CBC  - ANNIV. (75th)" and "PREM.: DHAs -  AMALGAMATION/SAVINGS".
-            text[/\A[A-ZÉths\d"&'(),.:\/\[\][:space:]–-]{2,}\z|\A(?:Tabled|Given on) \S+ \d{1,2}, 20\d\d\z|\A\(?Pursuant to Rule 30(?:\(1\))?\)?\z/] &&
+            # Avoid capturing "<p>.</p>" and allow some lowercase letters, e.g.
+            # "CBC  - ANNIV. (75th)" and "PREM.: DHAs -  AMALGAMATION/SAVINGS".
+            text[/\A[A-ZÉths\d"&'(),.:\/\[\][:space:]–-]{2,}\z/] &&
             # Ignore non-heading paragraphs.
             !["SPEAKER'S RULING:", "THEREFORE BE IT RESOLVED AS FOLLOWS:"].include?(text) ||
             # Exceptions not requiring regular expressions.
-            ['Private and Local Bills For Third Reading'].include?(p.at_css('b') && p.css('b').text.strip.squeeze(' '))
+            ['Private and Local Bills For Third Reading'].include?(text) ||
             # Resolutions headers are hard to find.
-            @speech.nil? && @state == :heading_begin && text[/\ARes\. (?:No\. ?)?\d+/] ||
+            @speech.nil? && @state == :heading_begin && text[/\ARes\. (?:No\. ?)?\d+|\ABill No\. \d+ [–-]/] ||
             # All-bold lines may appear within a speech. Punctuation may not be inside the b tags.
             # @note This causes some bill headings to be captured in non-
             #   headings; in some cases, this is the correct result.
@@ -440,44 +517,20 @@ private
             dispatch(Speech.new({
               index: index,
               element: 'heading',
-              num_title: text[/\A(?:RESOLUTION|QUESTION|) NO\. (\d+)\z/, 1],
+              num_title: text[/\AQUESTION NO\. (\d+)\z/, 1],
               html: p.to_s,
               text: text,
               debate_id: debate._id,
             }))
 
-            # Non-rule 32 resolution without a speaker, although there is one in the table of contents. FIXME
-            if @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov14/' && text == 'RESOLUTION NO. 2212' ||
-               @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec05/' && text == 'RESOLUTION NO. 2773'
-              transition_to(:speech)
-              @speech = {
-                index: index,
-                element: 'speech',
-                html: '',
-                text: '',
-                debate_id: debate._id,
-              }
-              transition_to(:speech_continue)
-            elsif text == 'NOTICES OF MOTION UNDER RULE 32(3)'
+            if text == 'NOTICES OF MOTION UNDER RULE 32(3)'
               rule_32 = true
-            elsif rule_32 && text[/\ARESOLUTION NO\. \d+\z/]
-              # Explicit exceptions are made for unattributed resolutions. FIXME
-              if @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14apr02/'
-                transition_to(:resolution_by)
-                @speech = {
-                  index: index,
-                  element: 'speech',
-                  note: 'resolution',
-                  debate_id: debate._id,
-                }
-                transition_to(:resolution)
-              else
-                transition_to(:resolution_by)
-              end
-            elsif text[/\AQUESTION NO\. \d+\z/]
-              transition_to(:question_line1)
+            elsif ['INTRODUCTION OF BILLS', 'NOTICE OF QUESTIONS FOR WRITTEN ANSWERS'].include?(text)
+              transition_to(:other_begin)
             elsif text == 'RESPONSE:'
               transition_to(:answer)
+            elsif text[/\AQUESTION NO\. \d+\z/]
+              transition_to(:question_line1)
             end
 
           # A narrative that has a single paragraph.
@@ -520,10 +573,14 @@ private
                 error("Illegal transition from #{@state} to a continuation: #{@a[:href]}\n#{JSON.pretty_generate(@speech)}")
               end
 
-              @speech[:html] += "\n#{p.to_s}"
-              @speech[:text] += "\n#{clean_paragraph(p)}"
-              if @state == :narrative_continue
-                @speech[:text].sub!(']', '')
+              if @speech[:html] && @speech[:text]
+                @speech[:html] += "\n#{p.to_s}"
+                @speech[:text] += "\n#{clean_paragraph(p)}"
+                if @state == :narrative_continue
+                  @speech[:text].sub!(']', '')
+                end
+              else
+                error("Expected html and text to be present: #{@a[:href]}\n#{JSON.pretty_generate(@speech)}")
               end
 
             # An unattributed one-line speech by the speaker.
@@ -560,14 +617,14 @@ private
 
             # An unknown paragraph.
             elsif !text[/\A\d+\z/] # unlinked page numbers
-              warn("Unsaved paragraph #{p.to_s.inspect} #{text} | #{index} #{@a[:href]}")
+              warn("Unsaved paragraph {state: #{@state}, rule_32: #{rule_32}} #{p.to_s.inspect} #{text} | #{index} #{@a[:href]}")
             end
 
             # In one case, a speech by the speaker is bracketed. FIXME
             # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec12/
             if @previous_state == :narrative_continue && text[/\]\z/]
-              transition_to(:speech_begin)
               create_speech
+              transition_to(:speech_begin)
             end
           end
         end

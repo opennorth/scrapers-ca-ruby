@@ -14,6 +14,8 @@ class NovaScotia < GovernmentProcessor
 
       speech_begin: [:speech],
       speech: [
+        # Non-Rule 32 resolution
+        :speech_by,
         # Multi-line speech
         :speech_continue,
         # Predicted heading
@@ -22,10 +24,12 @@ class NovaScotia < GovernmentProcessor
         :heading,
         :speech,
       ],
+      speech_by: [:speech_continue],
       speech_continue: [
         :speech_continue,
         :division,
         :heading,
+        :other, # A speaker may interject between "INTRODUCTION OF BILLS"
         :narrative,
         :recorded_time,
         :speech,
@@ -43,15 +47,31 @@ class NovaScotia < GovernmentProcessor
         :speech,
       ],
 
+      # In three cases, there is an interruption after "would you please call..."
+      # @see http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12may14/
+      # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec15/
       heading_begin: [:heading],
       heading: [
         # Predicted
         :answer,
         :question_line1,
         :resolution_by,
+        :other_begin,
         # Unpredicted
-        :heading,
+        :heading, # Top-level headings may have no speeches
+        :other, # "NOTICES OF MOTION UNDER RULE 32(3)" transitions to "Tabled April 28, 2014"
         :speech,
+      ],
+
+      other_begin: [
+        :heading, # If no bills in "INTRODUCTION OF BILLS"
+        :other,
+        :speech, # If a speaker interjects at the start of "INTRODUCTION OF BILLS"
+      ],
+      other: [
+        :heading, # "Tabled May 1, 2014" transitions to "NOTICES OF MOTION UNDER RULE 32(3)"
+        :other, # "Given on May 16, 2011" transitions to "(Pursuant to Rule 30)"
+        :speech, # The bills in "INTRODUCTION OF BILLS" transition to a speech
       ],
 
       question_line1: [:question_line2],
@@ -73,6 +93,7 @@ class NovaScotia < GovernmentProcessor
       resolution_continue: [
         :resolution_continue,
         :heading,
+        :other, # "Tabled April 29, 2014"
       ],
 
       narrative: [
@@ -86,10 +107,12 @@ class NovaScotia < GovernmentProcessor
         :speech,
       ],
       narrative_continue: [
-        # Unclosed narrative
+        # Multi-line narrative
         :narrative_continue,
         # Closed narrative
         :speech_begin,
+        # There is a single unclosed narrative: "The Speaker and the Clerks left the Chamber."
+        # @see http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12dec06/
       ],
     }
 

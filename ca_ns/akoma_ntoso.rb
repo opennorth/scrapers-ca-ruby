@@ -140,32 +140,33 @@ private
 
   def output_section(xml, heading, speeches)
     text = heading.fetch('text')
-    tag = HEADING_TO_TAG[heading.fetch('text')] || :debateSection
 
-    # <questions id="">
-    #   <heading id="">ORAL QUESTIONS PUT BY MEMBERS</heading>
-    #   <subheading>WAIT TIMES - EFFECTS</subheading>
-    # </questions>
-    # <resolutions id="">
-    #   <heading id="">NOTICES OF MOTION UNDER RULE 32(3)</heading>
-    #   <num title="1227">RESOLUTION NO. 1227</num>
-    # </resolutions>
-    # @note `id` is a required attribute on debate sections. `name` is an
-    # additional required attributes on `debateSection`.
-    xml.send(tag) do |section|
-      if heading['num_title']
-        xml.num(title: heading.fetch('num_title')) do
-          xml << text
-        end
-      else
-        # @note `id` is a required attribute.
-        xml.heading text
-      end
-      speeches.each do |speech|
-        if Array === speech
-          output_section(section, speech[0], speech[1])
+    if speeches.empty?
+      info("Skipping empty section #{text}")
+    else
+      tag = HEADING_TO_TAG[text] || :debateSection
+
+      # <questions id="">
+      #   <heading id="">ORAL QUESTIONS PUT BY MEMBERS</heading>
+      #   <subheading>WAIT TIMES - EFFECTS</subheading>
+      # </questions>
+      # @note `id` is a required attribute on debate sections. `name` is an
+      # additional required attributes on `debateSection`.
+      xml.send(tag) do |section|
+        if heading['num_title']
+          xml.num(title: heading.fetch('num_title')) do
+            xml << text
+          end
         else
-          output_speech(xml, speech)
+          # @note `id` is a required attribute.
+          xml.heading text
+        end
+        speeches.each do |speech|
+          if Array === speech
+            output_section(section, speech[0], speech[1])
+          else
+            output_speech(xml, speech)
+          end
         end
       end
     end
@@ -173,7 +174,7 @@ private
 
   def output_speech(xml, speech)
     # Tabular divisions have no text.
-    if speech['text'] || speech['note'] != 'division'
+    if speech['text'] || !speech['division']
       text = speech.fetch('text')
       # Wrap a one-line speech in a paragraph.
       unless text['</p>']
@@ -201,6 +202,14 @@ private
         xml << text
       end
 
+    when 'other'
+      # <other>
+      #   <p>Tabled May 1, 2014</p>
+      # </other>
+      xml.other do
+        xml << text
+      end
+
     when 'question'
       attributes = {}
 
@@ -219,14 +228,27 @@ private
       end
 
     when 'recordedTime'
+      # Skip for now, as it's an inline element that is not supported by SayIt,
+      # plus it adds nothing to the user experience, like page numbers which we
+      # could include with the <eop> tag.
+      return
+
       # <recordedTime time="2014-04-04T07:09:00-03:00">7:09 a.m.</recordedTime>
       xml.recordedTime(time: Time.zone.parse(speech.fetch('time')).strftime('%FT%T%:z')) do
         xml << text
       end
 
     when 'speech'
-      if speech['note'] == 'resolution'
+      if speech['num_title']
+        #   <speech by="#">
+        #     <num title="1227">RESOLUTION NO. 1588</num>
+        #     <from>Mr. Chuck Porter</from>
+        #     <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+        #   </speech>
         xml.speech(by: "##{speech.fetch('from_id')}") do
+          xml.num(title: speech.fetch('num_title')) do
+            xml << speech.fetch('num')
+          end
           xml.from speech.fetch('from')
           xml << text
         end
@@ -258,7 +280,7 @@ private
     else
       # @note `id` is a required attribute on `other`.
       # @see http://examples.akomantoso.org/categorical.html#voteAttsAG
-      if speech['note'] == 'division'
+      if speech['division']
         if speech['html']['<table']
           doc = Nokogiri::XML(speech['html'], &:noblanks)
           doc.xpath('//td[string-length(text())=1]').each do |td|

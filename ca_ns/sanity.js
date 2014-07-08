@@ -90,12 +90,11 @@ if (count) {
 [ {element: 'heading'},
   {element: 'answer'},
   {element: 'narrative'},
+  {element: 'other'},
   {element: 'question'},
   {element: 'recordedTime'},
-  {note: 'resolution'},
-  {element: 'speech', note: {$ne: 'resolution'}, fuzzy: {$ne: true}},
-  {element: 'speech', note: {$ne: 'resolution'}, fuzzy: true},
-  {note: 'division'},
+  {element: 'speech'},
+  {division: true},
 ].forEach(function (selector) {
   selector.text = /<b\b/
   var count = db.speeches.count(selector)
@@ -118,15 +117,9 @@ sorted('$text', [{
 
 // If you need to take a close look at specific kinds of speeches:
 
-// {element: 'heading'}
-// {element: 'answer'}
-// {element: 'narrative'}
-// {element: 'question'}
-// {element: 'recordedTime'}
-// {note: 'resolution'}
-// {element: 'speech', note: {$ne: 'resolution'}, fuzzy: {$ne: true}}
-// {element: 'speech', note: {$ne: 'resolution'}, fuzzy: true}
-// {note: 'division'}
-
+// {element: 'speech', num: null, fuzzy: true}
+// {element: 'speech', num: null, fuzzy: {$ne: true}}
+// {element: 'speech', num: {$ne: null}, fuzzy: true} // Resolution
+// {element: 'speech', num: {$ne: null}, fuzzy: {$ne: true}} // Resolution
 // {from_id: null, from_as: null, from: {$ne: null}} // AN HON. MEMBER:, ANOTHER HON. MEMBER:
 // {from_id: null, from: null, from_as: {$ne: null}} // The honourable, SPEAKER'S RULING:

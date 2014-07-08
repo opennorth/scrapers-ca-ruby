@@ -27,7 +27,9 @@ class Speech
   attr_accessor :index
   # @return [String] the Akoma Ntoso element for the paragraph
   attr_accessor :element
-  # @return [Integer] the heading's number
+  # @return [Integer] the label for the number of the heading or speech
+  attr_accessor :num
+  # @return [Integer] the number of the heading or speech
   attr_accessor :num_title
   # @return [Time] a local time
   attr_accessor :time
@@ -47,18 +49,18 @@ class Speech
   attr_accessor :html
   # @return [String] a clean version of the paragraph
   attr_accessor :text
-  # @return [Boolean] whether the speech is a division or a resolution
-  attr_accessor :note
+  # @return [Boolean] whether the speech is a division
+  attr_accessor :division
   # @return [Boolean] whether the speaker's name was hyperlinked
   attr_accessor :fuzzy
   # @return [String] the ID of the debate to which this speech belongs
   attr_accessor :debate_id
 
-  dump :index, :element, :num_title, :time, :from, :from_as, :from_id, :to, :to_as, :to_id, :html, :text, :note, :fuzzy, :debate_id
+  dump :index, :element, :num, :num_title, :time, :from, :from_as, :from_id, :to, :to_as, :to_id, :html, :text, :division, :fuzzy, :debate_id
   foreign_key :debate_id, :from_id
 
   validates_numericality_of :index
-  validates_inclusion_of :element, in: %w(recordedTime speech narrative other), allow_blank: true
+  validates_inclusion_of :element, in: %w(answer narrative other question recordedTime speech), allow_blank: true
   validates_presence_of :debate_id
 
   def fingerprint
