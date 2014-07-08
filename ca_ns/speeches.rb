@@ -336,7 +336,7 @@ private
               index: index,
               element: 'speech',
               from: from,
-              from_as: '#member',
+              from_as: 'member',
               html: p.to_s,
               text: clean_paragraph(p.inner_html).sub(/\AAN(?:OTHER)? HON\. MEMBER: /, ''),
               debate_id: debate._id,
