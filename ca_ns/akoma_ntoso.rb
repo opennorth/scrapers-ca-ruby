@@ -141,8 +141,13 @@ private
   def output_section(xml, heading, speeches)
     text = heading.fetch('text')
 
-    if speeches.empty?
-      info("Skipping empty section #{text}")
+    # The hansard always includes top-level headings, even if there is no
+    # content; we don't include these. Merge headings that are split onto
+    # two lines, unless the heading begins with "Bill No.".
+    if speeches.empty? && !text[/\ABill (?:No\. )?\d+ [–-]/]
+      unless TOP_LEVEL_HEADINGS.include?(text)
+        return text
+      end
     else
       tag = HEADING_TO_TAG[text] || :debateSection
 
@@ -161,15 +166,27 @@ private
           # @note `id` is a required attribute.
           xml.heading text
         end
+
+        text_to_merge = nil
         speeches.each do |speech|
-          if Array === speech
-            output_section(section, speech[0], speech[1])
+          if text_to_merge
+            if Array === speech
+              subheading = speech[0]
+              subheading['text'] = "#{text_to_merge} #{subheading.fetch('text')}"
+              output_section(section, subheading, speech[1])
+            else
+              error("Expected a continuation of the heading: #{text_to_merge}")
+            end
+          elsif Array === speech
+            text_to_merge = output_section(section, speech[0], speech[1])
           else
             output_speech(xml, speech)
           end
         end
       end
     end
+
+    nil
   end
 
   def output_speech(xml, speech)
@@ -239,42 +256,39 @@ private
       end
 
     when 'speech'
-      if speech['num_title']
-        #   <speech by="#">
-        #     <num title="1227">RESOLUTION NO. 1588</num>
-        #     <from>Mr. Chuck Porter</from>
-        #     <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
-        #   </speech>
-        xml.speech(by: "##{speech.fetch('from_id')}") do
+      attributes = {}
+
+      # Three resolutions set neither.
+      # @see http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14apr02/
+      # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec05/
+      # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov14/
+      if speech['from_id']
+        attributes[:by] = "##{speech['from_id']}"
+      elsif speech['from_as']
+        # @see https://groups.google.com/forum/#!topic/akomantoso-xml/3R7EZRNp4No/discussion
+        attributes[:by] = ''
+        attributes[:as] = "##{speech['from_as']}"
+        attributes[:status] = 'undefined'
+      end
+
+      # <speech by="#">
+      #   <num title="1227">RESOLUTION NO. 1588</num>
+      #   <from>Mr. Chuck Porter</from>
+      #   <p>I hereby give notice that on a future day I shall move the adoption of the following resolution:</p>
+      # </speech>
+      xml.speech(attributes) do
+        if speech['num_title']
           xml.num(title: speech.fetch('num_title')) do
             xml << speech.fetch('num')
           end
-          xml.from speech.fetch('from')
-          xml << text
         end
-      else
-        attributes = {}
-
-        # A single speech defines neither. FIXME
-        # @see http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14apr02/
-        if speech['from_id']
-          attributes[:by] = "##{speech['from_id']}"
-        elsif speech['from_as']
-          # @see https://groups.google.com/forum/#!topic/akomantoso-xml/3R7EZRNp4No/discussion
-          attributes[:by] = ''
-          attributes[:as] = "##{speech['from_as']}"
-          attributes[:status] = 'undefined'
+        # Insert a <from> tag for the speaker, even if the source omits it.
+        if speech['from']
+          xml.from speech['from']
+        elsif speech['from_as'] == 'speaker'
+          xml.from 'MR. SPEAKER'
         end
-
-        xml.speech(attributes) do
-          # Insert a <from> tag for the speaker, even if the source omits it.
-          if speech['from']
-            xml.from speech['from']
-          elsif speech['from_as'] == 'speaker'
-            xml.from 'MR. SPEAKER'
-          end
-          xml << text
-        end
+        xml << text
       end
 
     else

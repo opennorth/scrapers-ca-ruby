@@ -413,7 +413,7 @@ private
           # * INTRODUCTION OF BILLS
           # * NOTICE OF QUESTIONS FOR WRITTEN ANSWERS
           # * NOTICES OF MOTION UNDER RULE 32(3)
-          elsif text[/\ABill No\. \d+ [–-] Entitled\b|\A(?:Given on|Tabled) \S+ \d{1,2}, 20\d\d\z|\A\(?Pursuant to Rule 30(?:\(1\))?\)?\z/]
+          elsif text[/\ABill No\. \d+ [–-] Entitled\b|\A(?:Given on|Tabled) \S+ \d{1,2}, 20\d\d\z|\A\(?Pursuant to Rule 30(?:\(1\))?\)?\z|\APURSUANT TO RULE 30\z/]
             transition_to(:other)
             create_speech
 
@@ -426,45 +426,33 @@ private
             }))
 
           # A resolution.
-          #
-          # The "NO." can be missing.
-          # @see http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14mar27/
-          # The "I" in "RESOLUTION" can be missing. FIXME
-          # @see http://nslegislature.ca/index.php/proceedings/hansard/C89/house_12apr26/
-          elsif text[/\ARESOLUTI?ON (?:NO\. )?\d+\z/]
+          elsif text[/\A\[?RESOL[IUT]+ONS? ?(?:NO\. ?)?\d+\]?\z/]
             # It's syntactically a heading, but we treat it as a speech title.
             transition_to(:heading)
+            create_speech
+
+            text = clean_resolution(text)
+
+            @speech = {
+              index: index,
+              element: 'speech',
+              num: text,
+              num_title: text.match(/\ARESOLUTION NO\. (\d+)\z/)[1],
+              debate_id: debate._id,
+            }
+
             if rule_32
               transition_to(:resolution_by)
-              create_speech
-
-              @speech = {
-                index: index,
-                element: 'speech',
-                num: text,
-                num_title: text[/\ARESOLUTION (?:NO\. )?(\d+)\z/, 1],
-                debate_id: debate._id,
-              }
 
               # If a resolution is unattributed, skip the attribution. FIXME
               if @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C94/house_14apr02/'
                 transition_to(:resolution)
               end
             else
-              transition_to(:speech)
-              create_speech
-
-              @speech = {
-                index: index,
-                element: 'speech',
-                num: text,
-                num_title: text[/\ARESOLUTION NO\. (\d+)\z/, 1],
-                debate_id: debate._id,
-              }
-
               # Non-Rule 32 resolution without a speaker, although there is one in the table of contents. FIXME
               if @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov14/' && text == 'RESOLUTION NO. 2212' ||
-                 @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec05/' && text == 'RESOLUTION NO. 2773'
+                  @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec05/' && text == 'RESOLUTION NO. 2773'
+                transition_to(:speech)
                 @speech.merge!({
                   html: '',
                   text: '',
@@ -488,12 +476,13 @@ private
             # Exceptions not requiring regular expressions.
             ['Private and Local Bills For Third Reading'].include?(text) ||
             # Resolutions headers are hard to find.
-            @speech.nil? && @state == :heading_begin && text[/\ARes\. (?:No\. ?)?\d+|\ABill No\. \d+ [–-]/] ||
+            @speech.nil? && @state == :heading_begin && text[/\ARes\. (?:No\. ?)?\d+|\ABill (?:No\. )?\d+ [–-]/] ||
             # All-bold lines may appear within a speech. Punctuation may not be inside the b tags.
             # @note This causes some bill headings to be captured in non-
             #   headings; in some cases, this is the correct result.
             @speech.nil? && p.at_css('b') && text.gsub(/[().\[\]]/, '') == p.css('b').text.strip.squeeze(' ').gsub(/[().\[\]]/, '')
           )
+            original_text = text.dup
             text = clean_heading(text)
 
             # The person answering a question is hard to parse.
@@ -511,7 +500,7 @@ private
             # based headings, so check the format. Avoid matching on colons,
             # because colons may indicate speakers.
             unless HEADINGS.include?(text) || HEADINGS_RE.any?{|pattern| text[pattern]} || text[/\A- | [&–-] /] || text[/[\.)]:/]
-              warn("Unrecognized heading #{text} | #{index} #{@a[:href]}")
+              warn("Unrecognized heading #{original_text} => #{text} | #{index} #{@a[:href]}")
             end
 
             dispatch(Speech.new({
@@ -684,6 +673,18 @@ private
     string
   end
 
+  def clean_resolution(string)
+    string.gsub!(/[\[\]]/, '')
+
+    RESOLUTION_TYPOS.each do |incorrect,correct|
+      if string[incorrect]
+        return string.sub(incorrect, correct)
+      end
+    end
+
+    string
+  end
+
   def clean_paragraph(p)
     # Text may contain <a>, <br>, <i>, <li>, <sup>, <u>, <ul> tags.
     p.to_s.strip.squeeze(' ').
@@ -832,8 +833,8 @@ private
       if @speaker_urls.key?(key)
         if @speaker_urls[key] != url
           unless response.status == 301 && response.headers['Location'] == 'http://nslegislature.ca/index.php/people/members/' &&
-                 # FIXME 2014-05-23 publications@gov.ns.ca
-                 key == 'maureen macdonald' && url == 'http://nslegislature.ca/index.php/people/members/Manning_MacDonald'
+              # FIXME 2014-05-23 publications@gov.ns.ca
+              key == 'maureen macdonald' && url == 'http://nslegislature.ca/index.php/people/members/Manning_MacDonald'
             raise "Expected #{@speaker_urls[key]} but was #{url} | #{@a[:href]} #{key}"
           end
         end

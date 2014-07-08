@@ -14,8 +14,6 @@ class NovaScotia < GovernmentProcessor
 
       speech_begin: [:speech],
       speech: [
-        # Non-Rule 32 resolution
-        :speech_by,
         # Multi-line speech
         :speech_continue,
         # Predicted heading
@@ -54,9 +52,10 @@ class NovaScotia < GovernmentProcessor
       heading: [
         # Predicted
         :answer,
+        :other_begin,
         :question_line1,
         :resolution_by,
-        :other_begin,
+        :speech_by,
         # Unpredicted
         :heading, # Top-level headings may have no speeches
         :other, # "NOTICES OF MOTION UNDER RULE 32(3)" transitions to "Tabled April 28, 2014"
