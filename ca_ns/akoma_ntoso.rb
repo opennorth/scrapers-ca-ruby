@@ -10,25 +10,25 @@ class NovaScotia
       name = "#{debate.fetch('docDate_date')}_#{debate.fetch('docNumber')}.xml"
 
       # Create a list of people for the <meta> block.
-      people = {}
-      connection.raw_connection[:speeches].find(debate_id: debate.fetch('_id'), from_id: {'$ne' => nil}).each do |speech|
+      @people = {}
+      connection.raw_connection[:speeches].find(debate_id: debate.fetch('_id'), from_id: {'$ne' => nil}).sort(index: 1).each do |speech|
         id = speech.fetch('from_id')
-        unless people.key?(id)
+        unless @people.key?(id)
           url = connection.raw_connection[:people].find(_id: id).first.fetch('sources')[0].fetch('url')
           # @see https://code.google.com/p/akomantoso/wiki/Using_Akoma_Ntoso_URIs#TLC_Person
           part = url.match(%r{([^/]+)\z})[1].downcase.gsub(/[._-]+/, '.').gsub(/[^a-z.]/, '')
           # @see https://groups.google.com/d/topic/akomantoso-xml/I8vsYM3srv0/discussion
-          people[id] = {'href' => "/ontology/person/ca-ns.#{part}", 'showAs' => speech.fetch('from')}
+          @people[id] = {id: part, href: "/ontology/person/ca-ns.#{part}", showAs: speech.fetch('from')}
         end
       end
 
       # Create a list of roles for the <meta> block.
       roles = {}
-      connection.raw_connection[:speeches].find(debate_id: debate.fetch('_id'), from_as: {'$ne' => nil}, from: {'$ne' => nil}).each do |speech|
+      connection.raw_connection[:speeches].find(debate_id: debate.fetch('_id'), from_as: {'$ne' => nil}, from: {'$ne' => nil}).sort(index: 1).each do |speech|
         id = speech.fetch('from_as')
         unless roles.key?(id)
           # @see https://code.google.com/p/akomantoso/wiki/Using_Akoma_Ntoso_URIs#TLC_Role
-          roles[id] = {'href' => "/ontology/role/nslegislature.ca-ns.#{id}", 'showAs' => speech.fetch('from')}
+          roles[id] = {href: "/ontology/role/nslegislature.ca-ns.#{id}", showAs: speech.fetch('from')}
         end
       end
 
@@ -44,7 +44,7 @@ class NovaScotia
         #       <docTitle>Debates, 1 May 2014</docTitle>
         #       <docNumber>14-38</docNumber>
         #       <docDate date="2014-05-01">Thursday, May 1, 2014</docDate>
-        #       <docProponent>Nova Scotia House of Assembly</docProponent>
+        #       <docAuthority>Nova Scotia House of Assembly</docAuthority>
         #       <legislature value="62">62nd General Assembly</legislature>
         #       <session value="1">1st Session</session>
         #     </preface>
@@ -58,11 +58,11 @@ class NovaScotia
               xml.references(source: '#source') do
                 # @see https://code.google.com/p/akomantoso/wiki/Using_Akoma_Ntoso_URIs#TLC_Organization
                 xml.TLCOrganization(id: 'source', href: '/ontology/organization/ca.open.north.inc', showAs: "Open North Inc.")
-                people.each do |id,person|
-                  xml.TLCPerson(id: id, href: person.fetch('href'), showAs: person.fetch('showAs'))
+                @people.each do |id,person|
+                  xml.TLCPerson(id: person.fetch(:id), href: person.fetch(:href), showAs: person.fetch(:showAs))
                 end
                 roles.each do |id,role|
-                  xml.TLCRole(id: id, href: role.fetch('href'), showAs: role.fetch('showAs'))
+                  xml.TLCRole(id: id, href: role.fetch(:href), showAs: role.fetch(:showAs))
                 end
               end
             end
@@ -72,17 +72,15 @@ class NovaScotia
               xml.docDate(date: debate.fetch('docDate_date')) do
                 xml << debate.fetch('docDate')
               end
-              # docAuthority and FRBRWork are other options.
               # @see https://groups.google.com/d/topic/akomantoso-xml/kh2t5i8OuHg/discussion
-              # @see https://groups.google.com/d/topic/akomantoso-xml/I8vsYM3srv0/discussion
-              # @see http://www.akomantoso.org/release-notes/akoma-ntoso-3.0-schema/naming-conventions-1/bungenihelpcenterreferencemanualpage.2008-01-09.1484954524
-              xml.docProponent debate.fetch('docProponent')
+              xml.docAuthority debate.fetch('docAuthority')
               xml.legislature(value: debate.fetch('legislature_value')) do
                 xml << debate.fetch('legislature')
               end
               xml.session(value: debate.fetch('session_value')) do
                 xml << debate.fetch('session')
               end
+              xml.link(rel: 'alternate', type: 'text/html', href: debate['sources'][0]['url'])
             end
 
             xml.debateBody do
@@ -208,7 +206,7 @@ private
       #   <from>MS. BAR</from>
       #   <p>Yes.</p>
       # </answer>
-      xml.answer(by: "##{speech.fetch('from_id')}", to: "##{speech.fetch('to_id')}") do
+      xml.answer(by: "##{by(speech)}", to: "##{speech.fetch('to_id')}") do
         if speech['heading']
           xml.heading speech.fetch('heading')
         end
@@ -246,7 +244,7 @@ private
       #   <from>MR. FOO</from>
       #   <p>Baz?</p>
       # </question>
-      xml.question(attributes.merge(by: "##{speech.fetch('from_id')}")) do
+      xml.question(attributes.merge(by: "##{by(speech)}")) do
         if speech['num_title']
           xml.num(title: speech.fetch('num_title')) do
             xml << speech.fetch('num')
@@ -265,7 +263,7 @@ private
       # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec05/
       # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov14/
       if speech['from_id']
-        attributes[:by] = "##{speech['from_id']}"
+        attributes[:by] = "##{by(speech)}"
       elsif speech['from_as']
         # @see https://groups.google.com/forum/#!topic/akomantoso-xml/3R7EZRNp4No/discussion
         attributes[:by] = ''
@@ -322,5 +320,9 @@ private
         error("Unexpected element #{speech['element']}\n#{JSON.pretty_generate(speech)}")
       end
     end
+  end
+
+  def by(speech)
+    @people.fetch(speech.fetch('from_id')).fetch(:id)
   end
 end

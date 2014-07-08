@@ -56,7 +56,7 @@ private
           docNumber: docNumber,
           docDate_date: docDate_date,
           docDate: docDate_date.strftime('%A, %B %-e, %Y'),
-          docProponent: 'Nova Scotia House of Assembly',
+          docAuthority: 'Nova Scotia House of Assembly',
           legislature_value: legislature_value,
           legislature: "#{legislature_value.ordinalize} General Assembly",
           session_value: session_value,

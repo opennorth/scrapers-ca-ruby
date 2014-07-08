@@ -5,9 +5,9 @@ class Debate
   include ActiveModel::Validations
 
   attr_accessor :name, :docTitle, :docNumber, :docDate, :docDate_date,
-    :docProponent, :legislature, :legislature_value, :session, :session_value
+    :docAuthority, :legislature, :legislature_value, :session, :session_value
   dump :name, :docTitle, :docNumber, :docDate, :docDate_date,
-    :docProponent, :legislature, :legislature_value, :session, :session_value
+    :docAuthority, :legislature, :legislature_value, :session, :session_value
 
   def fingerprint
     to_h.slice(:docDate_date, :docNumber)
