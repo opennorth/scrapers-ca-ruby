@@ -398,7 +398,7 @@ private
               index: index,
               element: 'subheading',
               html: p.to_s,
-              text: clean_paragraph(p.inner_html),
+              text: text,
               debate_id: debate._id,
             }))
 
