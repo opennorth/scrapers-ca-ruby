@@ -363,14 +363,12 @@ private
             transition_to(:recorded_time)
             create_speech
 
-            dispatch(Speech.new({
-              index: index,
-              element: 'recordedTime',
-              time: Time.zone.local(docDate_date.year, docDate_date.month, docDate_date.day, $1, $2),
-              html: p.to_s,
-              text: clean_paragraph(p.inner_html).sub('[', '').sub(']', ''),
-              debate_id: debate._id,
-            }))
+            # `recordedTime` can refer to a past, present or future time. If we
+            # want to preserve this information, we should store the parsed time
+            # in a temporary variable, and attach it as a `startTime` to a
+            # `speech`, `question` or `answer`.
+            #
+            # Time.zone.local(docDate_date.year, docDate_date.month, docDate_date.day, $1, $2)
 
           # A line of text, seen in:
           # * INTRODUCTION OF BILLS

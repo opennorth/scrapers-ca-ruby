@@ -257,17 +257,6 @@ private
         xml << text
       end
 
-    when 'recordedTime'
-      # Skip for now, as it's an inline element that is not supported by SayIt,
-      # plus it adds nothing to the user experience, like page numbers which we
-      # could include with the <eop> tag.
-      return
-
-      # <recordedTime time="2014-04-04T07:09:00-03:00">7:09 a.m.</recordedTime>
-      xml.recordedTime(time: Time.zone.parse(speech.fetch('time')).strftime('%FT%T%:z')) do
-        xml << text
-      end
-
     when 'speech'
       attributes = {}
 

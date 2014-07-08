@@ -92,7 +92,6 @@ if (count) {
   {element: 'narrative'},
   {element: 'other'},
   {element: 'question'},
-  {element: 'recordedTime'},
   {element: 'speech'},
   {division: true},
 ].forEach(function (selector) {

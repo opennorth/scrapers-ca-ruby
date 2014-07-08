@@ -33,8 +33,6 @@ class Speech
   attr_accessor :num
   # @return [Integer] the number of the heading or speech
   attr_accessor :num_title
-  # @return [Time] a local time
-  attr_accessor :time
   # @return [String] the label for the person speaking
   attr_accessor :from
   # @return [String] the role of the person speaking
@@ -58,11 +56,11 @@ class Speech
   # @return [String] the ID of the debate to which this speech belongs
   attr_accessor :debate_id
 
-  dump :index, :element, :heading, :num, :num_title, :time, :from, :from_as, :from_id, :to, :to_as, :to_id, :html, :text, :division, :fuzzy, :debate_id
+  dump :index, :element, :heading, :num, :num_title, :from, :from_as, :from_id, :to, :to_as, :to_id, :html, :text, :division, :fuzzy, :debate_id
   foreign_key :debate_id, :from_id
 
   validates_numericality_of :index
-  validates_inclusion_of :element, in: %w(answer narrative other question recordedTime speech), allow_blank: true
+  validates_inclusion_of :element, in: %w(answer narrative other question speech), allow_blank: true
   validates_presence_of :debate_id
 
   def fingerprint
