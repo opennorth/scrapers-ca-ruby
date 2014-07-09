@@ -53,7 +53,7 @@ class NovaScotia
         #   </debate>
         # </akomaNtoso>
         xml.akomaNtoso do
-          xml.debate(name: 'hansard') do
+          xml.debate(name: debate.fetch('name')) do
             xml.meta do
               xml.references(source: '#source') do
                 # @see https://code.google.com/p/akomantoso/wiki/Using_Akoma_Ntoso_URIs#TLC_Organization
@@ -207,10 +207,7 @@ private
       #   <p>Yes.</p>
       # </answer>
       xml.answer(by: "##{by(speech)}", to: "##{speech.fetch('to_id')}") do
-        if speech['heading']
-          xml.heading speech.fetch('heading')
-        end
-
+        xml.heading speech.fetch('heading')
         xml.from speech.fetch('from')
         xml << text
       end
@@ -245,12 +242,9 @@ private
       #   <p>Baz?</p>
       # </question>
       xml.question(attributes.merge(by: "##{by(speech)}")) do
-        if speech['num_title']
-          xml.num(title: speech.fetch('num_title')) do
-            xml << speech.fetch('num')
-          end
+        xml.num(title: speech.fetch('num_title')) do
+          xml << speech.fetch('num')
         end
-
         xml.from speech.fetch('from')
         xml << text
       end
@@ -294,7 +288,7 @@ private
       end
 
     when 'subheading'
-      # <subheading>Pursuant to Rule 30</subheading>
+      # <subheading>(RESPONSES)</subheading>
       xml.subheading speech.fetch('text')
 
     else
