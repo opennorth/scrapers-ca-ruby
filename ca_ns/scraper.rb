@@ -175,7 +175,9 @@ if ENV['REDISCLOUD_URL']
 end
 
 if ENV['MEMCACHIER_SERVERS']
-  options[:cache_dir] = "memcached://#{ENV['MEMCACHIER_USERNAME']}:#{ENV['MEMCACHIER_PASSWORD']}@#{ENV['MEMCACHIER_SERVERS']}"
+  options[:cache_dir] = "memcached://#{ENV['MEMCACHIER_SERVERS']}"
+  options[:memcached_username] = ENV['MEMCACHIER_USERNAME']
+  options[:memcached_password] = ENV['MEMCACHIER_PASSWORD']
 end
 
 runner = Pupa::Runner.new(NovaScotia, options)
