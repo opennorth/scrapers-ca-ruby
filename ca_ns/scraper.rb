@@ -165,9 +165,20 @@ require_relative 'akoma_ntoso'
 NovaScotia.add_scraping_task(:people)
 NovaScotia.add_scraping_task(:speeches)
 
-runner = Pupa::Runner.new(NovaScotia, {
+options = {
   database_url: 'mongodb://localhost:27017/sayit',
   expires_in: 604800, # 1 week
-})
+}
+
+if ENV['REDISCLOUD_URL']
+  options[:output_dir] = ENV['REDISCLOUD_URL']
+end
+
+if ENV['MEMCACHIER_SERVERS']
+  options[:cache_dir] = "memcached://#{ENV['MEMCACHIER_USERNAME']}:#{ENV['MEMCACHIER_PASSWORD']}@#{ENV['MEMCACHIER_SERVERS']}"
+end
+
+runner = Pupa::Runner.new(NovaScotia, options)
+
 runner.add_action(name: 'akoma_ntoso', description: 'Output speeches as Akoma Ntoso')
 runner.run(ARGV)

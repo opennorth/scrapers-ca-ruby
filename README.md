@@ -23,15 +23,16 @@ Run a scraper with:
 
     ruby ca_qc_montreal/scraper.rb
 
-## Data Quality
+## Deployment
 
-To check property usage:
+    heroku addons:add memcachier
+    heroku addons:add rediscloud
+    heroku addons:add mongolab
+    heroku addons:add scheduler
 
-    curl -O https://raw.github.com/variety/variety/master/variety.js
-    mongo mycityhall --eval 'var collection = "organizations"' variety.js
-    mongo mycityhall --eval 'var collection = "posts"' variety.js
-    mongo mycityhall --eval 'var collection = "people"' variety.js
-    mongo mycityhall --eval 'var collection = "memberships"' variety.js
+Schedule the job:
+
+    ruby ca_ns/scraper.rb --pipelined --no-validate -q -t people
 
 ## Bugs? Questions?
 

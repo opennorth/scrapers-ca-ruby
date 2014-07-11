@@ -10,3 +10,7 @@ gem 'pupa', '~> 0.1.1'
 gem 'redis-store'
 gem 'rubyzip', '~> 0.9.9'
 gem 'unicode_utils'
+
+# Server
+gem 'sinatra'
+gem 'unicorn'
