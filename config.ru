@@ -28,7 +28,7 @@ get '/organizations' do
   collection(:organizations)
 end
 
-get '/people' do
+get '/persons' do # like PopIt
   collection(:people)
 end
 
