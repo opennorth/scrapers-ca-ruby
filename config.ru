@@ -32,6 +32,10 @@ get '/persons' do # like PopIt
   collection(:people)
 end
 
+get '/posts' do
+  collection(:posts)
+end
+
 get '/' do
   204
 end
