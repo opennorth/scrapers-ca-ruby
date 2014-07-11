@@ -21,6 +21,16 @@ class NovaScotia
           @people[id] = {id: part, href: "/ontology/person/ca-ns.#{part}", showAs: speech.fetch('from')}
         end
       end
+      connection.raw_connection[:speeches].find(debate_id: debate.fetch('_id'), to_id: {'$ne' => nil}).sort(index: 1).each do |speech|
+        id = speech.fetch('to_id')
+        unless @people.key?(id)
+          url = connection.raw_connection[:people].find(_id: id).first.fetch('sources')[0].fetch('url')
+          # @see https://code.google.com/p/akomantoso/wiki/Using_Akoma_Ntoso_URIs#TLC_Person
+          part = url.match(%r{([^/]+)\z})[1].downcase.gsub(/[._-]+/, '.').gsub(/[^a-z.]/, '')
+          # @see https://groups.google.com/d/topic/akomantoso-xml/I8vsYM3srv0/discussion
+          @people[id] = {id: part, href: "/ontology/person/ca-ns.#{part}", showAs: speech.fetch('to')}
+        end
+      end
 
       # Create a list of roles for the <meta> block.
       roles = {}
