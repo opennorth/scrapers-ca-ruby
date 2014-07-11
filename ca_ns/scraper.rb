@@ -166,7 +166,7 @@ NovaScotia.add_scraping_task(:people)
 NovaScotia.add_scraping_task(:speeches)
 
 options = {
-  database_url: 'mongodb://localhost:27017/sayit',
+  database_url: ENV['MONGOLAB_URI'] || 'mongodb://localhost:27017/sayit',
   expires_in: 604800, # 1 week
 }
 
