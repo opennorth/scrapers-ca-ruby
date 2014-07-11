@@ -9,6 +9,11 @@ class NovaScotia
       # filenames to be date-based.
       name = "#{debate.fetch('docDate_date')}_#{debate.fetch('docNumber')}.xml"
 
+      if store.exist?(name) && @options.key?('no-clobber')
+        info("Skipping #{name}")
+        next
+      end
+
       # Create a list of people for the <meta> block.
       @people = {}
       connection.raw_connection[:speeches].find(debate_id: debate.fetch('_id'), from_id: {'$ne' => nil}).sort(index: 1).each do |speech|
@@ -147,6 +152,10 @@ class NovaScotia
                 previous_speech = speech
               end
 
+              unless heading_level_2.nil?
+                speeches_level_1 << [heading_level_2, speeches_level_2]
+                speeches_level_2 = []
+              end
               unless heading_level_1.nil?
                 output_section(xml, heading_level_1, speeches_level_1)
               end
