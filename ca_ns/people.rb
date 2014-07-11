@@ -30,6 +30,7 @@ class NovaScotia
       name: 'Darrell Dexter',
       family_name: 'Dexter',
       given_name: 'Darrell',
+      sort_name: 'Dexter, Darrell',
     })
     create_person(person, 'http://nslegislature.ca/index.php/people/members/Darrell_Dexter')
 
@@ -38,6 +39,7 @@ class NovaScotia
       name: 'John MacDonald',
       family_name: 'MacDonald',
       given_name: 'John',
+      sort_name: 'MacDonald, John',
     })
     create_person(person, 'http://nslegislature.ca/index.php/people/members/john_macdonnell')
 
@@ -54,6 +56,7 @@ class NovaScotia
         name: "#{given_name} #{family_name}",
         family_name: family_name,
         given_name: given_name,
+        sort_name: "#{family_name.sub(/\Ad'/, '')}, #{given_name}",
         email: characters[characters.index('>') + 1..characters.rindex('<') - 1].map{|c| Integer(c).chr}.join,
         image: doc.at_css('.portrait')[:src],
       })
