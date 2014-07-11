@@ -88,9 +88,11 @@ private
             end
           end
 
-          # Mr. Premier is linked within a blockquote.
+          # "Mr. Premier" is linked within a blockquote.
           # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec09/
           person_a = p.node_name == 'p' && p.at_css('a[title="View Profile"]')
+          # "the Premier" and "Mr. Speaker" are sometimes linked within a paragraph.
+          person_prefix = person_a && person_a.previous && person_a.previous.text.strip || ''
 
           # Skip all text before the first speaker.
           if initial_state?
@@ -150,7 +152,7 @@ private
             if ROLES.include?(key)
               @speech["#{field}_as".to_sym] = key
             elsif url
-              @speech["#{field}_id".to_sym] = @speaker_ids.fetch(url){TYPOS.fetch(key)}
+              @speech["#{field}_id".to_sym] = @speaker_ids.fetch(url)
             end
 
             if @state == :question_line1
@@ -220,7 +222,7 @@ private
             @speech[:text] += "\n#{clean_paragraph(p)}"
 
           # A speech, which may have many paragraphs.
-          elsif person_a
+          elsif person_a && (person_prefix.empty? || person_prefix == '[')
             unless @state == :speech_by
               transition_to(:speech)
               create_speech

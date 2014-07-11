@@ -33,6 +33,14 @@ class NovaScotia
     })
     create_person(person, 'http://nslegislature.ca/index.php/people/members/Darrell_Dexter')
 
+    # John MacDonald doesn't really have a URL.
+    person = Pupa::Person.new({
+      name: 'John MacDonald',
+      family_name: 'MacDonald',
+      given_name: 'John',
+    })
+    create_person(person, 'http://nslegislature.ca/index.php/people/members/john_macdonnell')
+
     get('http://nslegislature.ca/index.php/people/members/').css('#content tbody tr').each do |tr|
       tds = tr.css('td')
 

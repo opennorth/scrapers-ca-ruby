@@ -88,9 +88,23 @@ class NovaScotia
               heading_level_2 = nil
               speeches_level_1 = []
               speeches_level_2 = []
+              previous_speech = nil
 
               connection.raw_connection[:speeches].find(debate_id: debate.fetch('_id')).sort(index: 1).each do |speech|
-                if speech['element'] == 'heading'
+                if speech['element'] == 'narrative' && speech['text']['The House recessed.'] && previous_speech['text']['Lieutenant Governor']
+                  unless heading_level_2.nil?
+                    speeches_level_1 << [heading_level_2, speeches_level_2]
+                    speeches_level_2 = []
+                  end
+                  unless heading_level_1.nil?
+                    output_section(xml, heading_level_1, speeches_level_1)
+                    speeches_level_1 = []
+                  end
+                  heading_level_1 = nil
+                  heading_level_2 = nil
+                  # Don't forget to output the narrative.
+                  output_speech(xml, speech)
+                elsif speech['element'] == 'heading'
                   if TOP_LEVEL_HEADINGS.include?(speech.fetch('text'))
                     unless heading_level_2.nil?
                       speeches_level_1 << [heading_level_2, speeches_level_2]
@@ -116,9 +130,11 @@ class NovaScotia
                   speeches_level_2 << speech
                 elsif heading_level_1
                   speeches_level_1 << speech
-                else # first few speeches
+                else # first few speeches, speeches after Lieutenant Governor's arrival
                   output_speech(xml, speech)
                 end
+
+                previous_speech = speech
               end
 
               unless heading_level_1.nil?
@@ -174,6 +190,7 @@ private
             if Array === speech
               object = speech[0]
               object['text'] = "#{text_to_merge} #{object.fetch('text')}"
+              text_to_merge = nil
               output_section(section, object, speech[1])
             else
               error("Expected a continuation of the heading: #{text_to_merge}")
@@ -198,6 +215,9 @@ private
       unless text['</p>']
         text = "<p>#{text}</p>"
       end
+      if speech['element'] == 'narrative'
+        text.gsub!(/\bCWH\b/, 'Committee of the Whole House')
+      end
     end
 
     case speech['element']
@@ -206,7 +226,7 @@ private
       #   <from>MS. BAR</from>
       #   <p>Yes.</p>
       # </answer>
-      xml.answer(by: "##{by(speech)}", to: "##{speech.fetch('to_id')}") do
+      xml.answer(by: "##{by(speech)}", to: "##{to(speech)}") do
         xml.heading speech.fetch('heading')
         xml.from speech.fetch('from')
         xml << text
@@ -234,7 +254,7 @@ private
 
       # Question to a post, like the Premier, will not set `to_id`.
       if speech['to_id']
-        attributes[:to] = "##{speech['to_id']}"
+        attributes[:to] = "##{to(speech)}"
       end
 
       # <question by="#foo" to="#bar">
@@ -318,5 +338,9 @@ private
 
   def by(speech)
     @people.fetch(speech.fetch('from_id')).fetch(:id)
+  end
+
+  def to(speech)
+    @people.fetch(speech.fetch('to_id')).fetch(:id)
   end
 end
