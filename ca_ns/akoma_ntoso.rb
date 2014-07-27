@@ -235,7 +235,7 @@ private
         text = "<p>#{text}</p>"
       end
       if speech['element'] == 'narrative'
-        text.gsub!(/\bCWH\b/, 'Committee of the Whole House')
+        text.gsub!(/\bCWH?\b/, 'Committee of the Whole House')
       end
     end
 
