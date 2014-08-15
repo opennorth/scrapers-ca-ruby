@@ -1,42 +1,36 @@
 require File.expand_path(File.join('..', 'utils.rb'), __dir__)
 
 =begin
-ruby ca/scraper.rb -q
 export TWITTER_CONSUMER_KEY=...
 export TWITTER_CONSUMER_SECRET=...
-ruby ca/scraper.rb -q -a json
+ruby ca/scraper.rb -q -a scrape -a import -a id -a screen_name -a json
 
-The following users are not found on the party websites and have either never
-tweeted or tweeted many years ago.
+We first discover Twitter screen names from party websites, and then assign an
+ID if none is set. We then use the IDs to keep the screen names up-to-date, and
+can export the data as JSON.
 
-No tweets:
+The following users are not found on the party websites and have no tweets.
 
-alicewongcanada
-bobdechert
-emichaudnpd
-gordbrown
-maximebernier
-peterstoffermp
-stellaambler
-tomlukiwski
-
-No tweets in years:
-
-bradtrostcpc
-brianstorseth
-f_lapointe
-gschellenberger
-keithashfield11
-mackaycpc
-petergoldring
+* alicewongcanada
+* bobdechert
+* emichaudnpd
+* gordbrown
+* maximebernier
+* peterstoffermp
+* stellaambler
+* tomlukiwski
 =end
 
-class ScreenName
+class TwitterUser
   include Pupa::Model
 
-  attr_accessor :screen_name
+  attr_accessor :screen_name, :id
 
-  dump :screen_name
+  dump :screen_name, :id
+
+  def fingerprint
+    to_h.slice(:screen_name)
+  end
 
   def to_s
     screen_name
@@ -46,6 +40,69 @@ end
 class Canada < GovernmentProcessor
   # The Bloc Québécois, Green Party and Independents are done manually. Several
   # MPs are not linked from their party websites and are done manually.
+  def scrape_manual
+    screen_names = %w(
+      andrebellavance
+      claude_patry
+    ) + # Bloc Québécois
+    %w(
+      brucehyer
+      elizabethmay
+    ) + # Green Party
+    %w(
+      brentrathgeber
+      mpdeandelmastro
+      fortjf
+      mperreaultnpd
+    ) + # Independent
+    %w(
+      bradtrostcpc
+      brianstorseth
+      f_lapointe
+      gschellenberger
+      keithashfield11
+      mackaycpc
+      petergoldring
+    ) + # Inactive
+    %w(
+      barrydevolin_mp
+      bryanhayesmp
+      christianparad
+      danalbas
+      davidtilson
+      galipeauorleans
+      honrobnicholson
+      jacquesgourde
+      jayaspinmp
+      joe_preston
+      joycebatemanmp
+      kellyblockcpc
+      leonaaglukkaq
+      mpeveadams
+      mpmikea
+      pierrepoilievre
+      pmharper
+      scottreidcpc
+      shellyglovermin
+      susantruppe
+      terenceyoungmp
+    ) + # Conservative
+    %w(
+      honstephanedion
+      judyfootemp
+      scottandrewsmp
+    ) + # Liberal
+    %w(
+      fboivinnpd
+      jtremblaynpd
+      thomasmulcair
+    ) # NDP
+
+    screen_names.each do |screen_name|
+      dispatch(TwitterUser.new(screen_name: screen_name))
+    end
+  end
+
 
   def scrape_conservative
     get('http://www.conservative.ca/?page_id=35').xpath('//option').each do |option|
@@ -54,7 +111,7 @@ class Canada < GovernmentProcessor
         if url.empty?
           warn("No URL found at #{a[:href]}")
         else
-          twitter(url)
+          twitter_url(url)
         end
       end
     end
@@ -64,7 +121,7 @@ class Canada < GovernmentProcessor
     get('http://www.liberal.ca/mp/').xpath('//table//td[1]//a').each do |a|
       url = get(a[:href]).at_xpath('//a[@target="_blank"]')
       if url
-        twitter(url[:href].sub(/www\.(?=\w+\.liberal\.ca)/, ''), backup_url: "http://#{a[:href].split('/')[-1].gsub('-', '')}.liberal.ca/")
+        twitter_url(url[:href].sub(/www\.(?=\w+\.liberal\.ca)/, ''), backup_url: "http://#{a[:href].split('/')[-1].gsub('-', '')}.liberal.ca/")
       else
         warn("No URL found at #{a[:href]}")
       end
@@ -73,58 +130,78 @@ class Canada < GovernmentProcessor
 
   def scrape_ndp
     get('http://www.ndp.ca/ourcaucus').xpath('//table//a').each do |a|
-      twitter(a[:href])
+      twitter_url(a[:href])
+    end
+  end
+
+  def id
+    arguments = connection.raw_connection[:twitter_users].find(id: {'$exists' => false}).map do |user|
+      user['screen_name']
+    end
+
+    arguments.each_slice(100) do |slice|
+      twitter.users(*slice).each do |user|
+        connection.raw_connection[:twitter_users].find(screen_name: Regexp.new(user.screen_name, 'i')).update('$set' => {id: user.id.to_s})
+      end
+    end
+  end
+
+  def screen_name
+    arguments = connection.raw_connection[:twitter_users].find.map do |user|
+      user['id'].to_i
+    end
+
+    arguments.each_slice(100) do |slice|
+      twitter.users(*slice).each do |user|
+        connection.raw_connection[:twitter_users].find(id: user.id).update('$set' => {screen_name: user.screen_name})
+      end
     end
   end
 
   def json
-    client = Twitter::REST::Client.new do |config|
-      config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
-      config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
-    end
-
     data = {}
 
-    screen_names = connection.raw_connection[:screen_names].find.map do |screen_name|
-      screen_name['screen_name']
+    arguments = connection.raw_connection[:twitter_users].find.sort(id: 1).map do |user|
+      user['id'].to_i
     end
 
-    screen_names.each_slice(100) do |slice|
-      begin
-        client.users(*slice).each do |user|
-          key = user.name.
-            # Remove prefix.
-            sub(/\A(?:Dr|Hon)\. /, '').
-            # Remove parenthetical.
-            sub(/ \([^)]+\)/, '').
-            # Remove suffixes.
-            sub(/,.+/, '').
-            sub(/(?:député\/)?M\.?P\.?/, '').
-            sub(/ (?:NDP|NPD)\b/, '').
-            sub(/ \d+/, '').
-            # Remove infix initials.
-            sub(/ [A-Z]\./, '').
-            # Remove Chinese characters. https://twitter.com/joycemurray
-            gsub(/[^A-ZÉÈÎa-zçéèô'. -]/, '').
-            squeeze(' ').strip
+    arguments.each_slice(100) do |slice|
+      twitter.users(*slice).each do |user|
+        key = user.name.
+          # Remove prefix.
+          sub(/\A(?:Dr|Hon)\. /, '').
+          # Remove parenthetical.
+          sub(/ \([^)]+\)/, '').
+          # Remove suffixes.
+          sub(/,.+/, '').
+          sub(/(?:député\/)?M\.?P\.?/, '').
+          sub(/ (?:NDP|NPD)\b/, '').
+          sub(/ \d+/, '').
+          # Remove infix initials.
+          sub(/ [A-Z]\./, '').
+          # Remove Chinese characters. https://twitter.com/joycemurray
+          gsub(/[^A-ZÉÈÎa-zçéèô'. -]/, '').
+          squeeze(' ').strip
 
-          # Some Twitter names have no spaces between words, but we don't want to
-          # split MacKay into two words either.
-          key = key.split(/ |(?<=[a-z]{3})(?=[A-Z])|(?<=\.)(?! )/).map do |part|
-            if part[/[A-ZÉÈÎ]/]
-              part
-            else
-              part.capitalize
-            end
-          end.join(' ')
+        # Some Twitter names have no spaces between words, but we don't want to
+        # split MacKay into two words either.
+        key = key.split(/ |(?<=[a-z]{3})(?=[A-Z])|(?<=\.)(?! )/).map do |part|
+          if part[/[A-ZÉÈÎ]/]
+            part
+          else
+            part.capitalize
+          end
+        end.join(' ')
 
-          data[TWITTER_NAME_MAP.fetch(key, key)] = {id: user.id, screen_name: user.screen_name}
-       end
-      rescue Twitter::Error::TooManyRequests => error
-        warn("Sleeping #{error.rate_limit.reset_in} (limit=#{error.rate_limit.limit})")
-        sleep error.rate_limit.reset_in
-        retry
-      end
+        if user.statuses_count.zero?
+          warn("No tweets #{user.screen_name}")
+        end
+        unless user.verified?
+          info("Not verified #{user.screen_name}")
+        end
+
+        data[TWITTER_NAME_MAP.fetch(key, key)] = {id: user.id, screen_name: user.screen_name}
+     end
     end
 
     names = JSON.parse(Faraday.get('http://represent.opennorth.ca/representatives/house-of-commons/?limit=0').body)['objects'].map do |object|
@@ -156,6 +233,13 @@ private
     'T. Benskin' => 'Tyrone Benskin',
   }
 
+  def twitter
+    @twitter ||= Twitter::REST::Client.new do |config|
+      config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
+      config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
+    end
+  end
+
   BAD_SCREEN_NAME = [
     # Twitter
     'search',
@@ -182,7 +266,7 @@ private
     'sdionliberal' => 'honstephanedion',
   }
 
-  def twitter(url, backup_url: nil)
+  def twitter_url(url, backup_url: nil)
     if url
       begin
         response = client.get do |req|
@@ -229,14 +313,14 @@ private
           elsif response.env[:raw_body][/\.setUser\('([^']+)'\)/]
             screen_name = $1
           elsif backup_url
-            twitter(backup_url)
+            twitter_url(backup_url)
           end
           if screen_name
             screen_name.downcase!
             if BAD_SCREEN_NAME.include?(screen_name)
               warn("Ignoring #{screen_name} at #{url}")
             else
-              dispatch(ScreenName.new(screen_name: SCREEN_NAME_MAP.fetch(screen_name, screen_name)))
+              dispatch(TwitterUser.new(screen_name: SCREEN_NAME_MAP.fetch(screen_name, screen_name)))
             end
           end
         else
@@ -244,13 +328,13 @@ private
         end
       rescue Faraday::ConnectionFailed
         if backup_url
-          twitter(backup_url)
+          twitter_url(backup_url)
         elsif url['mp.ca'] # http://www.lauriehawnmp.ca
-          twitter(url.sub(/mp(?=\.ca\b)/, ''))
+          twitter_url(url.sub(/mp(?=\.ca\b)/, ''))
         elsif url['.ca'] # http://www.bradbutt.ca
-          twitter(url.sub(/(?=\.ca\b)/, 'mp'))
+          twitter_url(url.sub(/(?=\.ca\b)/, 'mp'))
         elsif url['.com'] # http://www.blainecalkinsmp.com
-          twitter(url.sub('.com', '.ca'))
+          twitter_url(url.sub('.com', '.ca'))
         else
           error("Server not found #{url}")
         end
@@ -261,6 +345,7 @@ private
   end
 end
 
+Canada.add_scraping_task(:manual)
 Canada.add_scraping_task(:conservative)
 Canada.add_scraping_task(:liberal)
 Canada.add_scraping_task(:ndp)
@@ -270,5 +355,7 @@ runner = Pupa::Runner.new(Canada, {
   expires_in: 604800, # 1 week
 })
 
-runner.add_action(name: 'json', description: 'Output JSON')
+runner.add_action(name: 'id', description: 'Set Twitter user IDs, if not set')
+runner.add_action(name: 'screen_name', description: 'Update Twitter screen names')
+runner.add_action(name: 'json', description: 'Output Twitter users as JSON')
 runner.run(ARGV)
