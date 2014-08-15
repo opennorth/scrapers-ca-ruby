@@ -260,6 +260,7 @@ private
         end
 
         last_url = URI.parse(url)
+        visited = [url]
         begin
           new_url = nil
           if [301, 302, 303].include?(response.status)
@@ -273,8 +274,13 @@ private
             parsed = URI.parse(new_url)
             parsed.scheme ||= last_url.scheme
             parsed.host ||= last_url.host
-            response = client.get(parsed.to_s)
-            last_url = parsed
+            if visited.include?(parsed.to_s)
+              return error("Redirection loop #{url}")
+            else
+              response = client.get(parsed.to_s)
+              last_url = parsed
+              visited << parsed.to_s
+            end
           end
         end while new_url
 
