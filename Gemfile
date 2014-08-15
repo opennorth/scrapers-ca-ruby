@@ -6,10 +6,11 @@ gem 'dalli'
 gem 'hiredis'
 gem 'multi_xml'
 gem 'nokogiri'
-gem 'pupa', '~> 0.1.1'
+gem 'pupa', '~> 0.1.7'
 gem 'redis-store'
 gem 'rubyzip', '~> 0.9.9'
 gem 'unicode_utils'
+gem 'twitter'
 
 # Server
 gem 'sinatra'

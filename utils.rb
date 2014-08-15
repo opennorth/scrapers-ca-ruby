@@ -13,6 +13,7 @@ require 'redis-store'
 require 'hiredis'
 require 'zip/zip'
 require 'unicode_utils'
+require 'twitter'
 
 class Pupa::Membership
   attr_reader :person, :post
