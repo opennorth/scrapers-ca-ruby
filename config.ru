@@ -36,6 +36,15 @@ get '/posts' do
   collection(:posts)
 end
 
+get '/twitter_users' do
+  content_type :json
+  data = {}
+  connection[:twitter_users].find.each do |user|
+    data[user['name']] = user['screen_name']
+  end
+  JSON.dump(data)
+end
+
 get '/' do
   204
 end

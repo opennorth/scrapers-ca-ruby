@@ -3,11 +3,10 @@ require File.expand_path(File.join('..', 'utils.rb'), __dir__)
 =begin
 export TWITTER_CONSUMER_KEY=...
 export TWITTER_CONSUMER_SECRET=...
-ruby ca/scraper.rb -q -a scrape -a import -a id -a screen_name -a json
+ruby ca/scraper.rb -q -a update -a scrape -a import -a update
 
 We first discover Twitter screen names from party websites, and then assign an
-ID if none is set. We then use the IDs to keep the screen names up-to-date, and
-can export the data as JSON.
+ID if none is set. We then use the IDs to keep the screen names up-to-date.
 
 The following users are not found on the party websites and have no tweets.
 
@@ -24,9 +23,9 @@ The following users are not found on the party websites and have no tweets.
 class TwitterUser
   include Pupa::Model
 
-  attr_accessor :screen_name, :id
+  attr_accessor :id, :screen_name, :name
 
-  dump :screen_name, :id
+  dump :id, :screen_name, :name
 
   def fingerprint
     to_h.slice(:screen_name)
@@ -59,18 +58,18 @@ class Canada < GovernmentProcessor
       bradtrostcpc
       brianstorseth
       f_lapointe
+      galipeauorleans
       gschellenberger
       keithashfield11
       mackaycpc
       petergoldring
-    ) + # Inactive
+    ) + # Inactive, also davidmcguinty from scrape_liberal
     %w(
       barrydevolin_mp
       bryanhayesmp
       christianparad
       danalbas
       davidtilson
-      galipeauorleans
       honrobnicholson
       jacquesgourde
       jayaspinmp
@@ -134,7 +133,12 @@ class Canada < GovernmentProcessor
     end
   end
 
-  def id
+  def update
+    names = JSON.parse(Faraday.get('http://represent.opennorth.ca/representatives/house-of-commons/?limit=0').body)['objects'].map do |object|
+      object['name']
+    end
+
+    # Set the ID if none is set.
     arguments = connection.raw_connection[:twitter_users].find(id: {'$exists' => false}).map do |user|
       user['screen_name']
     end
@@ -144,30 +148,15 @@ class Canada < GovernmentProcessor
         connection.raw_connection[:twitter_users].find(screen_name: Regexp.new(user.screen_name, 'i')).update('$set' => {id: user.id.to_s})
       end
     end
-  end
 
-  def screen_name
+    # Update the screen name.
     arguments = connection.raw_connection[:twitter_users].find.map do |user|
       user['id'].to_i
     end
 
     arguments.each_slice(100) do |slice|
       twitter.users(*slice).each do |user|
-        connection.raw_connection[:twitter_users].find(id: user.id).update('$set' => {screen_name: user.screen_name})
-      end
-    end
-  end
-
-  def json
-    data = {}
-
-    arguments = connection.raw_connection[:twitter_users].find.sort(id: 1).map do |user|
-      user['id'].to_i
-    end
-
-    arguments.each_slice(100) do |slice|
-      twitter.users(*slice).each do |user|
-        key = user.name.
+        name = user.name.
           # Remove prefix.
           sub(/\A(?:Dr|Hon)\. /, '').
           # Remove parenthetical.
@@ -183,9 +172,8 @@ class Canada < GovernmentProcessor
           gsub(/[^A-ZÉÈÎa-zçéèô'. -]/, '').
           squeeze(' ').strip
 
-        # Some Twitter names have no spaces between words, but we don't want to
-        # split MacKay into two words either.
-        key = key.split(/ |(?<=[a-z]{3})(?=[A-Z])|(?<=\.)(?! )/).map do |part|
+        # Some Twitter names have no spaces between words. Don't split "MacKay".
+        name = name.split(/ |(?<=[a-z]{3})(?=[A-Z])|(?<=\.)(?! )/).map do |part|
           if part[/[A-ZÉÈÎ]/]
             part
           else
@@ -193,28 +181,24 @@ class Canada < GovernmentProcessor
           end
         end.join(' ')
 
+        name = TWITTER_NAME_MAP.fetch(name, name)
+
+        connection.raw_connection[:twitter_users].find(id: user.id.to_s).update('$set' => {
+          screen_name: user.screen_name,
+          name: name,
+        })
+
+        unless names.include?(name)
+          error("Not an MP: #{name} https://twitter.com/#{user.screen_name}")
+        end
         if user.statuses_count.zero?
           warn("No tweets #{user.screen_name}")
+        elsif user.status.created_at < Time.now - 31556940 # 1 year
+          warn("Old tweets #{user.screen_name}")
         end
         unless user.verified?
           info("Not verified #{user.screen_name}")
         end
-
-        data[TWITTER_NAME_MAP.fetch(key, key)] = {id: user.id, screen_name: user.screen_name}
-     end
-    end
-
-    names = JSON.parse(Faraday.get('http://represent.opennorth.ca/representatives/house-of-commons/?limit=0').body)['objects'].map do |object|
-      object['name']
-    end
-
-    difference = data.keys - names
-
-    if difference.empty?
-      puts JSON.pretty_generate(data)
-    else
-      difference.each do |key|
-        puts "#{key} https://twitter.com/#{data[key][:screen_name]}"
       end
     end
   end
@@ -356,6 +340,5 @@ runner = Pupa::Runner.new(Canada, {
 })
 
 runner.add_action(name: 'id', description: 'Set Twitter user IDs, if not set')
-runner.add_action(name: 'screen_name', description: 'Update Twitter screen names')
-runner.add_action(name: 'json', description: 'Output Twitter users as JSON')
+runner.add_action(name: 'update', description: 'Update Twitter screen names')
 runner.run(ARGV)
