@@ -134,6 +134,8 @@ class Canada < GovernmentProcessor
   end
 
   def update
+    connection.raw_connection[:twitter_users].find(screen_name: {'$in' => NON_MP_SCREEN_NAME}).remove_all
+
     names = JSON.parse(Faraday.get('http://represent.opennorth.ca/representatives/house-of-commons/?limit=0').body)['objects'].map do |object|
       object['name']
     end
@@ -149,7 +151,7 @@ class Canada < GovernmentProcessor
       end
     end
 
-    arguments = connection.raw_connection[:twitter_users].find(id: {'$exists' => true}, screen_name: {'$nin' => NON_MP_SCREEN_NAME}).map do |user|
+    arguments = connection.raw_connection[:twitter_users].find(id: {'$exists' => true}).map do |user|
       user['id'].to_i
     end
 
