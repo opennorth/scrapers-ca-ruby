@@ -110,7 +110,7 @@ class Canada < GovernmentProcessor
         if url.empty?
           warn("No URL found at #{a[:href]}")
         else
-          twitter_url(url)
+          process(url)
         end
       end
     end
@@ -120,7 +120,7 @@ class Canada < GovernmentProcessor
     get('http://www.liberal.ca/mp/').xpath('//table//td[1]//a').each do |a|
       url = get(a[:href]).at_xpath('//a[@target="_blank"]')
       if url
-        twitter_url(url[:href].sub(/www\.(?=\w+\.liberal\.ca)/, ''), backup_url: "http://#{a[:href].split('/')[-1].gsub('-', '')}.liberal.ca/")
+        process(url[:href].sub(/www\.(?=\w+\.liberal\.ca)/, ''), backup_url: "http://#{a[:href].split('/')[-1].gsub('-', '')}.liberal.ca/")
       else
         warn("No URL found at #{a[:href]}")
       end
@@ -129,7 +129,7 @@ class Canada < GovernmentProcessor
 
   def scrape_ndp
     get('http://www.ndp.ca/ourcaucus').xpath('//table//a').each do |a|
-      twitter_url(a[:href])
+      process(a[:href])
     end
   end
 
@@ -138,22 +138,22 @@ class Canada < GovernmentProcessor
       object['name']
     end
 
-    # Set the ID if none is set.
     arguments = connection.raw_connection[:twitter_users].find(id: {'$exists' => false}).map do |user|
       user['screen_name']
     end
 
+    # Set the ID if none is set.
     arguments.each_slice(100) do |slice|
       twitter.users(*slice).each do |user|
         connection.raw_connection[:twitter_users].find(screen_name: Regexp.new(user.screen_name, 'i')).update('$set' => {id: user.id.to_s})
       end
     end
 
-    # Update the screen name.
-    arguments = connection.raw_connection[:twitter_users].find.map do |user|
+    arguments = connection.raw_connection[:twitter_users].find(id: {'$exists' => true}, screen_name: {'$nin' => NON_MP_SCREEN_NAME}).map do |user|
       user['id'].to_i
     end
 
+    # Update the screen name.
     arguments.each_slice(100) do |slice|
       twitter.users(*slice).each do |user|
         name = user.name.
@@ -224,18 +224,23 @@ private
     end
   end
 
-  BAD_SCREEN_NAME = [
-    # Twitter
-    'search',
-    'share',
-    # Conservative
-    'pmharper', # http://www.robertgoguen.ca
+  NON_MP_SCREEN_NAME = [
+    'hnisc', # http://www.rickdykstra.ca
+    'liberal_party',
+    'm_ignatieff', # http://dominicleblanc.liberal.ca
+    'parti_liberal',
     'pmwebupdates',
     'socdevsoc',
-    # Liberal
-    'liberal_party',
-    'parti_liberal',
-    'm_ignatieff', # http://dominicleblanc.liberal.ca
+    'uwaysc', # http://www.rickdykstra.ca
+
+    # Twitter
+    'intent',
+    'search',
+    'share',
+  ]
+
+  BAD_SCREEN_NAME = NON_MP_SCREEN_NAME + [
+    'pmharper', # http://www.robertgoguen.ca
   ]
 
   # The official party websites have errors.
@@ -250,7 +255,7 @@ private
     'sdionliberal' => 'honstephanedion',
   }
 
-  def twitter_url(url, backup_url: nil)
+  def process(url, backup_url: nil)
     if url
       begin
         response = client.get do |req|
@@ -291,40 +296,32 @@ private
           # * empty data-via attribute on http://www.charmaineborg.info
           # * "twitter-user" if highlighting another user in a tweet
           a = doc.xpath('//*[contains(@href,"twitter.com/")]').reject do |a|
-            a[:href]['twitter.com/share'] && a['data-via'].blank? || a[:class] == 'twitter-user' || a[:href]['/search/']
+            a['href']['twitter.com/share'] && a['data-via'].blank? || a['class'] == 'twitter-user' || a['href']['?q='] || BAD_SCREEN_NAME.include?(get_screen_name(a))
           end.first
 
           screen_name = nil
           if a
-            screen_name = a['href'].match(%r{twitter.com/(?:#!/)?@?(\w+)})[1]
-            if screen_name == 'share' && a['data-via']
-              screen_name = a['data-via'].sub(/\A@/, '')
-            end
+            screen_name = get_screen_name(a)
           elsif response.env[:raw_body][/\.setUser\('([^']+)'\)/]
-            screen_name = $1
+            screen_name = $1.downcase
           elsif backup_url
-            twitter_url(backup_url)
+            process(backup_url)
           end
           if screen_name
-            screen_name.downcase!
-            if BAD_SCREEN_NAME.include?(screen_name)
-              warn("Ignoring #{screen_name} at #{url}")
-            else
-              dispatch(TwitterUser.new(screen_name: SCREEN_NAME_MAP.fetch(screen_name, screen_name)))
-            end
+            dispatch(TwitterUser.new(screen_name: SCREEN_NAME_MAP.fetch(screen_name, screen_name)))
           end
         else
           warn("Unhandled redirect #{url}")
         end
       rescue Faraday::ConnectionFailed
         if backup_url
-          twitter_url(backup_url)
+          process(backup_url)
         elsif url['mp.ca'] # http://www.lauriehawnmp.ca
-          twitter_url(url.sub(/mp(?=\.ca\b)/, ''))
+          process(url.sub(/mp(?=\.ca\b)/, ''))
         elsif url['.ca'] # http://www.bradbutt.ca
-          twitter_url(url.sub(/(?=\.ca\b)/, 'mp'))
+          process(url.sub(/(?=\.ca\b)/, 'mp'))
         elsif url['.com'] # http://www.blainecalkinsmp.com
-          twitter_url(url.sub('.com', '.ca'))
+          process(url.sub('.com', '.ca'))
         else
           error("Server not found #{url}")
         end
@@ -332,6 +329,14 @@ private
         error("Timeout #{url}")
       end
     end
+  end
+
+  def get_screen_name(a)
+    screen_name = a['href'].match(%r{twitter.com/(?:#!/)?@?(\w+)})[1]
+    if screen_name == 'share' && a['data-via']
+      screen_name = a['data-via'].sub(/\A@/, '')
+    end
+    screen_name.downcase
   end
 end
 
