@@ -102,7 +102,6 @@ class Canada < GovernmentProcessor
     end
   end
 
-
   def scrape_conservative
     get('http://www.conservative.ca/?page_id=35').xpath('//option').each do |option|
       get("http://www.conservative.ca/?page_id=35&lang=en&pr=#{option[:value].gsub(' ', '+')}").xpath('//a[@class="mpname"]').each do |a|
