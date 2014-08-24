@@ -28,7 +28,9 @@ class TwitterUser
   dump :id, :screen_name, :name
 
   def fingerprint
-    to_h.slice(:screen_name)
+    {
+      screen_name: Regexp.new(Regexp.escape(user.screen_name), 'i'),
+    }
   end
 
   def to_s
@@ -145,8 +147,12 @@ class Canada < GovernmentProcessor
 
     # Set the ID if none is set.
     arguments.each_slice(100) do |slice|
-      twitter.users(*slice).each do |user|
-        connection.raw_connection[:twitter_users].find(screen_name: Regexp.new(user.screen_name, 'i')).update('$set' => {id: user.id.to_s})
+      users = twitter.users(*slice)
+      (slice - users.map(&:screen_name)).each do |screen_name|
+        warn("Not found #{screen_name}")
+      end
+      users.each do |user|
+        connection.raw_connection[:twitter_users].find(screen_name: Regexp.new(Regexp.escape(user.screen_name), 'i')).update('$set' => {id: user.id.to_s})
       end
     end
 
