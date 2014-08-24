@@ -148,7 +148,7 @@ class Canada < GovernmentProcessor
     # Set the ID if none is set.
     arguments.each_slice(100) do |slice|
       users = twitter.users(*slice)
-      (slice.map(&:downcase) - users.map{|user| user.screen_name.downcase).each do |screen_name|
+      (slice.map(&:downcase) - users.map{|user| user.screen_name.downcase}).each do |screen_name|
         warn("Not found #{screen_name}")
       end
       users.each do |user|
