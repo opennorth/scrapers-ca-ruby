@@ -29,7 +29,7 @@ class TwitterUser
 
   def fingerprint
     {
-      screen_name: Regexp.new(Regexp.escape(user.screen_name), 'i'),
+      screen_name: Regexp.new(Regexp.escape(screen_name), 'i'),
     }
   end
 
@@ -77,7 +77,7 @@ class Canada < GovernmentProcessor
       jayaspinmp
       joe_preston
       joycebatemanmp
-      kellyblockcpc
+      kellyblockmp
       leonaaglukkaq
       mpeveadams
       mpmikea
@@ -118,7 +118,7 @@ class Canada < GovernmentProcessor
   end
 
   def scrape_liberal
-    get('http://www.liberal.ca/mp/').xpath('//table//td[1]//a').each do |a|
+    get('http://www.liberal.ca/mp/').xpath('//table//td[1]//a[string(@href)]').each do |a|
       url = get(a[:href]).at_xpath('//a[@target="_blank"]')
       if url
         process(url[:href].sub(/www\.(?=\w+\.liberal\.ca)/, ''), backup_url: "http://#{a[:href].split('/')[-1].gsub('-', '')}.liberal.ca/")
@@ -148,7 +148,7 @@ class Canada < GovernmentProcessor
     # Set the ID if none is set.
     arguments.each_slice(100) do |slice|
       users = twitter.users(*slice)
-      (slice - users.map(&:screen_name)).each do |screen_name|
+      (slice.map(&:downcase) - users.map{|user| user.screen_name.downcase).each do |screen_name|
         warn("Not found #{screen_name}")
       end
       users.each do |user|
@@ -239,6 +239,7 @@ private
     'pmwebupdates',
     'socdevsoc',
     'uwaysc', # http://www.rickdykstra.ca
+    'canada_swc', # http://www.rickdykstra.ca
 
     # Twitter
     'intent',
