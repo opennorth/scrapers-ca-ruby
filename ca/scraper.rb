@@ -333,6 +333,8 @@ private
         else
           error("Server not found #{url}")
         end
+      rescue Faraday::ClientError
+        error("#{response.status} #{url}")
       rescue Faraday::TimeoutError, Errno::ETIMEDOUT
         error("Timeout #{url}")
       end
