@@ -335,8 +335,8 @@ private
         end
       rescue Faraday::TimeoutError, Errno::ETIMEDOUT
         error("Timeout #{url}")
-      rescue Faraday::ClientError
-        error("#{response.status} #{url}")
+      rescue Faraday::ClientError => e
+        error("#{e.message} #{url}")
       end
     end
   end
