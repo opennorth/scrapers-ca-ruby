@@ -1,10 +1,10 @@
 # Pupa Scrapers for Canada in Ruby
 
-The [bulk of Pupa scrapers](http://github.com/opencivicdata/scrapers-ca) for Canada are written in Python. This repository was created to integrate more specifically with [MyCityHall.ca](http://mycityhall.ca/).
+The [bulk of Pupa scrapers](http://github.com/opencivicdata/scrapers-ca) for Canada are written in Python.
 
 ## Getting Started
 
-Install Git, Ruby 2.x and MongoDB. We recommend [RVM](http://rvm.io/) or [rbenv](https://github.com/sstephenson/rbenv) to manage your Rubies.
+Install Git, Ruby 2.x and MongoDB. We recommend [rbenv](https://github.com/sstephenson/rbenv) to manage your Rubies.
 
 Install the Bundler gem:
 
@@ -19,7 +19,7 @@ Install gem dependencies:
 
     bundle
 
-Run a scraper with:
+Run a scraper with, for example:
 
     ruby ca_qc_montreal/scraper.rb
 
@@ -30,7 +30,7 @@ Run a scraper with:
     heroku addons:add mongolab
     heroku addons:add scheduler
 
-Schedule the job:
+Schedule job, for example:
 
     ruby ca_ns/scraper.rb --pipelined --no-validate -q -t people
 
