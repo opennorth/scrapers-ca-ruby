@@ -42,7 +42,10 @@ private
         @a = tr.at_css('a[href]') # XXX
         docDate_date = Date.parse(@a.text)
 
-        if @options.key?('down-to') && docDate_date < Date.parse(@options['down-to'])
+        if @options.key?('up-to') && docDate_date > Date.parse(@options['up-to'])
+          info("Skipping #{docDate_date}")
+          next
+        elsif @options.key?('down-to') && docDate_date < Date.parse(@options['down-to'])
           info("Skipping #{docDate_date}")
           return
         end
@@ -750,16 +753,20 @@ private
     doc.xpath('//b/b').each do |e|
       e.replace(doc.create_text_node(e.text))
     end
-    # Merge consecutive identical inline tags.
-    doc.xpath('//b/following-sibling::b').each do |e|
-      e.previous.inner_html += e.text
-      e.remove
-    end
-
     # Remove empty <b> and <i> tags (which may nonetheless break up words).
     doc.xpath('//b[not(normalize-space(.//text()))]|//i[not(normalize-space(.//text()))]').each do |e|
       e.replace(doc.create_text_node(e.text))
     end
+    # Merge consecutive identical inline tags.
+    doc.xpath('//b/following-sibling::node()').each do |e|
+      if e.name == 'b'
+        e.previous.inner_html += e.text
+        e.remove
+      else
+        break
+      end
+    end
+
     # Remove accidental <sup> tags.
     doc.xpath('//sup[string-length(normalize-space(text()))=1]').each do |e|
       e.replace(doc.create_text_node(e.text))
