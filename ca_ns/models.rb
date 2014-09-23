@@ -57,7 +57,7 @@ class Speech
   attr_accessor :debate_id
 
   dump :index, :element, :heading, :num, :num_title, :from, :from_as, :from_id, :to, :to_as, :to_id, :html, :text, :division, :fuzzy, :debate_id
-  foreign_key :debate_id, :from_id
+  foreign_key :debate_id, :from_id, :to_id
 
   validates_numericality_of :index
   validates_inclusion_of :element, in: %w(answer narrative other question speech), allow_blank: true
