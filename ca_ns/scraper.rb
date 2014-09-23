@@ -26,6 +26,7 @@ class NovaScotia < GovernmentProcessor
       speech_continue: [
         :speech_continue,
         :division,
+        :heading_begin,
         :heading,
         :other, # A speaker may interject between "INTRODUCTION OF BILLS"
         :narrative,

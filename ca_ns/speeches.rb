@@ -1,4 +1,7 @@
 class NovaScotia
+  # This text is always followed by a heading.
+  HEADING_BEGIN_RE = /\b(?:please|you) (?:now )?call (?:Bill|Resolution)\b/
+
   def scrape_speeches
     Time.zone = 'Atlantic Time (Canada)'
 
@@ -34,10 +37,15 @@ private
         # Ignore rows with colspans and hansards where names are not linked.
         # @note 2011-10-31 has links but many more Microsoft Word artifacts.
         # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11oct31/
-        tr.at_css('td').text == ' ' || Date.parse(tr.at_css('a[href]')) < Date.new(2011, 11, 1) # non-breaking space
+        tr.at_css('td').text == ' ' || tr.at_css('a[href]').nil? || Date.parse(tr.at_css('a[href]')) < Date.new(2011, 11, 1) # non-breaking space
       end.each do |tr|
         @a = tr.at_css('a[href]') # XXX
         docDate_date = Date.parse(@a.text)
+
+        if @options.key?('down-to') && docDate_date < Date.parse(@options['down-to'])
+          info("Skipping #{docDate_date}")
+          return
+        end
 
         # @note Can extract the speaker, the publisher, the printer, the table
         #   of contents, the start time, the deputy speaker.
@@ -263,8 +271,7 @@ private
               @speech[:from_id] = @speaker_ids.fetch(url)
             end
 
-            if text[/\b(?:please|you) call (?:Bill|Resolution)\b/]
-              # This text is always followed by a heading.
+            if text[HEADING_BEGIN_RE]
               create_speech
               transition_to(:heading_begin)
             else
@@ -321,8 +328,7 @@ private
               error("Unrecognized speaker #{key} | #{index} #{@a[:href]}")
             end
 
-            if text[/\b(?:please|you) call (?:Bill|Resolution)\b/]
-              # This text is always followed by a heading.
+            if text[HEADING_BEGIN_RE]
               create_speech
               transition_to(:heading_begin)
             else
@@ -431,7 +437,7 @@ private
                 transition_to(:resolution)
               end
             else
-              # Non-Rule 32 resolution without a speaker, although there is one in the table of contents. FIXME
+              # Non-Rule 32 resolution without a speaker, although there is a speaker in the table of contents. FIXME
               if @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11nov14/' && text == 'RESOLUTION NO. 2212' ||
                   @a[:href] == 'http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec05/' && text == 'RESOLUTION NO. 2773'
                 transition_to(:speech)
@@ -564,12 +570,6 @@ private
           else
             # A continuation.
             if @speech && (!text[/\ASPEAKER'S RULING: /] || @speech[:from_as] == 'speaker')
-              if @state.to_s[/_continue\z/]
-                transition_to(@state)
-              else
-                error("Illegal transition from #{@state} to a continuation: #{@a[:href]}\n#{JSON.pretty_generate(@speech)}")
-              end
-
               if @speech[:html] && @speech[:text]
                 @speech[:html] += "\n#{p.to_s}"
                 @speech[:text] += "\n#{clean_paragraph(p)}"
@@ -578,6 +578,19 @@ private
                 end
               else
                 error("Expected html and text to be present: #{@a[:href]}\n#{JSON.pretty_generate(@speech)}")
+              end
+
+              if @state == :speech_continue
+                if text[HEADING_BEGIN_RE]
+                  create_speech
+                  transition_to(:heading_begin)
+                else
+                  transition_to(:speech_continue)
+                end
+              elsif @state.to_s[/_continue\z/]
+                transition_to(@state)
+              else
+                error("Illegal transition from #{@state} to a continuation: #{@a[:href]}\n#{JSON.pretty_generate(@speech)}")
               end
 
             # An unattributed one-line speech by the speaker.
