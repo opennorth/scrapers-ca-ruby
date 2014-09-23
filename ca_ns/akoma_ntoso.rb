@@ -4,7 +4,7 @@ class NovaScotia
 
     store = DownloadStore.new(File.expand_path('akoma_ntoso', Dir.pwd))
 
-    connection.raw_connection[:debates].find.sort(docDate_date: 1).each do |debate|
+    connection.raw_connection[:debates].find.sort(docDate_date: -1).each do |debate|
       # docNumber is unique, and docDate is not. However, SayIt requires
       # filenames to be date-based.
       name = "#{debate.fetch('docDate_date')}_#{debate.fetch('docNumber')}.xml"
@@ -335,7 +335,7 @@ private
       # @see http://examples.akomantoso.org/categorical.html#voteAttsAG
       if speech['division']
         if speech['html']['<table']
-          doc = Nokogiri::XML(speech['html'], &:noblanks)
+          doc = Nokogiri::XML(speech['html'].gsub('<br>', '<br/>'), &:noblanks)
           doc.xpath('//td[string-length(text())=1]').each do |td|
             td.inner_html = ''
           end

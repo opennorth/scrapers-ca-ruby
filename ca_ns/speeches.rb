@@ -753,8 +753,8 @@ private
     doc.xpath('//b/b').each do |e|
       e.replace(doc.create_text_node(e.text))
     end
-    # Remove empty <b> and <i> tags (which may nonetheless break up words).
-    doc.xpath('//b[not(normalize-space(.//text()))]|//i[not(normalize-space(.//text()))]').each do |e|
+    # Remove empty <b>, <i> and <sup> tags (which may nonetheless break up words).
+    doc.xpath('//b[not(normalize-space(.//text()))]|//i[not(normalize-space(.//text()))]|//sup[not(normalize-space(.//text()))]').each do |e|
       e.replace(doc.create_text_node(e.text))
     end
     # Merge consecutive identical inline tags.
