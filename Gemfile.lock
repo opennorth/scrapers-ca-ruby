@@ -18,15 +18,42 @@ GEM
     connection_pool (2.0.0)
     dalli (2.7.2)
     equalizer (0.0.9)
+    excon (0.38.0)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.9.1)
       faraday (>= 0.7.4, < 0.10)
+    fog (1.23.0)
+      fog-brightbox
+      fog-core (~> 1.23)
+      fog-json
+      fog-softlayer
+      ipaddress (~> 0.5)
+      nokogiri (~> 1.5, >= 1.5.11)
+    fog-brightbox (0.5.1)
+      fog-core (~> 1.22)
+      fog-json
+      inflecto
+    fog-core (1.24.0)
+      builder
+      excon (~> 0.38)
+      formatador (~> 0.2)
+      mime-types
+      net-scp (~> 1.1)
+      net-ssh (>= 2.1.3)
+    fog-json (1.0.0)
+      multi_json (~> 1.0)
+    fog-softlayer (0.3.17)
+      fog-core
+      fog-json
+    formatador (0.2.5)
     hiredis (0.5.2)
     http (0.6.2)
       http_parser.rb (~> 0.6.0)
     http_parser.rb (0.6.0)
     i18n (0.6.11)
+    inflecto (0.0.2)
+    ipaddress (0.8.0)
     json (1.8.1)
     json-schema (2.1.9)
     kgio (2.9.2)
@@ -45,6 +72,9 @@ GEM
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     naught (1.0.0)
+    net-scp (1.2.1)
+      net-ssh (>= 2.6.5)
+    net-ssh (2.9.1)
     nokogiri (1.6.3.1)
       mini_portile (= 0.6.0)
     oj (2.10.0)
@@ -100,6 +130,7 @@ PLATFORMS
 DEPENDENCIES
   activemodel
   dalli
+  fog
   hiredis
   multi_xml
   nokogiri

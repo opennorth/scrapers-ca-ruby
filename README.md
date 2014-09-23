@@ -30,9 +30,16 @@ Run a scraper with, for example:
     heroku addons:add mongolab
     heroku addons:add scheduler
 
-Schedule job, for example:
+Add configuration variables (replace `REPLACE`):
+
+    heroku config:add AWS_BUCKET=REPLACE
+    heroku config:add AWS_ACCESS_KEY_ID=REPLACE
+    heroku config:add AWS_SECRET_ACCESS_KEY=REPLACE
+
+Schedule jobs to run daily, for example:
 
     ruby ca_ns/scraper.rb --pipelined --no-validate -q -t people
+    ruby ca_ns/scraper.rb --pipelined --no-validate -q -a scrape -a import -a akoma_ntoso -- down-to `date +%Y-%m-%d`
 
 ## Bugs? Questions?
 

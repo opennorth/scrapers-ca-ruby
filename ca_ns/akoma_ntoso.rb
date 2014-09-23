@@ -2,7 +2,11 @@ class NovaScotia
   def akoma_ntoso
     Time.zone = 'Atlantic Time (Canada)'
 
-    store = DownloadStore.new(File.expand_path('akoma_ntoso', Dir.pwd))
+    store = if ENV['AWS_BUCKET'] && ENV['AWS_ACCESS_KEY_ID'] && ENV['AWS_SECRET_ACCESS_KEY']
+      AWSStore.new(ENV['AWS_BUCKET'], 'akoma_ntoso', ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY'])
+    else
+      DownloadStore.new(File.expand_path('akoma_ntoso', Dir.pwd))
+    end
 
     connection.raw_connection[:debates].find.sort(docDate_date: -1).each do |debate|
       # docNumber is unique, and docDate is not. However, SayIt requires

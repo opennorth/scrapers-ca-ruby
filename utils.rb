@@ -6,6 +6,7 @@ require 'active_support/core_ext/integer/inflections'
 require 'active_support/time'
 require 'active_model'
 require 'dalli'
+require 'fog'
 require 'multi_xml'
 require 'nokogiri'
 require 'pupa'
@@ -109,21 +110,7 @@ end
 # Stores data downloads on disk.
 #
 # @see ActiveSupport::Cache::FileStore
-class DownloadStore
-  # @param [String] output_dir the directory in which to download data
-  def initialize(output_dir)
-    @output_dir = output_dir
-    FileUtils.mkdir_p(@output_dir)
-  end
-
-  # Returns whether a file with the given name exists.
-  #
-  # @param [String] name a key
-  # @return [Boolean] whether the store contains an entry for the given key
-  def exist?(name)
-    File.exist?(path(name))
-  end
-
+class DownloadStore < Pupa::Processor::DocumentStore::FileStore
   # Returns all file names in the storage directory.
   #
   # @return [Array<String>] all keys in the store
@@ -143,16 +130,6 @@ class DownloadStore
     end
   end
 
-  # Returns the contents of the files with the given names.
-  #
-  # @param [String] names keys
-  # @return [Array<Hash>] the values of the given keys
-  def read_multi(names)
-    names.map do |name|
-      read(name)
-    end
-  end
-
   # Writes the value to a file with the given name.
   #
   # @param [String] name a key
@@ -163,51 +140,11 @@ class DownloadStore
     end
   end
 
-  # Writes the value to a file with the given name, unless such a file exists.
-  #
-  # @param [String] name a key
-  # @param [Hash] value a value
-  # @return [Boolean] whether the key was set
-  def write_unless_exists(name, value)
-    !exist?(name).tap do |exists|
-      write(name, value) unless exists
-    end
-  end
-
-  # Writes the values to files with the given names.
-  #
-  # @param [Hash] pairs key-value pairs
-  def write_multi(pairs)
-    pairs.each do |name,value|
-      write(name, value)
-    end
-  end
-
-  # Delete a file with the given name.
-  #
-  # @param [String] name a key
-  def delete(name)
-    File.delete(path(name))
-  end
-
   # Deletes all files in the storage directory.
   def clear
     Dir[File.join(@output_dir, '*')].each do |path|
       File.delete(path)
     end
-  end
-
-  # Collects commands to run all at once.
-  def pipelined
-    yield
-  end
-
-  # Returns the path to the file with the given name.
-  #
-  # @param [String] name a key
-  # @param [String] a path
-  def path(name)
-    File.join(@output_dir, name)
   end
 
   # Returns the byte size of the file.
@@ -216,5 +153,67 @@ class DownloadStore
   # @return [Integer] the file size in bytes
   def size(name)
     File.size(path(name))
+  end
+end
+
+# Stores data downloads on AWS.
+#
+# @see ActiveSupport::Cache::FileStore
+class AWSStore < Pupa::Processor::DocumentStore::FileStore
+  # @param [String] bucket the AWS bucket in which to store data
+  # @param [String] output_dir the directory in which to download data
+  # @param [String] aws_access_key_id an AWS access key ID
+  # @param [String] aws_secret_access_key an AWS secret access key
+  # @see http://fog.io/storage/#using-amazon-s3-and-fog
+  def initialize(bucket, output_dir, aws_access_key_id, aws_secret_access_key)
+    @connection = Fog::Storage.new(provider: 'AWS', aws_access_key_id: aws_access_key_id, aws_secret_access_key: aws_secret_access_key, path_style: true)
+    @bucket = @connection.directories.get(output_dir)
+  end
+
+  # Returns whether a file with the given name exists.
+  #
+  # @param [String] name a key
+  # @return [Boolean] whether the store contains an entry for the given key
+  # @see http://fog.io/storage/#checking-if-a-file-already-exists
+  def exist?(name)
+    !!@bucket.files.head(name)
+  end
+
+  # Returns all file names in the storage directory.
+  #
+  # @return [Array<String>] all keys in the store
+  def entries
+    @bucket.files.map(&:key)
+  end
+
+  # Returns the contents of the file with the given name.
+  #
+  # @param [String] name a key
+  # @return [Hash] the value of the given key
+  # @see http://fog.io/storage/#backing-up-your-files
+  def read(name)
+    @bucket.files.get(name).body
+  end
+
+  # Writes the value to a file with the given name.
+  #
+  # @param [String] name a key
+  # @param [Hash,String] value a value
+  # @see http://fog.io/storage/#using-amazon-s3-and-fog
+  def write(name, value)
+    @bucket.files.new(key: name, body: value, public: true).save
+  end
+
+  # Delete a file with the given name.
+  #
+  # @param [String] name a key
+  # @see http://fog.io/storage/#cleaning-up
+  def delete(name)
+    @bucket.files.get(name).destroy
+  end
+
+  # Deletes all files in the storage directory.
+  def clear
+    @connection.delete_multiple_objects(@bucket.key, entries)
   end
 end

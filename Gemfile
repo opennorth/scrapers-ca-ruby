@@ -3,6 +3,7 @@ ruby '2.1.2'
 
 gem 'activemodel'
 gem 'dalli'
+gem 'fog'
 gem 'hiredis'
 gem 'multi_xml'
 gem 'nokogiri'
