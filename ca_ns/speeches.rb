@@ -105,7 +105,7 @@ private
           # "the Premier" and "Mr. Speaker" are sometimes linked within a paragraph.
           person_prefix = person_a && person_a.previous && person_a.previous.text.strip || ''
 
-          # Skip all text before the first speaker.
+          # Skip all text before the first speaker or narrative.
           if initial_state?
             if person_a
               transition_to(:speech_begin)
@@ -502,7 +502,7 @@ private
             # "CBC  - ANNIV. (75th)" and "PREM.: DHAs -  AMALGAMATION/SAVINGS".
             text[/\A[A-ZÉths\d"&'(),.:\/\[\][:space:]–-]{2,}\z/] &&
             # Ignore non-heading paragraphs.
-            !["SPEAKER'S RULING:", "THEREFORE BE IT RESOLVED AS FOLLOWS:"].include?(text) ||
+            !["SPEAKER'S RULING:", "THEREFORE BE IT RESOLVED AS FOLLOWS:", "LEGISLATIVE AGENDA FOR FALL 2013"].include?(text) ||
             # Exceptions not requiring regular expressions.
             ['Private and Local Bills For Third Reading'].include?(text) ||
             # Resolutions headers are hard to find.
