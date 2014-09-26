@@ -341,17 +341,19 @@ private
             end
 
           # A short, anonymous speech.
-          elsif from = text[/\A(AN(?:OTHER)? HON\. MEMBER): /, 1]
+          elsif from = text[ANONYMOUS_SPEAKER, 1]
             transition_to(:speech)
             create_speech
+
+            from_as = from == 'SOME HON. MEMBERS' ? 'members' : 'member'
 
             dispatch(Speech.new({
               index: index,
               element: 'speech',
               from: from,
-              from_as: 'member',
+              from_as: from_as,
               html: p.to_s,
-              text: clean_paragraph(p.inner_html).sub(/\AAN(?:OTHER)? HON\. MEMBER: /, ''),
+              text: clean_paragraph(p.inner_html).sub(ANONYMOUS_SPEAKER, ''),
               debate_id: debate._id,
             }))
 
