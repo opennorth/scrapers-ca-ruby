@@ -10,7 +10,10 @@ class NovaScotia < GovernmentProcessor
     # If the machine is in a state ending in "_begin", the next state is
     # expected to be that state.
     @transitions = {
-      not_started: [:speech_begin],
+      not_started: [
+        :speech_begin,
+        :narrative_begin,
+      ],
 
       speech_begin: [:speech],
       speech: [
@@ -106,6 +109,7 @@ class NovaScotia < GovernmentProcessor
         :other, # "Tabled April 29, 2014"
       ],
 
+      narrative_begin: [:narrative],
       narrative: [
         # Multi-line narrative
         :narrative_continue,

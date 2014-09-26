@@ -109,6 +109,8 @@ private
           if initial_state?
             if person_a
               transition_to(:speech_begin)
+            elsif p.node_name == 'p' && text['['] && p.at_css('a').nil? # not a page reference
+              transition_to(:narrative_begin)
             else
               next
             end

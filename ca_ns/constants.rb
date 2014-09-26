@@ -41,6 +41,7 @@ TYPOS = {
   'william estabooks' => 'http://nslegislature.ca/index.php/people/members/Bill_Estabrooks', # both names
 }
 
+# Used to clean headings.
 HEADING_TYPOS = { # FIXME
   'MOTIONS UNDER RULE 5(5)' => 'MOTION UNDER RULE 5(5)',
   'NOTICE OF QUESTION FOR WRITTEN ANSWERS' => 'NOTICE OF QUESTIONS FOR WRITTEN ANSWERS',
@@ -54,6 +55,7 @@ HEADING_TYPOS = { # FIXME
   'TABLING REPORTS, REGLATIONS AND OTHER PAPERS' => 'TABLING REPORTS, REGULATIONS AND OTHER PAPERS',
 }
 
+# Used to clean resolutions.
 RESOLUTION_TYPOS = {
   /\ARESOLTUION\b/ => 'RESOLUTION',
   /\ARESOLTUTION\b/ => 'RESOLUTION',
@@ -65,6 +67,7 @@ RESOLUTION_TYPOS = {
   /\ARESOLUTON\b/ => 'RESOLUTION',
 }
 
+# Used to create a hierarchy during Akoma Ntoso export.
 TOP_LEVEL_HEADINGS = [
   'ADJOURNMENT',
   'ANSWERS TO WRITTEN QUESTIONS',
@@ -92,9 +95,13 @@ TOP_LEVEL_HEADINGS = [
   'PUBLIC BILLS FOR THIRD READING',
   'STATEMENTS BY MINISTERS',
   'TABLING REPORTS, REGULATIONS AND OTHER PAPERS',
+  'SPEECH FROM THE THRONE',
 ]
 
+# Used to validate headings during scrape.
 HEADINGS = TOP_LEVEL_HEADINGS + [
+  # In Speech from the Throne.
+  'Introduction',
   # All-caps headings with no useful markers.
   'COLLABORATIVE EMERGENCY CENTRES',
   'ELIGIBILITY BREAKDOWN',
@@ -104,6 +111,7 @@ HEADINGS = TOP_LEVEL_HEADINGS + [
   'RESPONSIBILITY ASSUME',
 ]
 
+# Used to validate headings during scrape.
 HEADINGS_RE = [
   /\ABill No\. \d+ [–-]/, # n-dash
   # Issue-based headings with no useful markers.
@@ -118,6 +126,7 @@ HEADINGS_RE = [
   /\A(?:EMO|ERDT|GAMING|JUSTICE|N\.S\. HOME FOR COLORED CHILDREN|PREM|SNSMR|STATUS OF WOMEN)\b/,
 ]
 
+# Used to use a semantic tag instead of <debateSection> during Akoma Ntoso export.
 HEADING_TO_TAG = {
   'ADJOURNMENT' => :adjournment,
   'ANSWERS TO WRITTEN QUESTIONS' => :questions,
