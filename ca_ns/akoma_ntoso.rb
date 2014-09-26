@@ -9,9 +9,18 @@ class NovaScotia
     end
 
     connection.raw_connection[:debates].find.sort(docDate_date: -1).each do |debate|
+      debate_id = debate.fetch('_id')
+      docDate_date = debate.fetch('docDate_date')
+      docNumber = debate.fetch('docNumber')
+
+      if @options.key?('up-to') && docDate_date > @options['up-to'] || @options.key?('down-to') && docDate_date < @options['down-to']
+        info("Skipping #{docDate_date}")
+        next
+      end
+
       # docNumber is unique, and docDate is not. However, SayIt requires
       # filenames to be date-based.
-      name = "#{debate.fetch('docDate_date')}_#{debate.fetch('docNumber')}.xml"
+      name = "#{docDate_date}_#{docNumber}.xml"
 
       if store.exist?(name) && @options.key?('no-clobber')
         info("Skipping #{name}")
@@ -20,7 +29,7 @@ class NovaScotia
 
       # Create a list of people for the <meta> block.
       @people = {}
-      connection.raw_connection[:speeches].find(debate_id: debate.fetch('_id'), from_id: {'$ne' => nil}).sort(index: 1).each do |speech|
+      connection.raw_connection[:speeches].find(debate_id: debate_id, from_id: {'$ne' => nil}).sort(index: 1).each do |speech|
         id = speech.fetch('from_id')
         unless @people.key?(id)
           url = connection.raw_connection[:people].find(_id: id).first.fetch('sources')[0].fetch('url')
@@ -30,7 +39,7 @@ class NovaScotia
           @people[id] = {id: part, href: "/ontology/person/ca-ns.#{part}", showAs: speech.fetch('from')}
         end
       end
-      connection.raw_connection[:speeches].find(debate_id: debate.fetch('_id'), to_id: {'$ne' => nil}).sort(index: 1).each do |speech|
+      connection.raw_connection[:speeches].find(debate_id: debate_id, to_id: {'$ne' => nil}).sort(index: 1).each do |speech|
         id = speech.fetch('to_id')
         unless @people.key?(id)
           url = connection.raw_connection[:people].find(_id: id).first.fetch('sources')[0].fetch('url')
@@ -43,7 +52,7 @@ class NovaScotia
 
       # Create a list of roles for the <meta> block.
       roles = {}
-      connection.raw_connection[:speeches].find(debate_id: debate.fetch('_id'), from_as: {'$ne' => nil}, from: {'$ne' => nil}).sort(index: 1).each do |speech|
+      connection.raw_connection[:speeches].find(debate_id: debate_id, from_as: {'$ne' => nil}, from: {'$ne' => nil}).sort(index: 1).each do |speech|
         id = speech.fetch('from_as')
         unless roles.key?(id)
           # @see https://code.google.com/p/akomantoso/wiki/Using_Akoma_Ntoso_URIs#TLC_Role
@@ -87,8 +96,8 @@ class NovaScotia
             end
             xml.preface do
               xml.docTitle debate.fetch('docTitle')
-              xml.docNumber debate.fetch('docNumber')
-              xml.docDate(date: debate.fetch('docDate_date')) do
+              xml.docNumber docNumber
+              xml.docDate(date: docDate_date) do
                 xml << debate.fetch('docDate')
               end
               # @see https://groups.google.com/d/topic/akomantoso-xml/kh2t5i8OuHg/discussion
@@ -109,7 +118,7 @@ class NovaScotia
               speeches_level_2 = []
               previous_speech = nil
 
-              connection.raw_connection[:speeches].find(debate_id: debate.fetch('_id')).sort(index: 1).each do |speech|
+              connection.raw_connection[:speeches].find(debate_id: debate_id).sort(index: 1).each do |speech|
                 if speech['element'] == 'narrative' && speech['text']['The House recessed.'] && previous_speech['text']['Lieutenant Governor']
                   unless heading_level_2.nil?
                     speeches_level_1 << [heading_level_2, speeches_level_2]
