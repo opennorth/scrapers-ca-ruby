@@ -119,57 +119,73 @@ class NovaScotia
               previous_speech = nil
 
               connection.raw_connection[:speeches].find(debate_id: debate_id).sort(index: 1).each do |speech|
-                if speech['element'] == 'narrative' && speech['text']['The House recessed.'] && previous_speech['text']['Lieutenant Governor']
-                  unless heading_level_2.nil?
+                # If a recess isn't brief, it occurs between top-level sections.
+                # A short recess may occur before a committee of the full house.
+                if speech['element'] == 'narrative' && speech['text']['The House recessed.'] && !previous_speech['text'][/\b(?:five|brief)\b/]
+                  # Append the second-level section to its top-level section.
+                  # `speeches_level_2` only grows if `heading_level_2` is set.
+                  if heading_level_2
                     speeches_level_1 << [heading_level_2, speeches_level_2]
                     speeches_level_2 = []
                   end
-                  unless heading_level_1.nil?
+                  # Output the top-level section.
+                  # `speeches_level_1` only grows if `heading_level_1` is set.
+                  if heading_level_1
                     output_section(xml, heading_level_1, speeches_level_1)
                     speeches_level_1 = []
                   end
                   heading_level_1 = nil
                   heading_level_2 = nil
+
                   # Don't forget to output the narrative.
                   output_speech(xml, speech)
+
                 elsif speech['element'] == 'heading'
                   if TOP_LEVEL_HEADINGS.include?(speech.fetch('text'))
-                    unless heading_level_2.nil?
+                    if heading_level_2
                       speeches_level_1 << [heading_level_2, speeches_level_2]
                       speeches_level_2 = []
                     end
-                    unless heading_level_1.nil?
+                    if heading_level_1
                       output_section(xml, heading_level_1, speeches_level_1)
                       speeches_level_1 = []
                     end
                     heading_level_1 = speech
                     heading_level_2 = nil
+
                   elsif heading_level_1.nil?
-                    error('Level 2 heading occurs without a level 1 heading')
-                    warn("speech:\n#{JSON.pretty_generate(speech)}")
+                    error("A level 2 heading occurs without a level 1 heading\n#{JSON.pretty_generate(speech)}")
+
+                  # `heading_level_2` is only set if `heading_level_1` is set.
                   else
-                    unless heading_level_2.nil?
+                    if heading_level_2
                       speeches_level_1 << [heading_level_2, speeches_level_2]
                       speeches_level_2 = []
                     end
                     heading_level_2 = speech
                   end
+
+                # A non-heading speech.
                 elsif heading_level_2
                   speeches_level_2 << speech
                 elsif heading_level_1
                   speeches_level_1 << speech
-                else # first few speeches, speeches after Lieutenant Governor's arrival
+
+                # The first few speeches in a hansard and the speeches after the
+                # Lieutenant Governor's arrival have no section.
+                else
                   output_speech(xml, speech)
                 end
 
                 previous_speech = speech
               end
 
-              unless heading_level_2.nil?
+              if heading_level_2
                 speeches_level_1 << [heading_level_2, speeches_level_2]
                 speeches_level_2 = []
               end
-              unless heading_level_1.nil?
+              if heading_level_1
+                # Top-level section headings won't cause `output_section` to return.
                 output_section(xml, heading_level_1, speeches_level_1)
               end
             end
@@ -178,7 +194,7 @@ class NovaScotia
       end
 
       if store.exist?(name)
-        warn("Overwriting #{name}")
+        info("Overwriting #{name}")
       else
         info("Writing #{name}")
       end
@@ -188,16 +204,41 @@ class NovaScotia
 
 private
 
-  def output_section(xml, heading, speeches)
+  BILL_HEADING_RE = /\ABill (?:No\. )?\d+ [–-]/
+
+  def output_section(xml, heading, speeches, list_of_bills = nil)
     text = heading.fetch('text')
 
-    # The hansard always includes top-level headings, even if there is no
-    # content; we don't include these. Merge headings that are split onto
-    # two lines, unless the heading begins with "Bill No.".
-    if speeches.empty? && !text[/\ABill (?:No\. )?\d+ [–-]/]
-      unless TOP_LEVEL_HEADINGS.include?(text)
+    # An empty section.
+    if speeches.empty?
+      # Bills occasionally appear as a list without speeches, in contexts where
+      # speeches are expected, e.g. after "would you please call".
+      if text[BILL_HEADING_RE]
+        return [heading]
+      # Merge headings that are split onto two lines. The hansard includes top-
+      # level headings, even if there is no content; we don't include these.
+      elsif !TOP_LEVEL_HEADINGS.include?(text)
         return text
       end
+
+    # The end of a list of bills.
+    elsif list_of_bills
+      if text[BILL_HEADING_RE]
+        list_of_bills << heading
+        list_of_bills.each do |speech|
+          # Restore the bold tags from the source document.
+          speech['text'] = "<b>#{speech.fetch('text')}</b>"
+          speech['element'] = 'other'
+          output_speech(xml, speech)
+        end
+        speeches.each do |speech|
+          output_speech(xml, speech)
+        end
+      else
+        error("Expected an end to the list of bills: #{speech}")
+      end
+
+    # An actual section.
     else
       tag = HEADING_TO_TAG[text] || :debateSection
 
@@ -205,7 +246,7 @@ private
       #   <heading id="">ORAL QUESTIONS PUT BY MEMBERS</heading>
       # </questions>
       # @note `id` is a required attribute on debate sections. `name` is an
-      # additional required attributes on `debateSection`.
+      #   additional required attributes on `debateSection`.
       xml.send(tag) do |section|
         if heading['num_title']
           xml.num(title: heading.fetch('num_title')) do
@@ -216,22 +257,49 @@ private
           xml.heading text
         end
 
-        text_to_merge = nil
+        adjustment = nil
         speeches.each do |speech|
-          if text_to_merge
+          # If we saw the start of a list of bills, we expect a section whose
+          # heading is a bill.
+          if Array === adjustment
             if Array === speech
-              object = speech[0]
-              object['text'] = "#{text_to_merge} #{object.fetch('text')}"
-              text_to_merge = nil
-              output_section(section, object, speech[1])
+              bill = output_section(section, speech[0], speech[1], adjustment)
+              if Array === bill # Continuation of a list of bills.
+                adjustment += bill
+              elsif bill # Continuation of a heading.
+                error("A continuation of a heading occurs in a list of bills: #{bill}")
+              else
+                adjustment = nil
+              end
             else
-              error("Expected a continuation of the heading: #{text_to_merge}")
+              error("Expected a continuation of the list of bills: #{adjustment}")
             end
+
+          # If we saw the start of a heading, we expect a section whose heading
+          # is a continuation of the heading.
+          elsif adjustment
+            if Array === speech
+              speech[0]['text'] = "#{adjustment} #{speech[0].fetch('text')}"
+              adjustment = output_section(section, speech[0], speech[1])
+              if adjustment
+                error("A continuation of a heading occurs twice in a row: #{adjustment}")
+              end
+            else
+              error("Expected a continuation of the heading: #{adjustment}")
+            end
+
+          # A section, as a two-value array of heading and speeches.
           elsif Array === speech
-            text_to_merge = output_section(section, speech[0], speech[1])
+            adjustment = output_section(section, speech[0], speech[1])
+
+          # A speech.
           else
             output_speech(xml, speech)
           end
+        end
+
+        if adjustment
+          error("Unhandled adjustment: #{adjustment}")
         end
       end
     end
