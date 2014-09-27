@@ -172,7 +172,6 @@ NovaScotia.add_scraping_task(:speeches)
 
 options = {
   database_url: ENV['MONGOLAB_URI'] || 'mongodb://localhost:27017/sayit',
-  expires_in: 43200, # half-day
 }
 
 if ENV['REDISCLOUD_URL']
@@ -180,9 +179,10 @@ if ENV['REDISCLOUD_URL']
 end
 
 if ENV['MEMCACHIER_SERVERS']
-  options[:cache_dir] = "memcached://#{ENV['MEMCACHIER_SERVERS']}"
-  options[:memcached_username] = ENV['MEMCACHIER_USERNAME']
-  options[:memcached_password] = ENV['MEMCACHIER_PASSWORD']
+  options[:cache_dir] = nil
+  # options[:cache_dir] = "memcached://#{ENV['MEMCACHIER_SERVERS']}"
+  # options[:memcached_username] = ENV['MEMCACHIER_USERNAME']
+  # options[:memcached_password] = ENV['MEMCACHIER_PASSWORD']
 end
 
 runner = Pupa::Runner.new(NovaScotia, options)
