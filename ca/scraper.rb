@@ -1,5 +1,7 @@
 require File.expand_path(File.join('..', 'utils.rb'), __dir__)
 
+require_relative 'constants'
+
 =begin
 export TWITTER_CONSUMER_KEY=...
 export TWITTER_CONSUMER_SECRET=...
@@ -39,67 +41,12 @@ class TwitterUser
 end
 
 class Canada < GovernmentProcessor
+  TIMEOUT_DELAY = 5
+
   # The Bloc Québécois, Green Party and Independents are done manually. Several
   # MPs are not linked from their party websites and are done manually.
   def scrape_manual
-    screen_names = %w(
-      andrebellavance
-      claude_patry
-    ) + # Bloc Québécois
-    %w(
-      brucehyer
-      elizabethmay
-    ) + # Green Party
-    %w(
-      brentrathgeber
-      mpdeandelmastro
-      fortjf
-      mperreaultnpd
-    ) + # Independent
-    %w(
-      bradtrostcpc
-      brianstorseth
-      f_lapointe
-      galipeauorleans
-      gschellenberger
-      keithashfield11
-      mackaycpc
-      petergoldring
-    ) + # Inactive, also davidmcguinty from scrape_liberal
-    %w(
-      barrydevolin_mp
-      bryanhayesmp
-      christianparad
-      danalbas
-      davidtilson
-      honrobnicholson
-      jacquesgourde
-      jayaspinmp
-      joe_preston
-      joycebatemanmp
-      kellyblockmp
-      leonaaglukkaq
-      mpeveadams
-      mpmikea
-      pierrepoilievre
-      pmharper
-      scottreidcpc
-      shellyglovermin
-      susantruppe
-      terenceyoungmp
-    ) + # Conservative
-    %w(
-      honstephanedion
-      judyfootemp
-      scottandrewsmp
-    ) + # Liberal
-    %w(
-      fboivinnpd
-      jtremblaynpd
-      thomasmulcair
-    ) # NDP
-
-    screen_names.each do |screen_name|
+    MANUAL_SCREEN_NAMES.each do |screen_name|
       dispatch(TwitterUser.new(screen_name: screen_name))
     end
   end
@@ -111,7 +58,7 @@ class Canada < GovernmentProcessor
         if url.empty?
           warn("No URL found at #{a[:href]}")
         else
-          process(url)
+          process(url, backup_url: BACKUP_URLS[url])
         end
       end
     end
@@ -119,11 +66,21 @@ class Canada < GovernmentProcessor
 
   def scrape_liberal
     get('http://www.liberal.ca/mp/').xpath('//table//td[1]//a[string(@href)]').each do |a|
+      backup_url = "http://#{a[:href].split('/')[-1].gsub('-', '')}.liberal.ca"
       url = get(a[:href]).at_xpath('//a[@target="_blank"]')
       if url
-        process(url[:href].sub(/www\.(?=\w+\.liberal\.ca)/, ''), backup_url: "http://#{a[:href].split('/')[-1].gsub('-', '')}.liberal.ca/")
+        # Remove the incorrect "www." part of liberal.ca subdomains.
+        url = url[:href].sub(/www\.(?=\w+\.liberal\.ca)/, '')
+        if URI.parse(url).path == '/'
+          url.chomp!('/')
+        end
+        if url == backup_url
+          process(url)
+        else
+          process(url, backup_url: backup_url)
+        end
       else
-        warn("No URL found at #{a[:href]}")
+        process(backup_url)
       end
     end
   end
@@ -135,7 +92,7 @@ class Canada < GovernmentProcessor
   end
 
   def update
-    connection.raw_connection[:twitter_users].find(screen_name: {'$in' => NON_MP_SCREEN_NAME}).remove_all
+    connection.raw_connection[:twitter_users].find(screen_name: {'$in' => NON_MP_SCREEN_NAMES}).remove_all
 
     names = JSON.parse(Faraday.get('http://represent.opennorth.ca/representatives/house-of-commons/?limit=0').body)['objects'].map do |object|
       object['name']
@@ -212,18 +169,6 @@ class Canada < GovernmentProcessor
 
 private
 
-  TWITTER_NAME_MAP = {
-    'Alexandrine' => 'Alexandrine Latendresse',
-    'Anne Minh Thu Quach' => 'Anne Minh-Thu Quach',
-    'Elaine Michaud' => 'Élaine Michaud',
-    'Genest-Jourdain' => 'Jonathan Genest-Jourdain',
-    'Gord Brown' => 'Gordon Brown',
-    'Jinny Sims' => 'Jinny Jogindera Sims',
-    'Marjolaine Boutin-S.' => 'Marjolaine Boutin-Sweet',
-    'Moore Christine' => 'Christine Moore',
-    'T. Benskin' => 'Tyrone Benskin',
-  }
-
   def twitter
     @twitter ||= Twitter::REST::Client.new do |config|
       config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
@@ -231,69 +176,63 @@ private
     end
   end
 
-  NON_MP_SCREEN_NAME = [
-    'hnisc', # http://www.rickdykstra.ca
-    'liberal_party',
-    'm_ignatieff', # http://dominicleblanc.liberal.ca
-    'parti_liberal',
-    'pmwebupdates',
-    'socdevsoc',
-    'uwaysc', # http://www.rickdykstra.ca
-    'canada_swc', # http://www.rickdykstra.ca
-
-    # Twitter
-    'intent',
-    'search',
-    'share',
-  ]
-
-  BAD_SCREEN_NAME = NON_MP_SCREEN_NAME + [
-    'pmharper', # http://www.robertgoguen.ca
-  ]
-
-  # The official party websites have errors.
-  SCREEN_NAME_MAP = {
-    'dianeablonczymp' => 'dianeablonczy',
-    'edholdermp' => 'edholder_mp',
-    'jayaspin' => 'jayaspinmp',
-    'joyce_bateman' => 'joycebatemanmp',
-    'judyfoote' => 'judyfootemp',
-    'justinpjtrudeau' => 'justintrudeau',
-    'npdlavallesiles' => 'francoispilon',
-    'sdionliberal' => 'honstephanedion',
-  }
-
-  def process(url, backup_url: nil)
+  # Dispatches a TwitterUser.
+  def process(url, backup_url: nil, visited: [])
     if url
+      if visited.include?(url)
+        return error("Redirection loop #{url}: #{visited.join(', ')}")
+      end
+
       begin
         response = client.get do |req|
           req.url url
-          req.options.timeout = 5
-          req.options.open_timeout = 5
+          req.options.timeout = TIMEOUT_DELAY
+          req.options.open_timeout = TIMEOUT_DELAY
         end
 
         last_url = URI.parse(url)
-        visited = [url]
+        visited << url
+
+        # Loop until we no longer have redirects.
         begin
           new_url = nil
+
+          # Check for a redirect.
           if [301, 302, 303].include?(response.status)
             new_url = response.headers.fetch('Location')
           elsif response.env[:raw_body][/^window\.location="([^"]+)";$/] # http://www.johnmckayliberal.ca
             new_url = $1
-          elsif meta = response.body.at_xpath('//meta[translate(@http-equiv,"ABCDEFGHIJKLMNOPQRSTUVWXYZ","abcdefghijklmnopqrstuvwxyz")="refresh"]')
-            new_url = meta[:content].match(/url=(.+)/i)[1]
+          elsif response.body # www.merrifieldmp.com has no body
+            meta = response.body.at_xpath('//meta[translate(@http-equiv,"ABCDEFGHIJKLMNOPQRSTUVWXYZ","abcdefghijklmnopqrstuvwxyz")="refresh"]')
+            if meta
+              new_url = meta[:content].match(/url=(.+)/i)[1]
+            end
           end
+
+          # If a redirect is found.
           if new_url
             parsed = URI.parse(new_url)
             parsed.scheme ||= last_url.scheme
             parsed.host ||= last_url.host
+            parsed.port ||= last_url.port
+            parsed.fragment ||= last_url.fragment
+
             if visited.include?(parsed.to_s)
-              return error("Redirection loop #{url}")
-            else
-              response = client.get(parsed.to_s)
-              last_url = parsed
-              visited << parsed.to_s
+              if backup_url
+                parsed = URI.parse(backup_url)
+              else
+                return error("Redirection loop #{url}: #{visited.join(', ')}")
+              end
             end
+
+            response = client.get do |req|
+              req.url parsed.to_s
+              req.options.timeout = TIMEOUT_DELAY
+              req.options.open_timeout = TIMEOUT_DELAY
+            end
+
+            last_url = parsed
+            visited << parsed.to_s
           end
         end while new_url
 
@@ -301,10 +240,12 @@ private
 
         if doc
           # * <area> tag on http://www.johnmckayliberal.ca
+          as = doc.xpath('//*[contains(@href,"twitter.com/")]')
+
           # * empty data-via attribute on http://www.charmaineborg.info
           # * "twitter-user" if highlighting another user in a tweet
-          a = doc.xpath('//*[contains(@href,"twitter.com/")]').reject do |a|
-            a['href']['twitter.com/share'] && a['data-via'].blank? || a['class'] == 'twitter-user' || a['href']['?q='] || BAD_SCREEN_NAME.include?(get_screen_name(a))
+          a = as.reject do |a|
+            a['href']['twitter.com/share'] && a['data-via'].blank? || a['class'] == 'twitter-user' || a['href']['?q='] || BAD_SCREEN_NAMES.include?(get_screen_name(a))
           end.first
 
           screen_name = nil
@@ -313,28 +254,29 @@ private
           elsif response.env[:raw_body][/\.setUser\('([^']+)'\)/]
             screen_name = $1.downcase
           elsif backup_url
-            process(backup_url)
+            process(backup_url, visited: visited)
           end
           if screen_name
+            # @todo test that original doesn't exist
             dispatch(TwitterUser.new(screen_name: SCREEN_NAME_MAP.fetch(screen_name, screen_name)))
           end
         else
-          warn("Unhandled redirect #{url}")
+          warn("Unhandled redirect or empty body #{url}")
         end
-      rescue Faraday::ConnectionFailed
-        if backup_url
-          process(backup_url)
-        elsif url['mp.ca'] # http://www.lauriehawnmp.ca
-          process(url.sub(/mp(?=\.ca\b)/, ''))
+      rescue Faraday::ConnectionFailed, Faraday::TimeoutError, Errno::ETIMEDOUT
+        backup_url ||= if url['mp.ca'] # http://www.lauriehawnmp.ca
+          url.sub(/mp(?=\.ca\b)/, '')
         elsif url['.ca'] # http://www.bradbutt.ca
-          process(url.sub(/(?=\.ca\b)/, 'mp'))
+          url.sub(/(?=\.ca\b)/, 'mp')
         elsif url['.com'] # http://www.blainecalkinsmp.com
-          process(url.sub('.com', '.ca'))
+          url.sub('.com', '.ca')
+        end
+
+        if backup_url
+          process(backup_url, visited: visited)
         else
           error("Server not found #{url}")
         end
-      rescue Faraday::TimeoutError, Errno::ETIMEDOUT
-        error("Timeout #{url}")
       rescue Faraday::ClientError => e
         error("#{e.message} #{url}")
       end
