@@ -98,12 +98,13 @@ class Canada < GovernmentProcessor
       object['name']
     end
 
-    arguments = connection.raw_connection[:twitter_users].find(id: {'$exists' => false}).map do |user|
+    # Collect screen names of Twitter users without a Twitter ID.
+    screen_names = connection.raw_connection[:twitter_users].find(id: {'$exists' => false}).map do |user|
       user['screen_name']
     end
 
-    # Set the ID if none is set.
-    arguments.each_slice(100) do |slice|
+    # Set a Twitter user's ID if none is set.
+    screen_names.each_slice(100) do |slice|
       users = twitter.users(*slice)
       (slice.map(&:downcase) - users.map{|user| user.screen_name.downcase}).each do |screen_name|
         warn("Not found #{screen_name}")
@@ -113,12 +114,13 @@ class Canada < GovernmentProcessor
       end
     end
 
-    arguments = connection.raw_connection[:twitter_users].find(id: {'$exists' => true}).map do |user|
+    # Collect Twitter IDs.
+    screen_names = connection.raw_connection[:twitter_users].find(id: {'$exists' => true}).map do |user|
       user['id'].to_i
     end
 
-    # Update the screen name.
-    arguments.each_slice(100) do |slice|
+    # Update screen names of Twitter users with Twitter IDs.
+    screen_names.each_slice(100) do |slice|
       twitter.users(*slice).each do |user|
         name = user.name.
           # Remove prefix.
@@ -133,18 +135,19 @@ class Canada < GovernmentProcessor
           # Remove infix initials.
           sub(/ [A-Z]\./, '').
           # Remove Chinese characters. https://twitter.com/joycemurray
-          gsub(/[^A-ZÉÈÎa-zçéèô'. -]/, '').
+          gsub(/[^A-ZÇÉÈÎÔa-zçéèîô'. -]/, '').
           squeeze(' ').strip
 
-        # Some Twitter names have no spaces between words. Don't split "MacKay".
+        # Some Twitter names have no spaces between words, but don't split "MacKay".
         name = name.split(/ |(?<=[a-z]{3})(?=[A-Z])|(?<=\.)(?! )/).map do |part|
-          if part[/[A-ZÉÈÎ]/]
+          if part[/[A-ZÇÉÈÎÔ]/]
             part
           else
             part.capitalize
           end
         end.join(' ')
 
+        # Some Twitter names are irrecoverably malformed.
         name = TWITTER_NAME_MAP.fetch(name, name)
 
         connection.raw_connection[:twitter_users].find(id: user.id.to_s).update('$set' => {
@@ -248,17 +251,23 @@ private
             a['href']['twitter.com/share'] && a['data-via'].blank? || a['class'] == 'twitter-user' || a['href']['?q='] || BAD_SCREEN_NAMES.include?(get_screen_name(a))
           end.first
 
-          screen_name = nil
+          attributes = {}
           if a
-            screen_name = get_screen_name(a)
+            attributes[:screen_name] = get_screen_name(a)
+            if a['data-widget-id']
+              attributes[:id] = a['data-widget-id']
+            end
           elsif response.env[:raw_body][/\.setUser\('([^']+)'\)/]
-            screen_name = $1.downcase
+            attributes[:screen_name] = $1.downcase
           elsif backup_url
             process(backup_url, visited: visited)
           end
-          if screen_name
-            # @todo test that original doesn't exist
-            dispatch(TwitterUser.new(screen_name: SCREEN_NAME_MAP.fetch(screen_name, screen_name)))
+
+          unless attributes.empty?
+            if attributes.key?(:screen_name)
+              attributes[:screen_name] = SCREEN_NAME_MAP.fetch(attributes[:screen_name], attributes[:screen_name])
+            end
+            dispatch(TwitterUser.new(attributes))
           end
         else
           warn("Unhandled redirect or empty body #{url}")

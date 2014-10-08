@@ -21,7 +21,9 @@ MANUAL_SCREEN_NAMES = %w(
   keithashfield11
   mackaycpc
   petergoldring
-) + # Inactive (davidmcguinty from scrape_liberal is also inactive)
+) + # Inactive
+# davidmcguinty from scrape_liberal is also inactive.
+# Cause "Old tweets" warnings.
 %w(
   barrydevolin_mp
   bryanhayesmp
@@ -32,7 +34,6 @@ MANUAL_SCREEN_NAMES = %w(
   jacquesgourde
   jayaspinmp
   joe_preston
-  joycebatemanmp
   kellyblockmp
   leonaaglukkaq
   mpeveadams
@@ -88,15 +89,15 @@ BAD_SCREEN_NAMES = NON_MP_SCREEN_NAMES + [
   'pmharper', # http://www.robertgoguen.ca
 ]
 
-# The official party websites have errors.
+# The official party websites have errors. Cause "Not found" warnings. Items can
+# be removed from this list once they are corrected on websites.
 SCREEN_NAME_MAP = {
-  'dianeablonczymp' => 'dianeablonczy',
+  'rob_clarke_mp' => 'robclarkemp', # first link at robclarkemp.ca is bad
   'edholdermp' => 'edholder_mp',
-  'jayaspin' => 'jayaspinmp',
   'joyce_bateman' => 'joycebatemanmp',
   'judyfoote' => 'judyfootemp',
-  'justinpjtrudeau' => 'justintrudeau',
-  'npdlavallesiles' => 'francoispilon',
+  'justinpjtrudeau' => 'justintrudeau', # justinpjtrudeau is an old parked account
+  'npdlavallesiles' => 'francoispilon', # npdlavallesiles is a riding account
   'sdionliberal' => 'honstephanedion',
 }
 
