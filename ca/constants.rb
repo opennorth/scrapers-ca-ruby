@@ -99,6 +99,7 @@ SCREEN_NAME_MAP = {
   'justinpjtrudeau' => 'justintrudeau', # justinpjtrudeau is an old parked account
   'npdlavallesiles' => 'francoispilon', # npdlavallesiles is a riding account
   'sdionliberal' => 'honstephanedion',
+  'stevenjfletcher' => 'honsfletchermp',
 }
 
 BACKUP_URLS = {

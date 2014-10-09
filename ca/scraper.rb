@@ -255,23 +255,17 @@ private
             a['href']['twitter.com/share'] && a['data-via'].blank? || a['class'] == 'twitter-user' || a['href']['?q='] || BAD_SCREEN_NAMES.include?(get_screen_name(a))
           end.first
 
-          attributes = {}
+          screen_name = nil
           if a
-            attributes[:screen_name] = get_screen_name(a)
-            if a['data-widget-id']
-              attributes[:id] = a['data-widget-id']
-            end
+            screen_name = get_screen_name(a)
           elsif response.env[:raw_body][/\.setUser\('([^']+)'\)/]
-            attributes[:screen_name] = $1.downcase
+            screen_name = $1.downcase
           elsif backup_url
             process(backup_url, visited: visited)
           end
 
-          unless attributes.empty?
-            if attributes.key?(:screen_name)
-              attributes[:screen_name] = SCREEN_NAME_MAP.fetch(attributes[:screen_name], attributes[:screen_name])
-            end
-            dispatch(TwitterUser.new(attributes))
+          if screen_name
+            dispatch(TwitterUser.new(screen_name: SCREEN_NAME_MAP.fetch(screen_name, screen_name)))
           end
         else
           warn("Unhandled redirect or empty body #{url}")
