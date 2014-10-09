@@ -30,29 +30,46 @@ MANUAL_SCREEN_NAMES = %w(
   christianparad
   danalbas
   davidtilson
+  davidyurdiga
+  honedfast
   honrobnicholson
   jacquesgourde
   jayaspinmp
   joe_preston
+  johnw_mp
   kellyblockmp
   leonaaglukkaq
+  maximebernier
+  michaelchongmp
+  min_lebel
+  minksorenson
   mpeveadams
   mpmikea
+  mptedfalk
+  petervanloan
   pierrepoilievre
   pmharper
+  ryanleefmp
   scottreidcpc
   shellyglovermin
+  stellaamblermp
   susantruppe
   terenceyoungmp
 ) + # Conservative
 %w(
   honstephanedion
+  irwincotler
   judyfootemp
+  l_macaulaymp
   scottandrewsmp
+  toadamvaughan
 ) + # Liberal
 %w(
+  elaine_michaud
   fboivinnpd
   jtremblaynpd
+  sadia_groguhe
+  sanahassainia
   thomasmulcair
 ) # NDP
 
