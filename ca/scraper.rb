@@ -115,13 +115,17 @@ class Canada < GovernmentProcessor
     end
 
     # Collect Twitter IDs.
-    screen_names = connection.raw_connection[:twitter_users].find(id: {'$exists' => true}).map do |user|
+    ids = connection.raw_connection[:twitter_users].find(id: {'$exists' => true}).map do |user|
       user['id'].to_i
     end
 
     # Update screen names of Twitter users with Twitter IDs.
-    screen_names.each_slice(100) do |slice|
-      twitter.users(*slice).each do |user|
+    ids.each_slice(100) do |slice|
+      users = twitter.users(*slice)
+      (slice.map(&:to_s) - users.map{|user| user.id.to_s}).each do |id|
+        connection.raw_connection[:twitter_users].find(id: id).update('$unset' => {id: ''})
+      end
+      users.each do |user|
         name = user.name.
           # Remove prefix.
           sub(/\A(?:Dr|Hon)\. /, '').
