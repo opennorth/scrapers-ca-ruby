@@ -50,7 +50,8 @@ count = db.speeches.count(selector)
 if (count) {
   print(count + " attributes on non-a tags: db.speeches.distinct('html', {text: " + selector.text + "})")
 }
-// Find non-hret attributes on a tags. (Should be empty.)
+
+// Find non-href attributes on a tags. (Should be empty.)
 selector = {$or: [{text: /<a [^h]/}, {text: /<a href="\S+" /}]}
 count = db.speeches.count(selector)
 if (count) {
@@ -88,17 +89,29 @@ if (count) {
 
 // Find b tags, which may indicate a heading within a non-heading.
 [ {element: 'heading'},
-  {element: 'answer'},
-  {element: 'narrative'},
-  {element: 'other'},
-  {element: 'question'},
-  {element: 'speech'},
+  {element: 'answer'}, // References to the questions being answered (15)
+  {element: 'narrative'}, // 2011-12-09: Repeats a heading when continuing the debate (1)
+  {element: 'other'}, // bills under Introduction of Bills
+  {element: 'question'}, // 2011-11-02: "ANSWER:" at beginning of two paragraphs (2)
+  {element: 'speech'}, // Throne Speech, Budget, Clerk or Assistant Clerk reading bills to Lieutenant Governor (19)
   {division: true},
 ].forEach(function (selector) {
-  selector.text = /<b\b/
-  var count = db.speeches.count(selector)
+  if (selector.element == 'speech') {
+    selector.text = {$regex: /<b\b/, $not: /\bmet and considered the following bill|\bRULING\b|\bHydro\b/}; // Speaker's Ruling, Hydro-Québec
+  }
+  else {
+    selector.text = /<b\b/;
+  }
+  var count = db.speeches.count(selector);
   if (count) {
-    print(count + " b tags found: db.speeches.distinct('text', " + JSON.stringify(selector).replace('{}', selector.text) + ")")
+    var criteria = JSON.stringify(selector);
+    if (selector.element == 'speech') {
+      criteria = criteria.replace('{}', selector.text.$regex).replace('{}', selector.text.$not);
+    }
+    else {
+      criteria = criteria.replace('{}', selector.text);
+    }
+    print(count + " b tags found: db.speeches.distinct('text', " + criteria + ").sort()");
   }
 });
 
