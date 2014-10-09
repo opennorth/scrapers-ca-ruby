@@ -1,6 +1,12 @@
 class NovaScotia
   # This text is always followed by a heading.
-  HEADING_BEGIN_RE = /\b(?:please|you) (?:now )?call (?:Bill|Resolution)\b/
+  #
+  # * "could you please call"
+  # * "would you call"
+  # * "would you please call"
+  # * "would you please now call"
+  # * "would you please"
+  HEADING_BEGIN_RE = /\b(?:please|please call|you call|now call) (?:Bill|Resolution)\b/
 
   def scrape_speeches
     Time.zone = 'Atlantic Time (Canada)'
@@ -37,7 +43,8 @@ private
         # Ignore rows with colspans and hansards where names are not linked.
         # @note 2011-10-31 has links but many more Microsoft Word artifacts.
         # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11oct31/
-        tr.at_css('td').text == ' ' || tr.at_css('a[href]').nil? || Date.parse(tr.at_css('a[href]')) < Date.new(2011, 11, 1) # non-breaking space
+        a = tr.at_xpath('.//a[@href][not(contains(.,"Question Period"))][not(contains(.,"QP"))]')
+        tr.at_css('td').text == ' ' || a.nil? || Date.parse(a) < Date.new(2011, 11, 1) # non-breaking space
       end.each do |tr|
         @a = tr.at_css('a[href]') # XXX
         docDate_date = Date.parse(@a.text)
@@ -131,7 +138,7 @@ private
 
           # A division.
           elsif p.node_name == 'table'
-            if text['YEAS']
+            if text['YEAS'] && (!@speech || !@speech[:division])
               transition_to(:division)
               create_speech
 
@@ -292,7 +299,7 @@ private
           # * Period after name: "MR. KEITH BAIN."
           # * Space after name: "MR. LEO GLAVINE"
           # * Roles instead of names.
-          elsif match = text.match(/\A((?:HON|M[RS])\b\.? ?[A-Z]+ [A-Z'-]+)[.:; ]|\A((?:MR\.|MADAM) (?:SPEAKER|CHAIRMAN)|SERGEANT-AT-ARMS|THE (?:ADMINISTRATOR|LIEUTENANT GOVERNOR)):/)
+          elsif match = text.match(/\A((?:HON|M[RS])\b\.? ?[A-Z]+ [A-Z'-]+)[.:; ]|\A((?:MR\. ?|MADAM )(?:SPEAKER|CHAIRMAN)|SERGEANT-AT-ARMS|THE (?:ADMINISTRATOR|LIEUTENANT GOVERNOR)):/)
             unless @state == :speech_by
               transition_to(:speech)
               create_speech
@@ -671,7 +678,8 @@ private
   end
 
   def to_key(string)
-    # Mr. and Ms. can disambiguate Maureen MacDonald from Manning MacDonald.
+    # Removes honorifix prefixes, unless the family name is MacDonald, as Mr.
+    # and Ms. can disambiguate Maureen MacDonald from Manning MacDonald.
     string.sub(/\A(?:#{string[/\bMacDonald\b/i] ? /Hon/i : /(?:Hon|Mr|Ms|The)/i}\b\.?|Honourable\b|Madam\b)/i, '').strip.squeeze(' ').downcase
   end
 
@@ -721,7 +729,7 @@ private
       gsub('...', '…').
       gsub('&amp;', '&').
       # Remove formatting.
-      sub(' class="hsd_general"', '').
+      sub(/ class="(?:hsd_general|hsd_noindent)"/, '').
       sub(' style="font-size: .7em"', '').
       # Remove leading and trailing whitespace inside paragraphs.
       sub(/(<p>(?:<[^>]+>)*)\s+/, '\1').

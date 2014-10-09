@@ -420,6 +420,9 @@ private
           doc.xpath('//td[string-length(text())=1]').each do |td|
             td.inner_html = ''
           end
+          doc.xpath('//td').each do |td|
+            td.inner_html = clean(td.inner_html.gsub('&#xA0;', ''))
+          end
           doc.xpath('//table/@class').remove
 
           xml.other do
