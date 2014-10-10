@@ -30,6 +30,7 @@ TYPOS = {
   'michele raymond' => 'http://nslegislature.ca/index.php/people/members/Michele_Raymond', # unlinked occurs before linked
   'pan eyking' => 'http://nslegislature.ca/index.php/people/members/pam_eyking', # given name "Pam"
   'peterson-rayfuse' => 'http://nslegislature.ca/index.php/people/members/Denise_Peterson-Rafuse', # family name
+  'randy delory' => 'http://nslegislature.ca/index.php/people/members/randy_delorey', # family name
   'ross laundry' => 'http://nslegislature.ca/index.php/people/members/Ross_Landry', # family name
   'macneil' => 'http://nslegislature.ca/index.php/people/members/Stephen_McNeil', # family name
   'stephen macneil' => 'http://nslegislature.ca/index.php/people/members/Stephen_McNeil', # family name

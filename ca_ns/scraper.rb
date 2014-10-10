@@ -180,9 +180,8 @@ end
 
 if ENV['MEMCACHIER_SERVERS']
   options[:cache_dir] = nil
-  # options[:cache_dir] = "memcached://#{ENV['MEMCACHIER_SERVERS']}"
-  # options[:memcached_username] = ENV['MEMCACHIER_USERNAME']
-  # options[:memcached_password] = ENV['MEMCACHIER_PASSWORD']
+else
+  options[:expires_in] = 86400 # 1 day
 end
 
 runner = Pupa::Runner.new(NovaScotia, options)
