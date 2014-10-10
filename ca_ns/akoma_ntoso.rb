@@ -404,7 +404,7 @@ private
           xml.from 'MR. SPEAKER'
         end
 
-        xml << text
+        xml << text.gsub('&#xFFFD;', '')
       end
 
     when 'subheading'
