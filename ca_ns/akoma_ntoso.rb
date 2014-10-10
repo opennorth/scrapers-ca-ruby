@@ -416,7 +416,7 @@ private
       # @see http://examples.akomantoso.org/categorical.html#voteAttsAG
       if speech['division']
         if speech['html']['<table']
-          doc = Nokogiri::XML(speech['html'].gsub('<br>', '<br/>'), &:noblanks)
+          doc = Nokogiri::XML("<div>#{speech['html'].gsub('<br>', '<br/>')}</div>", &:noblanks)
           doc.xpath('//td[string-length(text())=1]').each do |td|
             td.inner_html = ''
           end
@@ -426,7 +426,7 @@ private
           doc.xpath('//table/@class').remove
 
           xml.other do
-            xml << doc.to_xhtml(indent: 0)
+            xml << doc.xpath('//table').to_xhtml(indent: 0)
           end
         else
           xml.other do
