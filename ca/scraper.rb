@@ -105,12 +105,16 @@ class Canada < GovernmentProcessor
 
     # Set a Twitter user's ID if none is set.
     screen_names.each_slice(100) do |slice|
-      users = twitter.users(*slice)
-      (slice.map(&:downcase) - users.map{|user| user.screen_name.downcase}).each do |screen_name|
-        warn("Not found #{screen_name}")
-      end
-      users.each do |user|
-        connection.raw_connection[:twitter_users].find(screen_name: Regexp.new(Regexp.escape(user.screen_name), 'i')).update('$set' => {id: user.id.to_s})
+      begin
+        users = twitter.users(*slice)
+        (slice.map(&:downcase) - users.map{|user| user.screen_name.downcase}).each do |screen_name|
+          warn("Not found #{screen_name}")
+        end
+        users.each do |user|
+          connection.raw_connection[:twitter_users].find(screen_name: Regexp.new(Regexp.escape(user.screen_name), 'i')).update('$set' => {id: user.id.to_s})
+        end
+      rescue Twitter::Error::NotFound
+        error("Not found: #{slice.join(', ')}")
       end
     end
 
