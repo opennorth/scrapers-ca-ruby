@@ -71,9 +71,21 @@ Montreal.add_scraping_task(:posts)
 Montreal.add_scraping_task(:people)
 Montreal.add_scraping_task(:documents)
 
-runner = Pupa::Runner.new(Montreal, {
-  database_url: 'mongodb://localhost:27017/mycityhall',
-  expires_in: 604800, # 1 week
-})
+options = {
+  database_url: ENV['MONGOLAB_URI'] || 'mongodb://localhost:27017/mycityhall',
+}
+
+if ENV['REDISCLOUD_URL']
+  options[:output_dir] = ENV['REDISCLOUD_URL']
+end
+
+if ENV['MEMCACHIER_SERVERS']
+  options[:cache_dir] = nil
+else
+  options[:expires_in] = 86400 # 1 day
+end
+
+runner = Pupa::Runner.new(Montreal, options)
+
 runner.add_action(name: 'download', description: 'Download PDFs')
 runner.run(ARGV)
