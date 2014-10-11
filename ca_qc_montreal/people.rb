@@ -1,4 +1,6 @@
 class Montreal
+  MAIRE_DE_LA_VILLE = 'Maire de la Ville'
+
   # @note New datasets are now available. Waiting on:
   # * Publier les données sous format CSV
   # * Include le numéro de poste (par exemple, 1,00, 1,10, etc.)
@@ -11,7 +13,7 @@ class Montreal
   # http://donnees.ville.montreal.qc.ca/dataset/commissions-permanentes-du-conseil-membres
   def scrape_people # should have 103
     boroughs = {}
-    rows = CSV.parse(get('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-boroughs.csv').force_encoding('utf-8'))
+    rows = CSV.parse(get('https://raw.githubusercontent.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-boroughs.csv').force_encoding('utf-8'))
     rows.shift
     rows.each do |row|
       boroughs[row[1]] = row[0].sub(/\Aocd-division\b/, 'ocd-organization')
@@ -116,16 +118,16 @@ class Montreal
       person.add_source('http://donnees.ville.montreal.qc.ca/dataset/bd-elus', note: 'Portail des données ouvertes de la Ville de Montréal')
 
       # Dispatch the three people who appear twice and their party memberships only once.
-      if row['TITRE_MAIRIE'] == 'Maire' || ['Conseiller de la Ville désigné', 'Conseillère de la Ville désignée'].include?(row['TITRE_CONSEIL'])
+      if row['TITRE_MAIRIE'] == MAIRE_DE_LA_VILLE || ['Conseiller de la Ville désigné', 'Conseillère de la Ville désignée'].include?(row['TITRE_CONSEIL'])
         properties = {person: person.fingerprint}
       else
         properties = {person_id: person._id}
         dispatch(person)
-        warn(person.errors.full_messages) if person.invalid?
+        warn(person.errors.full_messages) if person.invalid? # No consequence unless major errors.
         create_membership(properties.merge(organization_id: party_ids.fetch(row['PARTI_POLITIQUE'])))
       end
 
-      identifier = if row['TITRE_MAIRIE'] == "Maire de la Ville"
+      identifier = if row['TITRE_MAIRIE'] == MAIRE_DE_LA_VILLE
         '0,00'
       elsif row['TITRE_MAIRIE'] == "Maire d'arrondissement" && row['ARRONDISSEMENT'] == 'Ville-Marie'
         '18,00'
@@ -192,7 +194,7 @@ class Montreal
       when 'Conseiller de la Ville désigné', 'Conseillère de la Ville désignée' # should have 2
         create_membership(properties.merge({
           role: person.gender == 'male' ? 'Conseiller de ville désigné' : 'Conseillère de ville désignée',
-          organization_id: 'ocd-organization/country:ca/csd:2466023/arrondissement:ville-marie/council',
+          organization_id: 'ocd-organization/country:ca/csd:2466023/borough:ville-marie/council',
           post: {
             label: "Conseiller de ville désigné (siège #{designated_councillor_number})",
           },
@@ -200,7 +202,7 @@ class Montreal
         designated_councillor_number += 1
       when ''
         # The person who is city mayor and Ville-Marie mayor appears twice.
-        if row['TITRE_MAIRIE'] == "Maire de la Ville" # should have 1
+        if row['TITRE_MAIRIE'] == MAIRE_DE_LA_VILLE # should have 1
           create_membership(properties.merge({
             role: person.gender == 'male' ? "Maire de la Ville de Montréal" : "Mairesse de la Ville de Montréal",
             organization_id: 'ocd-organization/country:ca/csd:2466023/council',
@@ -211,7 +213,7 @@ class Montreal
         elsif row['TITRE_MAIRIE'] == "Maire d'arrondissement" && row['ARRONDISSEMENT'] == 'Ville-Marie' # should have 1
           create_membership(properties.merge({
             role: person.gender == 'male' ? "Maire d'arrondissement" : "Mairesse d'arrondissement",
-            organization_id: 'ocd-organization/country:ca/csd:2466023/arrondissement:ville-marie/council',
+            organization_id: 'ocd-organization/country:ca/csd:2466023/borough:ville-marie/council',
             post: {
               label: "Maire de l'arrondissement de Ville-Marie",
             },
@@ -241,10 +243,10 @@ class Montreal
           },
         }))
         executive_committee_member_number += 1
-      when 'Conseiller associé', 'Conseillère associée', ''
+      when 'Conseiller associé', 'Conseillère associée', 'Président du conseil de la Ville', 'Vice-présidente du conseil de la Ville', ''
         # Do nothing.
       else
-        error("Unrecognized TITRE_COMITE_EXECUTIF #{row['TITRE_COMITE_EXECUTIF']}")
+        warn("Unrecognized TITRE_COMITE_EXECUTIF #{row['TITRE_COMITE_EXECUTIF']}") # Add to above exceptions.
       end
 
       row['AUTRE_TITRE'].split("\r\n").each do |title|

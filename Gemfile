@@ -3,6 +3,7 @@ ruby '2.1.2'
 
 gem 'activemodel'
 gem 'dalli'
+gem 'faraday_middleware', git: 'https://github.com/lostisland/faraday_middleware.git' # Gzip not in 0.9.1
 gem 'fog'
 gem 'hiredis'
 gem 'multi_xml'

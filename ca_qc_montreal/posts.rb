@@ -1,7 +1,7 @@
 class Montreal
   def scrape_posts # should have 198
     boroughs = {}
-    CSV.parse(get('https://raw.github.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-boroughs.csv').force_encoding('utf-8'), headers: true) do |row|
+    CSV.parse(get('https://raw.githubusercontent.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-boroughs.csv').force_encoding('utf-8'), headers: true) do |row|
       boroughs[row['number']] = row['id'].sub(/\Aocd-division\b/, 'ocd-organization')
     end
 
@@ -31,7 +31,7 @@ class Montreal
       identifier = post.fetch('id')
 
       unless label[area_name]
-        warn("expected #{label} to match #{area_name}")
+        warn("expected #{label} to match #{area_name}") # No consequence, just inconsistent.
       end
 
       properties = {
@@ -67,7 +67,7 @@ class Montreal
 
     # @see http://election-montreal.qc.ca/cadre-electoral-districts/cadre-electoral/arrondissements/villemarie.en.html
     properties = {
-      organization_id: 'ocd-organization/country:ca/csd:2466023/arrondissement:ville-marie/council',
+      organization_id: 'ocd-organization/country:ca/csd:2466023/borough:ville-marie/council',
       area: {
         name: 'Ville-Marie',
       },

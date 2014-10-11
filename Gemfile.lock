@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/lostisland/faraday_middleware.git
+  revision: 9a49b369c39cbef5525f4fda7e01cf8f5eb09e24
+  specs:
+    faraday_middleware (0.9.0)
+      faraday (>= 0.7.4, < 0.10)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -21,8 +28,6 @@ GEM
     excon (0.39.6)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
-    faraday_middleware (0.9.1)
-      faraday (>= 0.7.4, < 0.10)
     fog (1.23.0)
       fog-brightbox
       fog-core (~> 1.23)
@@ -61,7 +66,7 @@ GEM
       mime-types (>= 1.16, < 3)
     memoizable (0.4.2)
       thread_safe (~> 0.3, >= 0.3.1)
-    mime-types (2.3)
+    mime-types (2.4.1)
     mini_portile (0.6.0)
     minitest (4.7.5)
     moped (2.0.0)
@@ -77,10 +82,10 @@ GEM
     net-ssh (2.9.1)
     nokogiri (1.6.3.1)
       mini_portile (= 0.6.0)
-    oj (2.10.2)
+    oj (2.10.3)
     optionable (0.2.0)
     pg (0.17.1)
-    pupa (0.1.7)
+    pupa (0.1.9)
       activesupport (~> 4.0.0)
       colored (~> 1.2)
       faraday_middleware (~> 0.9.0)
@@ -130,6 +135,7 @@ PLATFORMS
 DEPENDENCIES
   activemodel
   dalli
+  faraday_middleware!
   fog
   hiredis
   multi_xml
