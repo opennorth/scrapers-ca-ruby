@@ -81,7 +81,7 @@ TWITTER_NAME_MAP = {
   'Genest-Jourdain' => 'Jonathan Genest-Jourdain',
   'Gord Brown' => 'Gordon Brown',
   'Jinny Sims' => 'Jinny Jogindera Sims',
-  'Marjolaine Boutin-S.' => 'Marjolaine Boutin-Sweet',
+  'Marjolaine Boutin-S' => 'Marjolaine Boutin-Sweet',
   'Moore Christine' => 'Christine Moore',
   'T. Benskin' => 'Tyrone Benskin',
 }
