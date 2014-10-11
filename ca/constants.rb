@@ -88,6 +88,7 @@ TWITTER_NAME_MAP = {
 
 NON_MP_SCREEN_NAMES = [
   'hnisc', # http://www.rickdykstra.ca
+  'industrycanada',
   'liberal_party',
   'm_ignatieff', # http://dominicleblanc.liberal.ca
   'parti_liberal',

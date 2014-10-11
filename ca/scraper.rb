@@ -128,7 +128,7 @@ class Canada < GovernmentProcessor
       users.each do |user|
         name = user.name.
           # Remove prefix.
-          sub(/\A(?:Dr|Hon)\. /, '').
+          sub(/\A(?:Dr\.|Hon\.|Ministre) /, '').
           # Remove parenthetical.
           sub(/ \([^)]+\)/, '').
           # Remove suffixes.
@@ -140,7 +140,10 @@ class Canada < GovernmentProcessor
           sub(/ [A-Z]\./, '').
           # Remove Chinese characters. https://twitter.com/joycemurray
           gsub(/[^A-ZÇÉÈÎÔa-zçéèîô'. -]/, '').
-          squeeze(' ').strip
+          squeeze(' ').
+          strip.
+          # Remove ending punctuation.
+          sub(/\.\z/, '')
 
         # Some Twitter names have no spaces between words, but don't split "MacKay".
         name = name.split(/ |(?<=[a-z]{3})(?=[A-Z])|(?<=\.)(?! )/).map do |part|
