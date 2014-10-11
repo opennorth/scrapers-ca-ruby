@@ -114,7 +114,7 @@ class Canada < GovernmentProcessor
           connection.raw_connection[:twitter_users].find(screen_name: Regexp.new(Regexp.escape(user.screen_name), 'i')).update('$set' => {id: user.id.to_s})
         end
       rescue Twitter::Error::NotFound
-        error("Not found: #{slice.join(', ')}")
+        warn("Not found #{slice.join(', ')}")
       end
     end
 
@@ -179,6 +179,9 @@ class Canada < GovernmentProcessor
         end
       end
     end
+
+    # Delete any Twitter users that were not found.
+    connection.raw_connection[:twitter_users].find(id: {'$exists' => false}).remove_all
   end
 
 private
