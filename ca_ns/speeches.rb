@@ -365,7 +365,7 @@ private
             }))
 
           # A division, which will have many paragraphs.
-          elsif p.at_css('b') && text[/\AYEAS[[:space:]]+NAYS\z/]
+          elsif p.at_css('b') && text[/\AYEAS[[:space:]]+NAYS\z/] || text == 'YEAS'
             transition_to(:division)
             create_speech
 
@@ -398,7 +398,7 @@ private
             create_speech
             # We choose not to import this.
           # A line of text, seen in "INTRODUCTION OF BILLS".
-          elsif text[/\ABill No\. \d+ [–-] Entitled\b/]
+          elsif text[/\ABill No\. \d+ ?[–-] Entitled\b/]
             transition_to(:other)
             create_speech
 
@@ -429,7 +429,7 @@ private
             }))
 
           # A resolution.
-          elsif text[/\A\[?RESOL[IUT]+ONS? ?(?:NO\. ?)?\d+\]?\z/]
+          elsif text[/\A\[?RESOL[IUT]+ONS? ?(?:NO\.? ?)?\d+\]?\z/]
             transition_to(:heading)
             create_speech
 
