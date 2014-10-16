@@ -566,7 +566,7 @@ private
           # A narrative that has many paragraphs.
           # Brackets appear in the middle of the speaker's speech. FIXME
           # @see http://nslegislature.ca/index.php/proceedings/hansard/C81/house_11dec05/
-          elsif text[/\A\[/] && text != '[Would all those in favour of the motion please say Aye. Contrary minded Nay.'
+          elsif text[/\A\[[^\]]+\z/] && text != '[Would all those in favour of the motion please say Aye. Contrary minded Nay.'
             transition_to(:narrative)
             create_speech
 
