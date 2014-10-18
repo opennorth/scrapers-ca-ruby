@@ -66,10 +66,10 @@ GEM
       mime-types (>= 1.16, < 3)
     memoizable (0.4.2)
       thread_safe (~> 0.3, >= 0.3.1)
-    mime-types (2.4.1)
+    mime-types (2.4.2)
     mini_portile (0.6.0)
     minitest (4.7.5)
-    moped (2.0.0)
+    moped (2.0.1)
       bson (~> 2.2)
       connection_pool (~> 2.0)
       optionable (~> 0.2.0)
@@ -85,7 +85,7 @@ GEM
     oj (2.10.3)
     optionable (0.2.0)
     pg (0.17.1)
-    pupa (0.1.9)
+    pupa (0.1.10)
       activesupport (~> 4.0.0)
       colored (~> 1.2)
       faraday_middleware (~> 0.9.0)
@@ -140,7 +140,7 @@ DEPENDENCIES
   hiredis
   multi_xml
   nokogiri
-  pupa (~> 0.1.7)
+  pupa (~> 0.1.10)
   redis-store
   rubyzip (~> 0.9.9)
   sinatra
