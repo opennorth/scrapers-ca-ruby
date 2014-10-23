@@ -17,6 +17,7 @@ TYPOS = {
   "d'enteremont" => 'http://nslegislature.ca/index.php/people/members/christopher_a_dentremont1', # family name
   "d'entremount" => 'http://nslegislature.ca/index.php/people/members/christopher_a_dentremont1', # family name
   'bekcy kent' => 'http://nslegislature.ca/index.php/people/members/Becky_Kent', # given name "Becky"
+  'brendan maquire' => 'http://nslegislature.ca/index.php/en/people/members/brendan_o._maguire', # family name
   'david wilson' => 'http://nslegislature.ca/index.php/people/members/David_Allan_Wilson', # unlinked occurs before linked
   'diane whalen' => 'http://nslegislature.ca/index.php/people/members/diana_whalen1', # given name "Diana"
   'gordon gosse' => 'http://nslegislature.ca/index.php/people/members/gordie_gosse1', # given name "Gordie"
@@ -108,6 +109,7 @@ HEADINGS = TOP_LEVEL_HEADINGS + [
   # In Speech from the Throne.
   'Introduction',
   # All-caps headings with no useful markers.
+  'AFFAIRES ACADIENNES: ASSEMBLÉE GÉNÉRALE DE FANE',
   'COLLABORATIVE EMERGENCY CENTRES',
   'ELIGIBILITY BREAKDOWN',
   'INQUIRY TERMS OF REF.',
