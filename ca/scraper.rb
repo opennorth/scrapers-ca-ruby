@@ -295,7 +295,8 @@ private
           error("Server not found #{url}")
         end
       rescue Faraday::ClientError => e
-        error("#{e.message} #{url}")
+        # 5xx errors occur regularly, so we downgrade to warning to limit email alerts.
+        warn("#{e.message} #{url}")
       end
     end
   end
