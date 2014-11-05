@@ -25,7 +25,8 @@ class Montreal
     }
 
     party_ids = {}
-    [ 'Coalition Montréal - Marcel Côté',
+    [ 'Coalition Montréal',
+      'Coalition Montréal - Marcel Côté',
       'Équipe Anjou',
       'Équipe Barbe Team – Pro action LaSalle', # n-dash
       'Équipe conservons Outremont',
