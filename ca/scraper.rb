@@ -52,8 +52,8 @@ class Canada < GovernmentProcessor
   end
 
   def scrape_conservative
-    get('http://www.conservative.ca/?page_id=35').xpath('//option').each do |option|
-      get("http://www.conservative.ca/?page_id=35&lang=en&pr=#{option[:value].gsub(' ', '+')}").xpath('//a[@class="mpname"]').each do |a|
+    get('http://www.conservative.ca/team/members-of-parliament/').xpath('//option').each do |option|
+      get("http://www.conservative.ca/team/members-of-parliament/?pr=#{option[:value].gsub(' ', '+')}").xpath('//a[@class="mpname"]').each do |a|
         url = get(a[:href]).at_xpath('//div[@id="sidebar"]//a[@target="_blank"]')[:href]
         if url.empty?
           warn("No URL found at #{a[:href]}")
