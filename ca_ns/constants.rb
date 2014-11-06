@@ -14,45 +14,48 @@ ROLES = [
 # name is of a role.
 TYPOS = {
   "christopher d'entromont" => 'http://nslegislature.ca/index.php/people/members/christopher_a_dentremont1', # family name
-  "d'enteremont" => 'http://nslegislature.ca/index.php/people/members/christopher_a_dentremont1', # family name
-  "d'entremount" => 'http://nslegislature.ca/index.php/people/members/christopher_a_dentremont1', # family name
-  'bekcy kent' => 'http://nslegislature.ca/index.php/people/members/Becky_Kent', # given name "Becky"
-  'brendan maquire' => 'http://nslegislature.ca/index.php/en/people/members/brendan_o._maguire', # family name
-  'david wilson' => 'http://nslegislature.ca/index.php/people/members/David_Allan_Wilson', # unlinked occurs before linked
-  'diane whalen' => 'http://nslegislature.ca/index.php/people/members/diana_whalen1', # given name "Diana"
-  'gordon gosse' => 'http://nslegislature.ca/index.php/people/members/gordie_gosse1', # given name "Gordie"
-  'harold therault' => 'http://nslegislature.ca/index.php/people/members/Harold_Theriault', # family name
-  'jaimie baillie' => 'http://nslegislature.ca/index.php/people/members/jamie_baillie', # given name "Jamie"
-  'john macdonnell' => 'http://nslegislature.ca/index.php/people/members/john_macdonnell', # no link
-  'mailyn more' => 'http://nslegislature.ca/index.php/people/members/Marilyn_More', # given name "Marilyn"
-  'mariyln more' => 'http://nslegislature.ca/index.php/people/members/Marilyn_More', # given name "Marilyn"
-  'maureen macdonld' => 'http://nslegislature.ca/index.php/people/members/Maureen_MacDonald', # family name
-  'michael samson' => 'http://nslegislature.ca/index.php/people/members/michel_p_samson1', # given name "Michel"
-  'michele raymond' => 'http://nslegislature.ca/index.php/people/members/Michele_Raymond', # unlinked occurs before linked
-  'pan eyking' => 'http://nslegislature.ca/index.php/people/members/pam_eyking', # given name "Pam"
-  'peterson-rayfuse' => 'http://nslegislature.ca/index.php/people/members/Denise_Peterson-Rafuse', # family name
-  'randy delory' => 'http://nslegislature.ca/index.php/people/members/randy_delorey', # family name
-  'ross laundry' => 'http://nslegislature.ca/index.php/people/members/Ross_Landry', # family name
-  'macneil' => 'http://nslegislature.ca/index.php/people/members/Stephen_McNeil', # family name
-  'stephen macneil' => 'http://nslegislature.ca/index.php/people/members/Stephen_McNeil', # family name
-  'bellieveau' => 'http://nslegislature.ca/index.php/people/members/sterling_belliveau1', # family name
-  'sterling bellieau' => 'http://nslegislature.ca/index.php/people/members/sterling_belliveau1', # family name
-  'sterling bellieveau' => 'http://nslegislature.ca/index.php/people/members/sterling_belliveau1', # family name
-  'sterlng belliveau' => 'http://nslegislature.ca/index.php/people/members/sterling_belliveau1', # given name "Sterling"
-  'terry farrell' => 'http://nslegislature.ca/index.php/people/members/terry_farrell', # unlinked occurs before linked
+  "d'enteremont"            => 'http://nslegislature.ca/index.php/people/members/christopher_a_dentremont1', # family name
+  "d'entremount"            => 'http://nslegislature.ca/index.php/people/members/christopher_a_dentremont1', # family name
+  'bekcy kent'              => 'http://nslegislature.ca/index.php/people/members/Becky_Kent', # given name "Becky"
+  'brendan maquire'         => 'http://nslegislature.ca/index.php/en/people/members/brendan_o._maguire', # family name
+  'david wilson'            => 'http://nslegislature.ca/index.php/people/members/David_Allan_Wilson', # unlinked occurs before linked
+  'diane whalen'            => 'http://nslegislature.ca/index.php/people/members/diana_whalen1', # given name "Diana"
+  'gordon gosse'            => 'http://nslegislature.ca/index.php/people/members/gordie_gosse1', # given name "Gordie"
+  'harold therault'         => 'http://nslegislature.ca/index.php/people/members/Harold_Theriault', # family name
+  'ian rankin'              => 'http://nslegislature.ca/index.php/people/members/iain_rankin', # given name "Iain"
+  'jaimie baillie'          => 'http://nslegislature.ca/index.php/people/members/jamie_baillie', # given name "Jamie"
+  'john macdonnell'         => 'http://nslegislature.ca/index.php/people/members/john_macdonnell', # no link
+  'mailyn more'             => 'http://nslegislature.ca/index.php/people/members/Marilyn_More', # given name "Marilyn"
+  'mariyln more'            => 'http://nslegislature.ca/index.php/people/members/Marilyn_More', # given name "Marilyn"
+  'maureen macdonld'        => 'http://nslegislature.ca/index.php/people/members/Maureen_MacDonald', # family name
+  'michael samson'          => 'http://nslegislature.ca/index.php/people/members/michel_p_samson1', # given name "Michel"
+  'michele raymond'         => 'http://nslegislature.ca/index.php/people/members/Michele_Raymond', # unlinked occurs before linked
+  'pan eyking'              => 'http://nslegislature.ca/index.php/people/members/pam_eyking', # given name "Pam"
+  'peterson-rayfuse'        => 'http://nslegislature.ca/index.php/people/members/Denise_Peterson-Rafuse', # family name
+  'randy delory'            => 'http://nslegislature.ca/index.php/people/members/randy_delorey', # family name
+  'ross laundry'            => 'http://nslegislature.ca/index.php/people/members/Ross_Landry', # family name
+  'macneil'                 => 'http://nslegislature.ca/index.php/people/members/Stephen_McNeil', # family name
+  'stephen macneil'         => 'http://nslegislature.ca/index.php/people/members/Stephen_McNeil', # family name
+  'bellieveau'              => 'http://nslegislature.ca/index.php/people/members/sterling_belliveau1', # family name
+  'sterling bellieau'       => 'http://nslegislature.ca/index.php/people/members/sterling_belliveau1', # family name
+  'sterling bellieveau'     => 'http://nslegislature.ca/index.php/people/members/sterling_belliveau1', # family name
+  'sterlng belliveau'       => 'http://nslegislature.ca/index.php/people/members/sterling_belliveau1', # given name "Sterling"
+  'terry farrell'           => 'http://nslegislature.ca/index.php/people/members/terry_farrell', # unlinked occurs before linked
   'the lieutenant governor' => 'http://nslegislature.ca/index.php/people/lt-gov/', # role-based
-  'vickie conrad' => 'http://nslegislature.ca/index.php/people/members/Vicki_Conrad', # given name "Vicki"
-  'william estabooks' => 'http://nslegislature.ca/index.php/people/members/Bill_Estabrooks', # both names "Bill"
+  'vickie conrad'           => 'http://nslegislature.ca/index.php/people/members/Vicki_Conrad', # given name "Vicki"
+  'william estabooks'       => 'http://nslegislature.ca/index.php/people/members/Bill_Estabrooks', # both names "Bill"
 }
 
 # Used to clean headings.
 HEADING_TYPOS = { # FIXME
+  '. ADJOURNMENT' => 'ADJOURNMENT',
   'INTRODUCTION OF BILLS:' => 'INTRODUCTION OF BILLS',
   'MOTIONS UNDER RULE 5(5)' => 'MOTION UNDER RULE 5(5)',
   'NOTICE OF QUESTION FOR WRITTEN ANSWERS' => 'NOTICE OF QUESTIONS FOR WRITTEN ANSWERS',
   'NOTICES OF MOTION UNDER RULE (32)(3)' => 'NOTICES OF MOTION UNDER RULE 32(3)',
   "OPPOSTION MEMBERS' BUSINESS" => "OPPOSITION MEMBERS' BUSINESS",
   'ORAL QUESTION PUT BY MEMBERS' => 'ORAL QUESTIONS PUT BY MEMBERS',
+  'ORAL QUESTIONS PUT TO MEMBERS BY MINISTERS' => 'ORAL QUESTIONS PUT BY MEMBERS TO MINISTERS',
   'PRESENTING AND READING OF PETITIONS' => 'PRESENTING AND READING PETITIONS',
   'PRESENTING REPORT OF COMMITTEES' => 'PRESENTING REPORTS OF COMMITTEES',
   'PRESENTING REPORTS OF COMMIITTEES' => 'PRESENTING REPORTS OF COMMITTEES',
@@ -60,6 +63,7 @@ HEADING_TYPOS = { # FIXME
   'Private and Local Bills For Third Reading' => 'PRIVATE AND LOCAL BILLS FOR THIRD READING',
   'TABLING REPORTS, REGLATIONS AND OTHER PAPERS' => 'TABLING REPORTS, REGULATIONS AND OTHER PAPERS',
   'TABLING REPORTS, REGULATONS AND OTHER PAPERS' => 'TABLING REPORTS, REGULATIONS AND OTHER PAPERS',
+  'TABLING REPORTS, REGULATIONS AND OTHER PAPERS:' => 'TABLING REPORTS, REGULATIONS AND OTHER PAPERS',
 }
 
 # Used to clean resolutions.
@@ -100,6 +104,7 @@ TOP_LEVEL_HEADINGS = [
   "PRIVATE MEMBERS' PUBLIC BILLS FOR THIRD READING",
   'PUBLIC BILLS FOR SECOND READING',
   'PUBLIC BILLS FOR THIRD READING',
+  'STATEMENTS BY MEMBERS',
   'STATEMENTS BY MINISTERS',
   'TABLING REPORTS, REGULATIONS AND OTHER PAPERS',
   'SPEECH FROM THE THRONE',

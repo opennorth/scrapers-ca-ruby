@@ -529,8 +529,9 @@ private
 
             # There are hundreds of possible prefixes and suffixes for issue-
             # based headings, so check the format. Avoid matching on colons,
-            # because colons may indicate speakers.
-            unless HEADINGS.include?(text) || HEADINGS_RE.any?{|pattern| text[pattern]} || text[/\A- | [&–-] /] || text[/[.)]:/]
+            # because colons may indicate speakers. Centered all-caps headings
+            # are statements by members.
+            unless HEADINGS.include?(text) || HEADINGS_RE.any?{|pattern| text[pattern]} || text[/\A- | [&–-] /] || text[/[.)]:/] || p[:class] == 'hsd_center' && p.at_css('b')
               warn("Unrecognized heading #{original_text} => #{text} | #{index} #{@a[:href]}")
             end
 
