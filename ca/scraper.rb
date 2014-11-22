@@ -196,19 +196,24 @@ private
   # Dispatches a TwitterUser.
   def process(url, backup_url: nil, visited: [])
     if url
-      if visited.include?(url)
-        return error("Redirection loop #{url}: #{visited.join(', ')}")
-      end
-
       begin
+        last_url = URI.parse(url)
+
+        if last_url.path == ''
+          last_url.path = '/'
+        end
+
+        url = last_url.to_s
+
+        if visited.include?(url)
+          return error("Redirection loop #{url}: #{visited.join(', ')}")
+        end
+        visited << url
         response = client.get do |req|
           req.url url
           req.options.timeout = TIMEOUT_DELAY
           req.options.open_timeout = TIMEOUT_DELAY
         end
-
-        last_url = URI.parse(url)
-        visited << url
 
         # Loop until we no longer have redirects.
         begin
@@ -233,23 +238,30 @@ private
             parsed.host ||= last_url.host
             parsed.port ||= last_url.port
             parsed.fragment ||= last_url.fragment
+            last_url = parsed
 
-            if visited.include?(parsed.to_s)
-              if backup_url
-                parsed = URI.parse(backup_url)
-              else
-                return error("Redirection loop #{url}: #{visited.join(', ')}")
-              end
+            if last_url.port == 80
+              last_url.port = nil
+            end
+            if last_url.path == ''
+              last_url.path = '/'
             end
 
+            if visited.include?(new_url) && backup_url
+              last_url = URI.parse(backup_url)
+            end
+
+            new_url = last_url.to_s
+
+            if visited.include?(new_url)
+              return error("Redirection loop #{url}: #{visited.join(', ')}")
+            end
+            visited << new_url
             response = client.get do |req|
-              req.url parsed.to_s
+              req.url new_url
               req.options.timeout = TIMEOUT_DELAY
               req.options.open_timeout = TIMEOUT_DELAY
             end
-
-            last_url = parsed
-            visited << parsed.to_s
           end
         end while new_url
 
@@ -296,7 +308,7 @@ private
         end
       rescue Faraday::ClientError => e
         # 5xx errors occur regularly, so we downgrade to warning to limit email alerts.
-        warn("#{e.message} #{url}")
+        warn("#{e.class} #{e.message} #{url}")
       end
     end
   end
