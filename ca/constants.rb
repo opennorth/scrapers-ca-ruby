@@ -125,5 +125,7 @@ SCREEN_NAME_MAP = {
 }
 
 BACKUP_URLS = {
-  'http://www.lukiwski.ca' => 'http://www.tomlukiwski.com',
+  'http://www.bernardvalcourt.ca/' => 'http://www.bernardvalcourtmp.ca/',
+  'http://www.gerryritzmp.com/' => 'http://gerryritz.ca/',
+  'http://www.lukiwski.ca/' => 'http://www.tomlukiwski.com/',
 }

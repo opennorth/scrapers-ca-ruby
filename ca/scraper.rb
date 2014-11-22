@@ -58,6 +58,9 @@ class Canada < GovernmentProcessor
         if url.empty?
           warn("No URL found at #{a[:href]}")
         else
+          if URI.parse(url).path.empty?
+            url += '/'
+          end
           process(url, backup_url: BACKUP_URLS[url])
         end
       end
@@ -71,9 +74,6 @@ class Canada < GovernmentProcessor
       if url
         # Remove the incorrect "www." part of liberal.ca subdomains.
         url = url[:href].sub(/www\.(?=\w+\.liberal\.ca)/, '')
-        if URI.parse(url).path == '/'
-          url.chomp!('/')
-        end
         if url == backup_url
           process(url)
         else
@@ -168,6 +168,7 @@ class Canada < GovernmentProcessor
 
         unless names.include?(name)
           error("Not an MP: #{name} https://twitter.com/#{user.screen_name}")
+          connection.raw_connection[:twitter_users].find(screen_name: user.screen_name).remove_all
         end
         if user.statuses_count.zero?
           warn("No tweets #{user.screen_name}")
@@ -199,8 +200,12 @@ private
       begin
         last_url = URI.parse(url)
 
-        if last_url.path == ''
+        if last_url.path.empty?
           last_url.path = '/'
+        end
+
+        if visited.include?(last_url.to_s) && backup_url
+          last_url = URI.parse(backup_url)
         end
 
         url = last_url.to_s
@@ -247,14 +252,14 @@ private
               last_url.path = '/'
             end
 
-            if visited.include?(new_url) && backup_url
+            if visited.include?(last_url.to_s) && backup_url
               last_url = URI.parse(backup_url)
             end
 
             new_url = last_url.to_s
 
             if visited.include?(new_url)
-              return error("Redirection loop #{url}: #{visited.join(', ')}")
+              return error("Redirection loop #{new_url}: #{visited.join(', ')}")
             end
             visited << new_url
             response = client.get do |req|
