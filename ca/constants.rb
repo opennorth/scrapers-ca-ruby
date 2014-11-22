@@ -98,6 +98,7 @@ NON_MP_SCREEN_NAMES = [
   'socdevsoc',
   'uwaysc', # http://www.rickdykstra.ca
   'canada_swc', # http://www.rickdykstra.ca
+  'fcacan',
 
   # Twitter
   'intent',
@@ -117,6 +118,7 @@ SCREEN_NAME_MAP = {
   'joyce_bateman' => 'joycebatemanmp',
   'judyfoote' => 'judyfootemp',
   'justinpjtrudeau' => 'justintrudeau', # justinpjtrudeau is an old parked account
+  'minksorenson' => 'kevinasorenson',
   'npdlavallesiles' => 'francoispilon', # npdlavallesiles is a riding account
   'sdionliberal' => 'honstephanedion',
   'stevenjfletcher' => 'honsfletchermp',
