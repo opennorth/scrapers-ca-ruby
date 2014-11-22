@@ -31,6 +31,7 @@ MANUAL_SCREEN_NAMES = %w(
   danalbas
   davidtilson
   davidyurdiga
+  deanallisonmp
   honedfast
   honrobnicholson
   jacquesgourde
@@ -41,6 +42,7 @@ MANUAL_SCREEN_NAMES = %w(
   leonaaglukkaq
   maximebernier
   michaelchongmp
+  min_bvalcourt
   min_lebel
   minksorenson
   mpeveadams
@@ -107,8 +109,8 @@ BAD_SCREEN_NAMES = NON_MP_SCREEN_NAMES + [
   'pmharper', # http://www.robertgoguen.ca
 ]
 
-# The official party websites have errors. Cause "Not found" warnings. Items can
-# be removed from this list once they are corrected on websites.
+# The official party websites have errors. Causes "Not found" warnings. Items
+# can be removed from this list once they are corrected on websites.
 SCREEN_NAME_MAP = {
   'rob_clarke_mp' => 'robclarkemp', # first link at robclarkemp.ca is bad
   'edholdermp' => 'edholder_mp',
