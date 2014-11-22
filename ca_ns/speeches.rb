@@ -6,7 +6,8 @@ class NovaScotia
   # * "would you please call"
   # * "would you please now call"
   # * "would you please"
-  HEADING_BEGIN_RE = /\b(?:please|please call|you call|now call) (?:Bill|Resolution)\b/
+  # @see http://nslegislature.ca/index.php/proceedings/hansard/C96/house_14nov19/
+  HEADING_BEGIN_RE = /\b(?:please|please call|you call|now call) (?:Bill|Resolution)\b(?! No. 3,)/
 
   def scrape_speeches
     Time.zone = 'Atlantic Time (Canada)'
@@ -509,7 +510,7 @@ private
           elsif (
             # Avoid capturing "<p>.</p>" and allow some lowercase letters, e.g.
             # "CBC  - ANNIV. (75th)" and "PREM.: DHAs -  AMALGAMATION/SAVINGS".
-            text[/\A[A-ZÉths\d"&'(),.:\/\[\][:space:]–-]{2,}\z/] &&
+            text[/\A[A-ZÉths\d"&'(),.:\/\[\][:space:]–-]{2,}\z/] && # n-dash
             # Ignore non-heading paragraphs.
             !["SPEAKER'S RULING:", "THEREFORE BE IT RESOLVED AS FOLLOWS:", "LEGISLATIVE AGENDA FOR FALL 2013"].include?(text) ||
             # Exceptions not requiring regular expressions.

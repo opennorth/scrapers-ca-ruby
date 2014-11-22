@@ -206,6 +206,8 @@ private
 
   BILL_HEADING_RE = /\ABill (?:No\. )?\d+ [–-]/
 
+  # @return [Array, String] a list of bills containing a single bill, or part of
+  #   a subheading.
   def output_section(xml, heading, speeches, list_of_bills = nil)
     text = heading.fetch('text')
 
@@ -299,7 +301,7 @@ private
         end
 
         if adjustment
-          error("Unhandled adjustment: #{adjustment}")
+          error("Unhandled adjustment: #{adjustment} (try dropping database)")
         end
       end
     end
