@@ -23,6 +23,15 @@ Run a scraper with, for example:
 
     ruby ca_qc_montreal/scraper.rb
 
+## API
+
+    foreman start
+
+* `GET /memberships?in_network_of=ocd-organization/country:ca/csd:2466023/council`
+* `GET /organizations?in_network_of=ocd-organization/country:ca/csd:2466023/council`
+* `GET /people?member_of=ocd-organization/country:ca/csd:2466023/council`
+* `GET /posts?organization_id=ocd-organization/country:ca/csd:2466023/council`
+
 ## Deployment
 
     heroku addons:add memcachier
