@@ -1,13 +1,13 @@
 require File.expand_path(File.join('..', 'utils.rb'), __dir__)
 
 class Pupa::Person
-  EMAIL_RE = /\A[A-Za-z.-]+@ville.montreal.qc.ca\z/
-  BOROUGH_RE = /Anjou|L'Île-Bizard|Lachine|LaSalle|Montréal|Montréal-Nord|Outremont|Pierrefonds|Saint-Laurent|Saint-Léonard/
+  EMAIL_RE = /\A[A-Za-z.-]+@(?:sympatico|ville\.montreal\.qc)\.ca\z/
+  BOROUGH_RE = /Anjou|L'[Îî]le-Bizard|Lachine|LaSalle|Montréal|Montréal-Nord|Outremont|Pierrefonds|Saint-Laurent|Saint-Léonard|Verdun/
   POSTAL_CODE_RE = /H[0-9][ABCEGHJKLMNPRSTVWXYZ] [0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]/
 
   validates_inclusion_of :honorific_prefix, in: %w(Monsieur Madame)
   validates_format_of :email, with: EMAIL_RE, allow_blank: true
-  validates_format_of :image, with: %r{\Ahttp://ville.montreal.qc.ca/pls/portal/docs/PAGE/COLLECTIONS_GENERALES/MEDIA/Images/Public/[\w-]+\.(?:JPG|jpg)\z}
+  validates_format_of :image, with: %r{\Ahttp://ville.montreal.qc.ca/pls/portal/docs/PAGE/COLLECTIONS_GENERALES/MEDIA/Images/Public/[\w-]+\.(?:JPG|jpg)\z}, allow_blank: true
   validate :validate_email_and_address
 
   def validate_email_and_address
@@ -18,28 +18,9 @@ class Pupa::Person
           errors.add(:contact_details, "contain an invalid email address: #{contact_detail[:value]}")
         end
       when 'address'
-        # Normalize newlines, and remove commas and spaces at line endings.
-        contact_detail[:value] = contact_detail[:value].split(/[, ]*\r\n/).join("\n")
-        # Normalize whitespace, apostrophes and province.
-        contact_detail[:value].squeeze!(' ')
-        contact_detail[:value].gsub!('’', "'")
-        contact_detail[:value].sub!(/, Québec\b/, ' (Québec)')
-        # Remove unnecessary address parts.
-        contact_detail[:value].sub!(/Bureau des élus de (?:Pointe-aux-Trembles|Rivière-des-Prairies)\n/, '')
-        # Add a comma after the street number.
-        contact_detail[:value].sub!(/\A(\d+) /, '\1, ')
-        # Correct typographical errors.
-        contact_detail[:value].sub!(/\bLasalle\b/, 'LaSalle')
-        contact_detail[:value].sub!(/\nbureau\b/, 'Bureau')
-        contact_detail[:value].sub!(/\bQu\.bec\b/, 'Québec')
-        # Add the province if not present.
-        contact_detail[:value].sub!(/(#{BOROUGH_RE})(?=\n#{POSTAL_CODE_RE}\z)/, '\1 (Québec)')
-        # Add a new line before the city and province line.
-        contact_detail[:value].sub!(/ (?=(?:#{BOROUGH_RE}) \(Québec\))/, "\n")
-        # Add a new line before the postal code line.
-        contact_detail[:value].sub!(/ (?=#{POSTAL_CODE_RE}\z)/, "\n")
+        contact_detail[:value].sub!(/ +(?=#{POSTAL_CODE_RE}\z)/, "\n")
 
-        unless contact_detail[:value][/\A[\dAB-]+, (?:avenue|boul\.|boulevard|ch\.|montée|rue) [^\n]+(?:\n\d+e étage(?:, bureau \d+)?|\n(?:Bureau|Suite) [\dAB.-]+)?\n(?:#{BOROUGH_RE}) \(Québec\)\n#{POSTAL_CODE_RE}\z/]
+        unless contact_detail[:value][/\A[\dA-]+, (?:avenue|boul\.|boulevard|chemin|montée|rue) [^\n]+\n(?:#{BOROUGH_RE}) \(Québec\)\n#{POSTAL_CODE_RE}\z/]
           errors.add(:contact_details, "contain an invalid address: #{contact_detail[:value]}")
         end
       end

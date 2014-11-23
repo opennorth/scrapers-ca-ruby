@@ -40,7 +40,7 @@ class Pupa::Person
     contact_details.each do |contact_detail|
       if %w(voice fax).include?(contact_detail[:type])
         if contact_detail[:value]['poste']
-          contact_detail[:value].sub!(/\A(\d{3}).(\d{3}).(\d{4}),? poste (\d+)\z/, '\1-\2-\3 x\4')
+          contact_detail[:value].sub!(/\A(\d{3}).(\d{3}).(\d{4}),?\sposte (\d+)\z/, '\1-\2-\3 x\4')
         else
           contact_detail[:value].sub!(/\A(\d{3}).(\d{3}).(\d{4})\z/, '\1-\2-\3')
         end

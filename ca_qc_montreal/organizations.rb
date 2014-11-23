@@ -16,13 +16,13 @@ class Montreal
     })
     create_organization({ # 28 posts
       _id: "#{region}/council",
-      name: 'Conseil de la Communauté',
+      name: 'Conseil de la Communauté métropolitaine de Montréal',
       parent_id: region,
       classification: 'council',
     })
     create_organization({ # 8 posts
       _id: "#{region}/executive_committee",
-      name: 'Comité exécutif de la Communauté',
+      name: 'Comité exécutif de la Communauté métropolitaine de Montréal',
       parent_id: "#{region}/council",
       classification: 'committee',
     })

@@ -11,7 +11,7 @@ class Montreal
       when /\AMaire de l'arrondissement\b/
         "Maire d'arrondissement"
       when /\AConseiller de la ville\b/
-        "Conseiller de ville"
+        "Conseiller de la ville"
       when /\AConseiller d'arrondissement\b/
         "Conseiller d'arrondissement"
       else
@@ -20,8 +20,8 @@ class Montreal
 
       label = post.fetch('nom')
       label.sub!(/\AConseiller d'arrondissement - District électoral\b/, "Conseiller d'arrondissement")
-      label.sub!(/\AConseiller de la ville - District électoral\b/, "Conseiller de ville")
-      label.sub!(/\AConseiller de la ville arrondissement\b/, "Conseiller de ville")
+      label.sub!(/\AConseiller de la ville - District électoral\b/, "Conseiller de la ville")
+      label.sub!(/\AConseiller de la ville arrondissement\b/, "Conseiller de la ville")
       label.gsub!('–', '—') # en dash to em dash
       label.gsub!('−', '—') # minus sign to em dash
       label.strip!
@@ -45,7 +45,7 @@ class Montreal
         }],
       }
 
-      if ["Maire d'arrondissement", "Conseiller de ville"].include?(role)
+      if ["Maire d'arrondissement", "Conseiller de la ville"].include?(role)
         create_post(properties.merge(organization_id: 'ocd-organization/country:ca/csd:2466023/council'))
       end
 
@@ -80,14 +80,15 @@ class Montreal
       }],
     })))
     dispatch(Pupa::Post.new(properties.merge({
-      label: "Conseiller de ville désigné (siège 1)",
-      role: "Conseiller de ville désigné",
+      label: "Conseiller de la ville désigné (siège 1)",
+      role: "Conseiller de la ville désigné",
     })))
     dispatch(Pupa::Post.new(properties.merge({
-      label: "Conseiller de ville désigné (siège 2)",
-      role: "Conseiller de ville désigné",
+      label: "Conseiller de la ville désigné (siège 2)",
+      role: "Conseiller de la ville désigné",
     })))
 
+    # @see http://ville.montreal.qc.ca/portal/page?_pageid=5798,85931587&_dad=portal&_schema=PORTAL
     1.upto(11) do |n|
       dispatch(Pupa::Post.new({
         label: "Membre du comité exécutif (siège #{n})",
@@ -95,7 +96,6 @@ class Montreal
         organization_id: 'ocd-organization/country:ca/csd:2466023/executive_committee',
       }))
     end
-
     dispatch(Pupa::Post.new({
       label: 'Président du comité exécutif',
       role: 'Président',
@@ -111,6 +111,34 @@ class Montreal
         organization_id: 'ocd-organization/country:ca/cd:2466/council',
       }))
     end
+
+    # @see http://cmm.qc.ca/who-are-we/council/
+    1.upto(13) do |n|
+      dispatch(Pupa::Post.new({
+        label: "Membre du conseil de la Communauté métropolitaine de Montréal (siège #{n})",
+        role: 'Membre',
+        organization_id: 'ocd-organization/country:ca/region:communauté_métropolitaine_de_montréal/council',
+      }))
+    end
+    dispatch(Pupa::Post.new({
+      label: 'Président de la Communauté métropolitaine de Montréal',
+      role: 'Président',
+      organization_id: 'ocd-organization/country:ca/region:communauté_métropolitaine_de_montréal/council',
+    }))
+
+    # #see http://cmm.qc.ca/who-are-we/executive-committee/
+    1.upto(3) do |n|
+      dispatch(Pupa::Post.new({
+        label: "Membre du comité exécutif de la Communauté métropolitaine de Montréal (siège #{n})",
+        role: 'Membre',
+        organization_id: 'ocd-organization/country:ca/region:communauté_métropolitaine_de_montréal/executive_committee',
+      }))
+    end
+    dispatch(Pupa::Post.new({
+      label: 'Président du comité exécutif de la Communauté métropolitaine de Montréal',
+      role: 'Président',
+      organization_id: 'ocd-organization/country:ca/region:communauté_métropolitaine_de_montréal/executive_committee',
+    }))
   end
 
   def create_post(properties)
