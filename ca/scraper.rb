@@ -211,7 +211,7 @@ private
         url = last_url.to_s
 
         if visited.include?(url)
-          return error("Redirection loop #{url}: #{visited.join(', ')}")
+          return warn("Redirection loop #{url}: #{visited.join(', ')}")
         end
         visited << url
         response = client.get do |req|
