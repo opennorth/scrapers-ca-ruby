@@ -210,6 +210,7 @@ private
 
         url = last_url.to_s
 
+        # @note The redirection loop (either here or below) sometimes false-positives...
         if visited.include?(url)
           return warn("Redirection loop #{url}: #{visited.join(', ')}")
         end
