@@ -89,16 +89,20 @@ TWITTER_NAME_MAP = {
 }
 
 NON_MP_SCREEN_NAMES = [
-  'hnisc', # http://www.rickdykstra.ca
+  'brownba',
+  'fcacan',
   'industrycanada',
   'liberal_party',
   'm_ignatieff', # http://dominicleblanc.liberal.ca
   'parti_liberal',
   'pmwebupdates',
   'socdevsoc',
-  'uwaysc', # http://www.rickdykstra.ca
-  'canada_swc', # http://www.rickdykstra.ca
-  'fcacan',
+
+  # http://www.rickdykstra.ca
+  'canada_swc',
+  'canada_trade',
+  'hnisc',
+  'uwaysc',
 
   # Twitter
   'intent',
