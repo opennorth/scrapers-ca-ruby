@@ -260,7 +260,7 @@ private
             new_url = last_url.to_s
 
             if visited.include?(new_url)
-              return error("Redirection loop #{new_url}: #{visited.join(', ')}")
+              return warn("Redirection loop #{new_url}: #{visited.join(', ')}")
             end
             visited << new_url
             response = client.get do |req|
