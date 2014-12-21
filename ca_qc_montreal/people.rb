@@ -87,7 +87,7 @@ class Montreal
       # at the discretion of the person (Marc Lebel, 2 Dec 2013).
 
       # Skip last rows.
-      next if row['Nom'].nil?
+      next if row['Nom'].nil? or row['Nom'].strip == 'Vacant'
 
       row.each do |key,value|
         row[key] = value && value.strip
@@ -237,6 +237,10 @@ class Montreal
         when 'Membre du comité exécutif', # should have 11
           'Vice-président du comité exécutif', # not sure if post is stable
           'Vice-présidente du comité exécutif' # not sure if post is stable
+          # @todo Remove once file is corrected.
+          # @see http://donnees.ville.montreal.qc.ca/dataset/listes-des-elus-de-la-ville-de-montreal
+          # @see http://ville.montreal.qc.ca/portal/page?_pageid=5798,85931587&_dad=portal&_schema=PORTAL
+          next if row['Nom'] == 'Bergeron'
           create_membership(properties.merge({
             label: role,
             organization_id: 'ocd-organization/country:ca/csd:2466023/executive_committee',
