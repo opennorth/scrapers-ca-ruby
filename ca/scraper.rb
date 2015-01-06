@@ -167,7 +167,7 @@ class Canada < GovernmentProcessor
         })
 
         unless names.include?(name)
-          error("Not an MP: #{name} https://twitter.com/#{user.screen_name}")
+          warn("Not an MP: #{name} https://twitter.com/#{user.screen_name}")
           connection.raw_connection[:twitter_users].find(screen_name: user.screen_name).remove_all
         end
         if user.statuses_count.zero?
