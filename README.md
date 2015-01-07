@@ -34,16 +34,11 @@ Run a scraper with, for example:
 
 ## Deployment
 
+    heroku addons:add flydata
     heroku addons:add memcachier
-    heroku addons:add rediscloud
     heroku addons:add mongolab
+    heroku addons:add rediscloud
     heroku addons:add scheduler
-
-Add configuration variables (replace `REPLACE`):
-
-    heroku config:add AWS_BUCKET=REPLACE
-    heroku config:add AWS_ACCESS_KEY_ID=REPLACE
-    heroku config:add AWS_SECRET_ACCESS_KEY=REPLACE
 
 Schedule jobs to run daily, for example:
 
