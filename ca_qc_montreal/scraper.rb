@@ -39,7 +39,7 @@ class Document
   ]
 end
 
-class Montreal < GovernmentProcessor
+class Montreal < Pupa::Processor
 end
 
 require_relative 'organizations'

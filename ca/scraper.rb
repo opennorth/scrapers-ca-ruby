@@ -40,7 +40,7 @@ class TwitterUser
   end
 end
 
-class Canada < GovernmentProcessor
+class Canada < Pupa::Processor
   TIMEOUT_DELAY = 5
 
   # The Bloc Québécois, Green Party and Independents are done manually. Several
