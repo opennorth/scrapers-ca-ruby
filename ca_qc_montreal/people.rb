@@ -11,10 +11,8 @@ class Montreal
   # http://donnees.ville.montreal.qc.ca/dataset/commissions-permanentes-du-conseil-membres
   def scrape_people # should have 103
     boroughs = {}
-    rows = CSV.parse(get('https://raw.githubusercontent.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-boroughs.csv').force_encoding('utf-8'))
-    rows.shift
-    rows.each do |row|
-      boroughs[row[3]] = row[0].sub(/\Aocd-division\b/, 'ocd-organization')
+    CSV.parse(get('https://raw.githubusercontent.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-boroughs.csv').force_encoding('utf-8'), headers: true) do |row|
+      boroughs[row['id'].split(':')[-1]] = row['id'].sub(/\Aocd-division\b/, 'ocd-organization')
     end
 
     gender_map = {

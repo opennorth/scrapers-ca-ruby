@@ -2,7 +2,7 @@ class Montreal
   def scrape_posts # should have 198
     boroughs = {}
     CSV.parse(get('https://raw.githubusercontent.com/opencivicdata/ocd-division-ids/master/identifiers/country-ca/census_subdivision-montreal-boroughs.csv').force_encoding('utf-8'), headers: true) do |row|
-      boroughs[row['number']] = row['id'].sub(/\Aocd-division\b/, 'ocd-organization')
+      boroughs[row['id'].split(':')[-1]] = row['id'].sub(/\Aocd-division\b/, 'ocd-organization')
     end
 
     # @see http://donnees.ville.montreal.qc.ca/dataset/resultats-elections-2013
