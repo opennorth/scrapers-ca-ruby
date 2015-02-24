@@ -67,7 +67,7 @@ class Montreal
 
     # @see http://election-montreal.qc.ca/cadre-electoral-districts/cadre-electoral/arrondissements/villemarie.en.html
     properties = {
-      organization_id: 'ocd-organization/country:ca/csd:2466023/borough:ville-marie/council',
+      organization_id: 'ocd-organization/country:ca/csd:2466023/borough:18/council',
       area: {
         name: 'Ville-Marie',
       },

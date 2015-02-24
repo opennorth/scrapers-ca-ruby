@@ -23,97 +23,97 @@ class Montreal
         start_year: 2006,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:ahuntsic-cartierville/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:1/council', # Ahuntsic-Cartierville
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85975614&_dad=portal&_schema=PORTAL',
         start_year: 2002,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:anjou/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:2/council', # Anjou
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85979752&_dad=portal&_schema=PORTAL',
         start_year: 2006,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:côte-des-neiges~notre-dame-de-grâce/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:3/council', # Côte-des-Neiges—Notre-Dame-de-Grâce
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85979770&_dad=portal&_schema=PORTAL',
         start_year: 2002,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:lachine/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:4/council', # Lachine
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,94713725&_dad=portal&_schema=PORTAL',
         start_year: 2010,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:lasalle/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:5/council', # LaSalle
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=8337,92865582&_dad=portal&_schema=PORTAL',
         start_year: 2009,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:le_plateau-mont-royal/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:11/council', # Le Plateau-Mont-Royal
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85979854&_dad=portal&_schema=PORTAL',
         start_year: 2009,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:le_sud-ouest/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:16/council', # Le Sud-Ouest
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85979873&_dad=portal&_schema=PORTAL',
         start_year: 2001,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:l~île-bizard~sainte-geneviève/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:6/council', # L'Île-Bizard—Sainte-Geneviève
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85979888&_dad=portal&_schema=PORTAL',
         start_year: 2006,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:mercier~hochelaga-maisonneuve/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:7/council', # Mercier—Hochelaga-Maisonneuve
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=9417,114237611&_dad=portal&_schema=PORTAL',
         start_year: 2013,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:montréal-nord/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:8/council', # Montréal-Nord
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=8717,97161614&_dad=portal&_schema=PORTAL',
         start_year: 2009,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:outremont/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:9/council', # Outremont
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=8517,95571598&_dad=portal&_schema=PORTAL',
         start_year: 2010,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:pierrefonds-roxboro/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:10/council', # Pierrefonds-Roxboro
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85981570&_dad=portal&_schema=PORTAL',
         start_year: 2006,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:rivière-des-prairies~pointe-aux-trembles/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:12/council', # Rivière-des-Prairies—Pointe-aux-Trembles
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85981591&_dad=portal&_schema=PORTAL',
         start_year: 2002,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:rosemont~la_petite-patrie/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:13/council', # Rosemont—La Petite-Patrie
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85981600&_dad=portal&_schema=PORTAL',
         start_year: 2008,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:saint-laurent/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:14/council', # Saint-Laurent
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,87943635&_dad=portal&_schema=PORTAL',
         start_year: 2009,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:saint-léonard/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:15/council', # Saint-Léonard
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85981609&_dad=portal&_schema=PORTAL',
         start_year: 2007,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:verdun/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:17/council', # Verdun
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=8637,96027668&_dad=portal&_schema=PORTAL',
         start_year: 2011,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:ville-marie/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:18/council', # Ville-Marie
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=5798,85981620&_dad=portal&_schema=PORTAL',
         start_year: 2009,
       },
       {
-        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:villeray~saint-michel~parc-extension/council',
+        organization_id: 'ocd-organization/country:ca/csd:2466023/borough:19/council', # Villeray—Saint-Michel—Parc-Extension
         url: 'http://ville.montreal.qc.ca/portal/page?_pageid=8638,96045899&_dad=portal&_schema=PORTAL',
         start_year: 2003,
       },

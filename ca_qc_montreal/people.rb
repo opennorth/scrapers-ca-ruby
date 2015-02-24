@@ -194,7 +194,7 @@ class Montreal
         when "Maire de l'arrondissement de Ville-Marie" # should have 1
           create_membership(properties.merge({
             role: person.gender == 'male' ? "Maire d'arrondissement" : "Mairesse d'arrondissement",
-            organization_id: 'ocd-organization/country:ca/csd:2466023/borough:ville-marie/council',
+            organization_id: 'ocd-organization/country:ca/csd:2466023/borough:18/council',
             post: {
               label: "Maire de l'arrondissement de Ville-Marie",
             },
@@ -217,7 +217,7 @@ class Montreal
         when "Membre du conseil d'arrondissement de Ville-Marie" # should have 2
           create_membership(properties.merge({
             role: person.gender == 'male' ? 'Conseiller de la ville désigné' : 'Conseillère de la ville désignée',
-            organization_id: 'ocd-organization/country:ca/csd:2466023/borough:ville-marie/council',
+            organization_id: 'ocd-organization/country:ca/csd:2466023/borough:18/council',
             post: {
               label: "Conseiller de la ville désigné (siège #{designated_councillor_number})",
             },
