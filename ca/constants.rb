@@ -105,6 +105,7 @@ NON_MP_SCREEN_NAMES = [
   'uwaysc',
 
   # Twitter
+  '', # no screen name
   'intent',
   'search',
   'share',

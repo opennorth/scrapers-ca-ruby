@@ -320,7 +320,7 @@ private
   end
 
   def get_screen_name(a)
-    screen_name = a['href'].match(%r{twitter.com/(?:#!/)?@?(\w+)})[1]
+    screen_name = a['href'].match(%r{twitter.com/(?:#!/)?@?(\w*)})[1]
     if screen_name == 'share' && a['data-via']
       screen_name = a['data-via'].sub(/\A@/, '')
     end
