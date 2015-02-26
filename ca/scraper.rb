@@ -350,6 +350,5 @@ end
 
 runner = Pupa::Runner.new(Canada, options)
 
-runner.add_action(name: 'id', description: 'Set Twitter user IDs, if not set')
 runner.add_action(name: 'update', description: 'Update Twitter screen names')
 runner.run(ARGV)

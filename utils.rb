@@ -3,6 +3,7 @@ require 'bundler/setup'
 require 'csv'
 
 require 'active_support/core_ext/integer/inflections'
+require 'active_support/core_ext/hash/keys'
 require 'active_support/time'
 require 'active_model'
 require 'dalli'
