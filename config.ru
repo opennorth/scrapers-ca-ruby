@@ -98,8 +98,8 @@ get '/favicon.ico' do
   204
 end
 
-get '/:id' do
-  collection(COLLECTION_MAP.fetch(params[:id].split('/', 1)[0]), {_id: params[:id]})
+get '/*' do
+  collection(COLLECTION_MAP.fetch(params[:splat][0]), {_id: params[:splat].join('/')})
 end
 
 get '/' do
