@@ -43,11 +43,14 @@ end
 get '/memberships' do
   in_network_of = params.delete('in_network_of')
   organization_id = params.delete('organization_id')
+  person_id = params.delete('person_id')
   id = params.delete('id')
   if in_network_of
     criteria = {person_id: members_of(in_network_of)}
   elsif organization_id
     criteria = {organization_id: organization_id}
+  elsif person_id
+    criteria = {person_id: person_id}
   elsif id
     criteria = {_id: id}
   else
