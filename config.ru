@@ -7,6 +7,13 @@ require 'active_support/core_ext/hash/slice'
 require 'moped'
 require 'sinatra'
 
+COLLECTION_MAP = {
+  'ocd-membership': :memberships,
+  'ocd-organization': :organizations,
+  'ocd-person': :people,
+  'ocd-post': :posts,
+}
+
 helpers do
   def connection
     uri = URI.parse(ENV['MONGOLAB_URI'] || 'mongodb://localhost:27017/pupa')
@@ -30,9 +37,12 @@ end
 
 # Get the memberships of the people who are members of the organization.
 get '/memberships' do
-  organization_id = params.delete('in_network_of')
-  if organization_id
-    criteria = {person_id: members_of(organization_id)}
+  in_network_of = params.delete('in_network_of')
+  organization_id = params.delete('organization_id')
+  if in_network_of
+    criteria = {person_id: members_of(in_network_of)}
+  elsif organization_id
+    criteria = {organization_id: organization_id}
   else
     criteria = {}
   end
@@ -80,15 +90,19 @@ get '/twitter_users' do
   JSON.dump(data)
 end
 
-get '/' do
-  204
-end
-
 get '/robots.txt' do
   "User-agent: *\nDisallow: /"
 end
 
 get '/favicon.ico' do
+  204
+end
+
+get '/:id' do
+  collection(COLLECTION_MAP.fetch(params[:id].split('/', 1)[0]), {_id: params[:id]})
+end
+
+get '/' do
   204
 end
 

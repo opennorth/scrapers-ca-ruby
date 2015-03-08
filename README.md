@@ -28,9 +28,11 @@ Run a scraper with, for example:
     foreman start
 
 * `GET /memberships?in_network_of=ocd-organization/country:ca/csd:2466023/council`
+* `GET /memberships?organization_id=ocd-organization/country:ca/csd:2466023/council`
 * `GET /organizations?in_network_of=ocd-organization/country:ca/csd:2466023/council`
 * `GET /people?member_of=ocd-organization/country:ca/csd:2466023/council`
 * `GET /posts?organization_id=ocd-organization/country:ca/csd:2466023/council`
+* `GET /ocd-organization/country:ca/csd:2466023/council`
 
 ## Deployment
 
