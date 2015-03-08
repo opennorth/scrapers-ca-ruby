@@ -29,9 +29,13 @@ Run a scraper with, for example:
 
 * `GET /memberships?in_network_of=ocd-organization/country:ca/csd:2466023/council`
 * `GET /memberships?organization_id=ocd-organization/country:ca/csd:2466023/council`
+* `GET /memberships?id=de305d54-75b4-431b-adb2-eb6b9e546013`
 * `GET /organizations?in_network_of=ocd-organization/country:ca/csd:2466023/council`
+* `GET /organizations?id=de305d54-75b4-431b-adb2-eb6b9e546013`
 * `GET /people?member_of=ocd-organization/country:ca/csd:2466023/council`
+* `GET /people?id=de305d54-75b4-431b-adb2-eb6b9e546013`
 * `GET /posts?organization_id=ocd-organization/country:ca/csd:2466023/council`
+* `GET /posts?id=de305d54-75b4-431b-adb2-eb6b9e546013`
 * `GET /ocd-organization/country:ca/csd:2466023/council`
 
 ## Deployment
