@@ -27,8 +27,8 @@ helpers do
     if params.any?
       raise "Unknown parameters: #{params.keys}"
     end
-    if criteria.keys == [:_id]
-      JSON.dump(connection[collection_name].find(criteria).to_a[0])
+    if criteria.keys == [:_id] && String === criteria.values[0]
+      JSON.dump(connection[collection_name].find(criteria).first)
     else
       JSON.dump(connection[collection_name].find(criteria).to_a)
     end
