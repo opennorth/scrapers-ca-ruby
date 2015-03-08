@@ -8,10 +8,10 @@ require 'moped'
 require 'sinatra'
 
 COLLECTION_MAP = {
-  'ocd-membership': :memberships,
-  'ocd-organization': :organizations,
-  'ocd-person': :people,
-  'ocd-post': :posts,
+  'ocd-membership' => :memberships,
+  'ocd-organization' => :organizations,
+  'ocd-person' => :people,
+  'ocd-post' => :posts,
 }
 
 helpers do
