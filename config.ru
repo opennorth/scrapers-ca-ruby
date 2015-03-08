@@ -27,7 +27,11 @@ helpers do
     if params.any?
       raise "Unknown parameters: #{params.keys}"
     end
-    JSON.dump(connection[collection_name].find(criteria).to_a)
+    if criteria.keys == [:_id]
+      JSON.dump(connection[collection_name].find(criteria).to_a[0])
+    else
+      JSON.dump(connection[collection_name].find(criteria).to_a)
+    end
   end
 
   def members_of(organization_id)
@@ -99,7 +103,9 @@ get '/favicon.ico' do
 end
 
 get '/*' do
-  collection(COLLECTION_MAP.fetch(params[:splat][0].split('/', 2)[0]), {_id: params[:splat][0]})
+  params.delete('captures') # ignore
+  id = params.delete('splat')[0]
+  collection(COLLECTION_MAP.fetch(id.split('/', 2)[0]), {_id: id})
 end
 
 get '/' do
