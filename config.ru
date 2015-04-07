@@ -114,14 +114,14 @@ get '/favicon.ico' do
   204
 end
 
+get '/' do
+  204
+end
+
 get '/*' do
   params.delete('captures') # ignore
   id = params.delete('splat')[0]
   collection(COLLECTION_MAP.fetch(id.split('/', 2)[0]), {_id: id})
-end
-
-get '/' do
-  204
 end
 
 run Sinatra::Application
