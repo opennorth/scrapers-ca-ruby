@@ -3,8 +3,8 @@ require File.expand_path(File.join('..', 'utils.rb'), __dir__)
 class Canada < Pupa::Processor
 end
 
+require_relative 'constants'
 require_relative 'twitter'
-require_relative 'candidates'
 
 Canada.add_scraping_task(:manual)
 Canada.add_scraping_task(:conservative)
