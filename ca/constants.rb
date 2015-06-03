@@ -86,6 +86,7 @@ TWITTER_NAME_MAP = {
   'Marjolaine Boutin-S' => 'Marjolaine Boutin-Sweet',
   'Moore Christine' => 'Christine Moore',
   'T. Benskin' => 'Tyrone Benskin',
+  'Tom Mulcair' => 'Thomas Mulcair',
 }
 
 NON_MP_SCREEN_NAMES = [
@@ -120,10 +121,12 @@ BAD_SCREEN_NAMES = NON_MP_SCREEN_NAMES + [
 SCREEN_NAME_MAP = {
   'rob_clarke_mp' => 'robclarkemp', # first link at robclarkemp.ca is bad
   'edholdermp' => 'edholder_mp',
+  'garrygoodyearmp' => 'garygoodyear',
   'joyce_bateman' => 'joycebatemanmp',
   'judyfoote' => 'judyfootemp',
   'justinpjtrudeau' => 'justintrudeau', # justinpjtrudeau is an old parked account
   'minksorenson' => 'kevinasorenson',
+  'mintimuppal' => 'timuppal',
   'npdlavallesiles' => 'francoispilon', # npdlavallesiles is a riding account
   'sdionliberal' => 'honstephanedion',
   'stevenjfletcher' => 'honsfletchermp',
