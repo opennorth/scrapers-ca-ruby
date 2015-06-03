@@ -3,13 +3,16 @@ MANUAL_SCREEN_NAMES = %w(
   claude_patry
 ) + # Bloc Québécois
 %w(
+  fortjf
+  jflarose
+) + # Forces et Démocratie
+%w(
   brucehyer
   elizabethmay
 ) + # Green Party
 %w(
   brentrathgeber
-  mpdeandelmastro
-  fortjf
+  jameslunneymp
   mperreaultqc
 ) + # Independent
 %w(
@@ -61,9 +64,12 @@ MANUAL_SCREEN_NAMES = %w(
 %w(
   honstephanedion
   irwincotler
+  frankvaleriote
+  gerry_byrne
   judyfootemp
   l_macaulaymp
   scottandrewsmp
+  tedhsu
   toadamvaughan
 ) + # Liberal
 %w(
