@@ -48,18 +48,8 @@ class Canada
   end
 
   def scrape_conservative
-    get('http://www.conservative.ca/team/members-of-parliament/').xpath('//option').each do |option|
-      get("http://www.conservative.ca/team/members-of-parliament/?pr=#{option[:value].gsub(' ', '+')}").xpath('//a[@class="mpname"]').each do |a|
-        url = get(a[:href]).at_xpath('//div[@id="sidebar"]//a[@target="_blank"]')[:href]
-        if url.empty?
-          warn("No URL found at #{a[:href]}")
-        else
-          if URI.parse(url).path.empty?
-            url += '/'
-          end
-          process(url, backup_url: BACKUP_URLS[url])
-        end
-      end
+    Nokogiri::HTML(get('http://www.conservative.ca/?member=mps')).xpath('//a[contains(@class,"team-list-person-block")]').each do |a|
+      process(a['data-website'])
     end
   end
 

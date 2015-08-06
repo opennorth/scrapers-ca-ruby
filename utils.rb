@@ -1,6 +1,7 @@
 require 'bundler/setup'
 
 require 'csv'
+require 'json'
 
 require 'active_support/core_ext/integer/inflections'
 require 'active_support/core_ext/hash/keys'

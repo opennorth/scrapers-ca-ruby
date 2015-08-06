@@ -137,9 +137,3 @@ SCREEN_NAME_MAP = {
   'sdionliberal' => 'honstephanedion',
   'stevenjfletcher' => 'honsfletchermp',
 }
-
-BACKUP_URLS = {
-  'http://www.bernardvalcourt.ca/' => 'http://www.bernardvalcourtmp.ca/',
-  'http://www.gerryritzmp.com/' => 'http://gerryritz.ca/',
-  'http://www.lukiwski.ca/' => 'http://www.tomlukiwski.com/',
-}
