@@ -81,7 +81,7 @@ get '/people' do
   organization_id = params.delete('member_of')
   id = params.delete('id')
   if in_network_of
-    criteria = {_id: members_of(network_of(organization_id))}
+    criteria = {_id: members_of(network_of(in_network_of))}
   elsif organization_id
     criteria = {_id: members_of(organization_id)}
   elsif id
