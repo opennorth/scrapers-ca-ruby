@@ -37,34 +37,34 @@ helpers do
   def members_of(organization_id)
     {'$in' => connection[:memberships].find(organization_id: organization_id).distinct(:person_id)}
   end
+
+  def network_of(organization_id)
+    {'$in' => connection[:memberships].find(person_id: members_of(organization_id)).distinct(:organization_id)}
+  end
 end
 
 # Get the memberships of the people who are members of the organization.
 get '/memberships' do
   in_network_of = params.delete('in_network_of')
-  organization_id = params.delete('organization_id')
-  person_id = params.delete('person_id')
   id = params.delete('id')
   if in_network_of
     criteria = {person_id: members_of(in_network_of)}
-  elsif organization_id
-    criteria = {organization_id: organization_id}
-  elsif person_id
-    criteria = {person_id: person_id}
   elsif id
     criteria = {_id: id}
   else
-    criteria = {}
+    criteria = params.slice('organization_id', 'person_id')
+    params.delete('organization_id')
+    params.delete('person_id')
   end
   collection(:memberships, criteria)
 end
 
 # Get the organizations which the members of the organization are members of.
 get '/organizations' do
-  organization_id = params.delete('in_network_of')
+  in_network_of = params.delete('in_network_of')
   id = params.delete('id')
-  if organization_id
-    criteria = {_id: {'$in' => connection[:memberships].find(person_id: members_of(organization_id)).distinct(:organization_id)}}
+  if in_network_of
+    criteria = {_id: network_of(in_network_of)}
   elsif id
     criteria = {_id: id}
   else
@@ -77,9 +77,12 @@ end
 
 # Get the people who are members of the organization.
 get '/people' do
+  in_network_of = params.delete('in_network_of')
   organization_id = params.delete('member_of')
   id = params.delete('id')
-  if organization_id
+  if in_network_of
+    criteria = {_id: members_of(network_of(organization_id))}
+  elsif organization_id
     criteria = {_id: members_of(organization_id)}
   elsif id
     criteria = {_id: id}
