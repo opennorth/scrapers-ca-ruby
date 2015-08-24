@@ -69,6 +69,8 @@ get '/organizations' do
     criteria = {_id: id}
   else
     criteria = params.slice('classification', 'parent_id')
+    params.delete('classification')
+    params.delete('parent_id')
   end
   collection(:organizations, criteria)
 end
