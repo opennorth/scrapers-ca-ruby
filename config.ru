@@ -68,7 +68,7 @@ get '/organizations' do
   elsif id
     criteria = {_id: id}
   else
-    criteria = {}
+    criteria = params.slice('classification', 'parent_id')
   end
   collection(:organizations, criteria)
 end
