@@ -6,6 +6,7 @@ require 'json'
 require 'active_support/core_ext/hash/slice'
 require 'moped'
 require 'sinatra'
+require 'sinatra/cross_origin'
 
 COLLECTION_MAP = {
   'ocd-membership' => :memberships,
@@ -13,6 +14,10 @@ COLLECTION_MAP = {
   'ocd-person' => :people,
   'ocd-post' => :posts,
 }
+
+configure do
+  enable :cross_origin
+end
 
 helpers do
   def connection

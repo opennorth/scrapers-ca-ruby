@@ -14,4 +14,5 @@ gem 'twitter'
 
 # Server
 gem 'sinatra'
+gem 'sinatra-cross_origin'
 gem 'unicorn'
