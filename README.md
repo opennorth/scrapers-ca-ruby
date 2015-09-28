@@ -41,6 +41,7 @@ Run a scraper with, for example:
 
 ## Deployment
 
+    heroku apps:create
     heroku addons:add flydata
     heroku addons:add memcachier
     heroku addons:add mongolab
