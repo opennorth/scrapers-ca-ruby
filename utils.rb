@@ -16,6 +16,8 @@ require 'hiredis'
 require 'unicode_utils'
 require 'twitter'
 
+Mongo::Logger.logger.level = Logger::WARN
+
 class Pupa::Membership
   attr_reader :person, :post
   dump :person, :post
