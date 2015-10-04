@@ -74,6 +74,7 @@ class Montreal
     # If any memberships seem to be missing, check the latest news.
     # @see http://election-montreal.qc.ca/actualites/index.en.html
     # @see http://donnees.ville.montreal.qc.ca/dataset/listes-des-elus-de-la-ville-de-montreal
+    # @todo The City removed the "Poste" column again….
     rows = CSV.parse(get('http://donnees.ville.montreal.qc.ca/dataset/9084d8ed-aceb-4fb6-be03-5fd0005f1bd1/resource/f01c434b-842c-4512-93c6-8c81e425c563/download/listeofficielledeselus.csv').force_encoding('utf-8'))
     data = CSV.generate do |csv|
       rows[4..-1].each do |row|
