@@ -23,7 +23,7 @@ helpers do
   def connection
     uri = URI.parse(ENV['MONGOLAB_URI'] || 'mongodb://localhost:27017/pupa')
     connection = Mongo::Client.new(["#{uri.host}:#{uri.port}"], database: uri.path[1..-1])
-    connection.login(uri.user, uri.password) if uri.user && uri.password
+    connection.with(uri.user, uri.password) if uri.user && uri.password
     connection
   end
 
