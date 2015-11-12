@@ -54,26 +54,14 @@ class Canada
   end
 
   def scrape_liberal
-    get('http://www.liberal.ca/mp/').xpath('//table//td[1]//a[string(@href)]').each do |a|
-      backup_url = "http://#{a[:href].split('/')[-1].gsub('-', '')}.liberal.ca"
-      url = get(a[:href]).at_xpath('//a[@target="_blank"]')
-      if url
-        # Remove the incorrect "www." part of liberal.ca subdomains.
-        url = url[:href].sub(/www\.(?=\w+\.liberal\.ca)/, '')
-        if url == backup_url
-          process(url)
-        else
-          process(url, backup_url: backup_url)
-        end
-      else
-        process(backup_url)
-      end
+    get('http://www.liberal.ca/mp/').xpath('//a[starts-with(@href,"http")][div[@class="icon-twitter"]]').each do |a|
+      dispatch(TwitterUser.new(screen_name: get_screen_name(a)))
     end
   end
 
   def scrape_ndp
-    get('http://www.ndp.ca/ourcaucus').xpath('//table//a').each do |a|
-      process(a[:href])
+    get('http://www.ndp.ca/team').xpath('//a[@class="candidate-twitter"]').each do |a|
+      dispatch(TwitterUser.new(screen_name: get_screen_name(a)))
     end
   end
 
@@ -184,6 +172,10 @@ private
   def process(url, backup_url: nil, visited: [])
     if url
       begin
+        unless url[/\Ahttp/]
+          url = "http://#{url}"
+        end
+
         last_url = URI.parse(url)
 
         if last_url.path.empty?
