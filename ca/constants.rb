@@ -31,6 +31,7 @@ MANUAL_SCREEN_NAMES = %w(
   genereuxbernard
   gerarddeltell
   gerryritzmp
+  gordbrown
   honedfast
   honrobnicholson
   jacquesgourde
