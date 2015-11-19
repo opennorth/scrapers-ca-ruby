@@ -6,10 +6,10 @@ end
 require_relative 'constants'
 require_relative 'twitter'
 
-Canada.add_scraping_task(:manual)
 Canada.add_scraping_task(:conservative)
 Canada.add_scraping_task(:liberal)
 Canada.add_scraping_task(:ndp)
+Canada.add_scraping_task(:manual)
 
 options = {
   database_url: ENV['MONGOLAB_URI'] || 'mongodb://localhost:27017/pupa',

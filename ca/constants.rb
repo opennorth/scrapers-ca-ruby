@@ -1,36 +1,14 @@
 MANUAL_SCREEN_NAMES = %w(
-  andrebellavance
-  claude_patry
 ) + # Bloc Québécois
 %w(
-  fortjf
-  jflarose
-) + # Forces et Démocratie
-%w(
-  brucehyer
   elizabethmay
 ) + # Green Party
 %w(
-  brentrathgeber
-  jameslunneymp
-  mperreaultqc
+) + # Forces et Démocratie
+%w(
 ) + # Independent
 %w(
   bradtrostcpc
-  brianstorseth
-  f_lapointe
-  galipeauorleans
-  gschellenberger
-  keithashfield11
-  mackaycpc
-  petergoldring
-) + # Inactive
-# davidmcguinty from scrape_liberal is also inactive.
-# Cause "Old tweets" warnings.
-%w(
-  barrydevolin_mp
-  bryanhayesmp
-  christianparad
   danalbas
   davidtilson
   davidyurdiga
@@ -38,102 +16,57 @@ MANUAL_SCREEN_NAMES = %w(
   honedfast
   honrobnicholson
   jacquesgourde
-  jayaspinmp
-  joe_preston
-  johnw_mp
   kellyblockmp
-  leonaaglukkaq
   maximebernier
   michaelchongmp
-  min_bvalcourt
-  min_lebel
   minksorenson
-  mpeveadams
-  mpmikea
-  mptedfalk
   petervanloan
   pierrepoilievre
-  pmharper
-  ryanleefmp
   scottreidcpc
-  shellyglovermin
-  stellaamblermp
-  susantruppe
-  terenceyoungmp
 ) + # Conservative
 %w(
   honstephanedion
-  irwincotler
-  frankvaleriote
-  gerry_byrne
   judyfootemp
-  l_macaulaymp
-  scottandrewsmp
-  tedhsu
   toadamvaughan
 ) + # Liberal
 %w(
-  elaine_michaud
-  fboivinnpd
-  jtremblaynpd
-  sadia_groguhe
-  sanahassainia
   thomasmulcair
 ) # NDP
 
 # Mismatches between Twitter names and parl.gc.ca names.
 TWITTER_NAME_MAP = {
-  'Alexandrine' => 'Alexandrine Latendresse',
+  'Alexandra Mendes' => 'Alexandra Mendès',
   'Anne Minh Thu Quach' => 'Anne Minh-Thu Quach',
-  'Elaine Michaud' => 'Élaine Michaud',
-  'Genest-Jourdain' => 'Jonathan Genest-Jourdain',
-  'Gord Brown' => 'Gordon Brown',
-  'Jinny Sims' => 'Jinny Jogindera Sims',
+  'Bill Blair' => 'William Blair',
+  'Bob Nault' => 'Robert Nault',
+  'Darshan Kang' => 'Darshan Singh Kang',
+  'Deb Schulte' => 'Deborah Schulte',
+  'EvaNassif Vimy' => 'Eva Nassif',
+  'François-P Champagne' => 'François-Philippe Champagne',
+  'Gudrid Hutchings' => 'Gudie Hutchings',
+  'Harjit Sajjan' => 'Harjit S. Sajjan',
   'Marjolaine Boutin-S' => 'Marjolaine Boutin-Sweet',
   'Moore Christine' => 'Christine Moore',
-  'T. Benskin' => 'Tyrone Benskin',
+  'Patty Hajdu' => 'Patricia Hajdu',
+  'Rob Oliphant' => 'Robert Oliphant',
+  'Robert-F Ouellette' => 'Robert-Falcon Ouellette',
+  'Steve MacKinnon' => 'Steven MacKinnon',
+  'T. J. Harvey' => 'TJ Harvey',
   'Tom Mulcair' => 'Thomas Mulcair',
+  'Votechen' => 'Shaun Chen',
 }
-
-NON_MP_SCREEN_NAMES = [
-  'brownba',
-  'fcacan',
-  'industrycanada',
-  'liberal_party',
-  'm_ignatieff', # http://dominicleblanc.liberal.ca
-  'parti_liberal',
-  'pmwebupdates',
-  'socdevsoc',
-
-  # http://www.rickdykstra.ca
-  'canada_swc',
-  'canada_trade',
-  'hnisc',
-  'uwaysc',
-
-  # Twitter
-  '', # no screen name
-  'intent',
-  'search',
-  'share',
-]
-
-BAD_SCREEN_NAMES = NON_MP_SCREEN_NAMES + [
-  'pmharper', # http://www.robertgoguen.ca
-]
 
 # The official party websites have errors. Causes "Not found" warnings. Items
 # can be removed from this list once they are corrected on websites.
 SCREEN_NAME_MAP = {
-  'rob_clarke_mp' => 'robclarkemp', # first link at robclarkemp.ca is bad
-  'edholdermp' => 'edholder_mp',
-  'garrygoodyearmp' => 'garygoodyear',
-  'joyce_bateman' => 'joycebatemanmp',
-  'judyfoote' => 'judyfootemp',
-  'justinpjtrudeau' => 'justintrudeau', # justinpjtrudeau is an old parked account
-  'minksorenson' => 'kevinasorenson',
-  'mintimuppal' => 'timuppal',
-  'npdlavallesiles' => 'francoispilon', # npdlavallesiles is a riding account
-  'sdionliberal' => 'honstephanedion',
-  'stevenjfletcher' => 'honsfletchermp',
 }
+
+NON_MP_SCREEN_NAMES = [
+  'cpc_hq',
+  # Twitter
+  'intent',
+]
+
+TWITTER_NAME_MAP_INVERSE = TWITTER_NAME_MAP.invert
+SCREEN_NAME_MAP_INVERSE = SCREEN_NAME_MAP.invert
+NON_MP_SCREEN_NAMES_COPY = NON_MP_SCREEN_NAMES.dup

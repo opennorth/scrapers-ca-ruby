@@ -45,6 +45,14 @@ class Canada
     MANUAL_SCREEN_NAMES.each do |screen_name|
       dispatch(TwitterUser.new(screen_name: screen_name))
     end
+
+    SCREEN_NAME_MAP_INVERSE.each_value do |screen_name|
+      info("Can delete #{screen_name} from SCREEN_NAME_MAP")
+    end
+
+    NON_MP_SCREEN_NAMES_COPY.each do |screen_name|
+      info("Can delete #{screen_name} from NON_MP_SCREEN_NAMES")
+    end
   end
 
   def scrape_conservative
@@ -66,7 +74,7 @@ class Canada
   end
 
   def update
-    connection.raw_connection[:twitter_users].find(screen_name: {'$in' => NON_MP_SCREEN_NAMES + SCREEN_NAME_MAP.keys}).remove_all
+    connection.raw_connection[:twitter_users].find(screen_name: {'$in' => NON_MP_SCREEN_NAMES + SCREEN_NAME_MAP.keys}).delete_many
 
     names = JSON.parse(Faraday.get('https://represent.opennorth.ca/representatives/house-of-commons/?limit=0').body)['objects'].map do |object|
       object['name']
@@ -85,7 +93,7 @@ class Canada
           warn("Not found #{screen_name}")
         end
         users.each do |user|
-          connection.raw_connection[:twitter_users].find(screen_name: Regexp.new(Regexp.escape(user.screen_name), 'i')).update('$set' => {id: user.id.to_s})
+          connection.raw_connection[:twitter_users].find(screen_name: Regexp.new(Regexp.escape(user.screen_name), 'i')).update_one('$set' => {id: user.id.to_s})
         end
       rescue Twitter::Error::NotFound
         warn("Not found #{slice.join(', ')}")
@@ -100,24 +108,26 @@ class Canada
     # Update screen names of Twitter users with Twitter IDs.
     ids.each_slice(100) do |slice|
       users = twitter.users(*slice)
+
       (slice.map(&:to_s) - users.map{|user| user.id.to_s}).each do |id|
-        connection.raw_connection[:twitter_users].find(id: id).update('$unset' => {id: ''})
+        connection.raw_connection[:twitter_users].find(id: id).update_one('$unset' => {id: ''})
       end
+
       users.each do |user|
         name = user.name.
           # Remove prefix.
-          sub(/\A(?:Dr\.|Hon\.|Ministre) /, '').
+          sub(/\A(?:Dr\.|Elect\b|Hon\.|Ministre\b) ?/, '').
           # Remove parenthetical.
           sub(/ \([^)]+\)/, '').
           # Remove suffixes.
           sub(/,.+/, '').
           sub(/(?:député\/)?M\.?P\.?/, '').
-          sub(/ (?:NDP|NPD)\b/, '').
+          sub(/ ?(?:NDP|NPD)\b/, '').
           sub(/ \d+/, '').
           # Remove infix initials.
           sub(/ [A-Z]\./, '').
           # Remove Chinese characters. https://twitter.com/joycemurray
-          gsub(/[^A-ZÇÉÈÎÔa-zçéèîô'. -]/, '').
+          gsub(/[^A-ZÇÉÈÜÎÔa-zçéèëîô'. -]/, '').
           squeeze(' ').
           strip.
           # Remove ending punctuation.
@@ -134,15 +144,16 @@ class Canada
 
         # Some Twitter names are irrecoverably malformed.
         name = TWITTER_NAME_MAP.fetch(name, name)
+        TWITTER_NAME_MAP_INVERSE.delete(name)
 
-        connection.raw_connection[:twitter_users].find(id: user.id.to_s).update('$set' => {
+        connection.raw_connection[:twitter_users].find(id: user.id.to_s).update_one('$set' => {
           screen_name: user.screen_name,
           name: name,
         })
 
         unless names.include?(name)
           warn("Not an MP: #{name} https://twitter.com/#{user.screen_name}")
-          connection.raw_connection[:twitter_users].find(screen_name: user.screen_name).remove_all
+          connection.raw_connection[:twitter_users].find(screen_name: user.screen_name).delete_many
         end
         if user.statuses_count.zero?
           warn("No tweets #{user.screen_name}")
@@ -156,7 +167,11 @@ class Canada
     end
 
     # Delete any Twitter users that were not found.
-    connection.raw_connection[:twitter_users].find(id: {'$exists' => false}).remove_all
+    connection.raw_connection[:twitter_users].find(id: {'$exists' => false}).delete_many
+
+    TWITTER_NAME_MAP_INVERSE.each_value do |name|
+      info("Can delete #{name} from TWITTER_NAME_MAP")
+    end
   end
 
 private
@@ -258,7 +273,8 @@ private
           # * empty data-via attribute on http://www.charmaineborg.info
           # * "twitter-user" if highlighting another user in a tweet
           a = as.reject do |a|
-            a['href']['twitter.com/share'] && a['data-via'].blank? || a['class'] == 'twitter-user' || a['href']['?q='] || BAD_SCREEN_NAMES.include?(get_screen_name(a))
+            a['href']['twitter.com/share'] && a['data-via'].blank? || a['class'] == 'twitter-user' || a['href']['?q='] ||
+              ((screen_name = get_screen_name(a)) && NON_MP_SCREEN_NAMES.include?(screen_name) && (NON_MP_SCREEN_NAMES_COPY.delete(screen_name) || true))
           end.first
 
           screen_name = nil
@@ -272,6 +288,7 @@ private
 
           if screen_name
             dispatch(TwitterUser.new(screen_name: SCREEN_NAME_MAP.fetch(screen_name, screen_name)))
+            SCREEN_NAME_MAP_INVERSE.delete(screen_name)
           end
         else
           warn("Unhandled redirect or empty body #{url}")
