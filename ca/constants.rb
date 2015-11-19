@@ -3,6 +3,7 @@ MANUAL_SCREEN_NAMES = %w(
   gabriel_smarie
   lucterjo1
   mario_beaulieu
+  reloif
 ) + # Bloc Québécois
 %w(
   elizabethmay
@@ -12,6 +13,7 @@ MANUAL_SCREEN_NAMES = %w(
 %w(
 ) + # Independent
 %w(
+  alupa_clarke
   arnoldviersen
   benlobbmp
   bobzimmermp
@@ -26,6 +28,7 @@ MANUAL_SCREEN_NAMES = %w(
   deanallisonmp
   deepakobhrai
   denislebelpcc
+  genereuxbernard
   gerarddeltell
   gerryritzmp
   honedfast
@@ -46,10 +49,22 @@ MANUAL_SCREEN_NAMES = %w(
   markstrahl
   martinbowriver
   maximebernier
+  melarnold2015
   michaelchongmp
+  mprandyhoback
   petervanloan
   pierrepoilievre
+  ronliepert
   scottreidcpc
+  shannonlstubbs
+  stephenharper
+  stevenblaneypcc
+  sylviepcc2015
+  tedfalkcpc
+  todddohertymp
+  tomaszkmiec
+  votepatkelly
+  ziad4manning
 ) + # Conservative
 %w(
 ) + # Liberal
