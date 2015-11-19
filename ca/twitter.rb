@@ -46,7 +46,7 @@ class Canada
       dispatch(TwitterUser.new(screen_name: screen_name))
     end
 
-    SCREEN_NAME_MAP_INVERSE.each_value do |screen_name|
+    SCREEN_NAME_MAP_COPY.each do |screen_name|
       info("Can delete #{screen_name} from SCREEN_NAME_MAP")
     end
 
@@ -116,7 +116,7 @@ class Canada
       users.each do |user|
         name = user.name.
           # Remove prefix.
-          sub(/\A(?:Dr\.|Elect\b|Hon\.|Ministre\b) ?/, '').
+          sub(/\A(?:Dr\.|Elect\b|Hon\b\.?|Ministre\b) ?/, '').
           # Remove parenthetical.
           sub(/ \([^)]+\)/, '').
           # Remove suffixes.
@@ -143,8 +143,8 @@ class Canada
         end.join(' ')
 
         # Some Twitter names are irrecoverably malformed.
+        TWITTER_NAME_MAP_COPY.delete(name)
         name = TWITTER_NAME_MAP.fetch(name, name)
-        TWITTER_NAME_MAP_INVERSE.delete(name)
 
         connection.raw_connection[:twitter_users].find(id: user.id.to_s).update_one('$set' => {
           screen_name: user.screen_name,
@@ -158,10 +158,19 @@ class Canada
         if user.statuses_count.zero?
           warn("No tweets #{user.screen_name}")
         elsif user.status.created_at < Time.now - 31556940 # 1 year
-          warn("Old tweets #{user.screen_name}")
+          if user.verified?
+            info("Old tweets #{user.screen_name} (verified)")
+          else
+            warn("Old tweets #{user.screen_name}")
+          end
         end
         unless user.verified?
-          info("Not verified #{user.screen_name}")
+          screen_name = user.screen_name.downcase
+          if MANUAL_SCREEN_NAMES.include?(screen_name) || SCREEN_NAME_MAP.values.include?(screen_name)
+            info("Not verified https://twitter.com/#{user.screen_name} (manual source)")
+          else
+            debug("Not verified https://twitter.com/#{user.screen_name}")
+          end
         end
       end
     end
@@ -169,7 +178,7 @@ class Canada
     # Delete any Twitter users that were not found.
     connection.raw_connection[:twitter_users].find(id: {'$exists' => false}).delete_many
 
-    TWITTER_NAME_MAP_INVERSE.each_value do |name|
+    TWITTER_NAME_MAP_COPY.each do |name|
       info("Can delete #{name} from TWITTER_NAME_MAP")
     end
   end
@@ -287,8 +296,8 @@ private
           end
 
           if screen_name
+            SCREEN_NAME_MAP_COPY.delete(screen_name)
             dispatch(TwitterUser.new(screen_name: SCREEN_NAME_MAP.fetch(screen_name, screen_name)))
-            SCREEN_NAME_MAP_INVERSE.delete(screen_name)
           end
         else
           warn("Unhandled redirect or empty body #{url}")
@@ -319,6 +328,8 @@ private
     if screen_name == 'share' && a['data-via']
       screen_name = a['data-via'].sub(/\A@/, '')
     end
-    screen_name.downcase
+    screen_name.downcase!
+    SCREEN_NAME_MAP_COPY.delete(screen_name)
+    SCREEN_NAME_MAP.fetch(screen_name, screen_name)
   end
 end
