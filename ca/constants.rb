@@ -92,7 +92,6 @@ TWITTER_NAME_MAP = {
   'Mary Ann Mihychuk' => 'MaryAnn Mihychuk',
   'Moore Christine' => 'Christine Moore',
   'Nate Erskine-Smith' => 'Nathaniel Erskine-Smith',
-  'Patty Hajdu' => 'Patricia Hajdu',
   'Rob Oliphant' => 'Robert Oliphant',
   'Robert-F Ouellette' => 'Robert-Falcon Ouellette',
   'Steve MacKinnon' => 'Steven MacKinnon',
@@ -103,8 +102,15 @@ TWITTER_NAME_MAP = {
 # The official party websites have errors. Causes "Not found" warnings. Items
 # can be removed from this list once they are corrected on websites.
 SCREEN_NAME_MAP = {
+  # Conservative
+  'tomaszkmiec' => 'tomkmiec',
   # Liberal
+  '_andrewleslie' => 'andrewlesliemp',
+  'adhillonliberal' => 'adhillonmp',
+  'ahmedhussenmp' => 'ahmedhussenlib',
   'bryanmay17' => '_bryanmay',
+  'danruimy2015' => 'danruimymp',
+  'electseanfraser' => 'seanfrasermp',
   'gptaylor2015' => 'gptaylormrd',
   'l_macaulaymp' => 'l_macaulay',
   'mcdonald4avalon' => 'avalonmpken',
@@ -112,17 +118,21 @@ SCREEN_NAME_MAP = {
   'rubys22' => 'mprubysahota',
   'rusnak2015' => 'donrusnakmp',
   'scarpaleggiamp' => 'scarpaleggialsl',
+  'stbdan' => 'stbstvdan',
   'stephenfuhr' => 'fuhr2015',
+  'voteborys' => 'boryswrz',
   'votecelina' => 'celinachavannes',
   'votechen' => 'shaun_chen',
   'votegengtan' => 'gengtanmp',
   'votejatisidhu' => 'jatisidhulpc',
+  'votekateyoung' => 'kateyoungmp',
   'votemihychuk' => 'mpmihychuk',
   'votenatebey' => 'beynate',
   'votesorbara' => 'fsorbara',
+  'votetabbara' => 'marwantabbaramp',
+  'voteterry' => 'terrysheehanmp',
   'votewhalen' => 'nickwhalenmp',
   'yswahmed' => 'ahmedhussenmp',
-
 }
 
 NON_MP_SCREEN_NAMES = [

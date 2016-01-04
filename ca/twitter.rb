@@ -194,7 +194,7 @@ private
 
   # Dispatches a TwitterUser.
   def process(url, backup_url: nil, visited: [])
-    if url
+    if url && !url.empty?
       begin
         unless url[/\Ahttp/]
           url = "http://#{url}"
