@@ -2,6 +2,10 @@
 
 The [bulk of Pupa scrapers](http://github.com/opencivicdata/scrapers-ca) for Canada are written in Python.
 
+The `ca` scraper in the [`scrapers-ca`](https://github.com/opencivicdata/scrapers-ca/) repository depends on the `ca` scraper in this repository.
+
+The `ca_qc_montreal` scraper in this repository is intended for `mamairie.ca`. [Represent](https://represent.opennorth.ca/) uses the `ca_qc_montreal` scraper in the [`scrapers-ca`](https://github.com/opencivicdata/scrapers-ca/) repository, which is dedicated to elected officials' contact information.
+
 ## Getting Started
 
 Install Git, Ruby 2.x and MongoDB. We recommend [rbenv](https://github.com/sstephenson/rbenv) to manage your Rubies.
